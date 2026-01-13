@@ -2,14 +2,21 @@ const express = require('express');
 const cors = require('cors');
 const Database = require('better-sqlite3');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DATABASE_PATH || './data/leads.db';
 
+// Configuração de admin (pode mudar aqui)
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'v4123';
+
+// Sessões ativas (em memória)
+const sessions = new Map();
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
@@ -48,12 +55,73 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
 `);
 
+// Gerar token de sessão
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// Middleware de autenticação
+function requireAuth(req, res, next) {
+  const token = req.headers['authorization']?.replace('Bearer ', '');
+  
+  if (!token || !sessions.has(token)) {
+    return res.status(401).json({ success: false, error: 'Não autorizado' });
+  }
+  
+  // Renovar sessão
+  sessions.set(token, Date.now());
+  next();
+}
+
+// Limpar sessões expiradas (24h)
+setInterval(() => {
+  const now = Date.now();
+  for (const [token, timestamp] of sessions) {
+    if (now - timestamp > 24 * 60 * 60 * 1000) {
+      sessions.delete(token);
+    }
+  }
+}, 60 * 60 * 1000);
+
+// ==================== ROTAS PÚBLICAS ====================
+
+// Login
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
+    const token = generateToken();
+    sessions.set(token, Date.now());
+    res.json({ success: true, token });
+  } else {
+    res.status(401).json({ success: false, error: 'Usuário ou senha inválidos' });
+  }
+});
+
+// Logout
+app.post('/api/logout', (req, res) => {
+  const token = req.headers['authorization']?.replace('Bearer ', '');
+  if (token) sessions.delete(token);
+  res.json({ success: true });
+});
+
+// Verificar sessão
+app.get('/api/session', (req, res) => {
+  const token = req.headers['authorization']?.replace('Bearer ', '');
+  if (token && sessions.has(token)) {
+    sessions.set(token, Date.now());
+    res.json({ success: true, authenticated: true });
+  } else {
+    res.json({ success: true, authenticated: false });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// Receber lead
+// Receber lead (público - formulários externos)
 app.post('/api/leads', async (req, res) => {
   try {
     const { formId, formName, data } = req.body;
@@ -100,8 +168,10 @@ app.post('/api/leads', async (req, res) => {
   }
 });
 
+// ==================== ROTAS PROTEGIDAS ====================
+
 // Listar leads
-app.get('/api/leads', (req, res) => {
+app.get('/api/leads', requireAuth, (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
@@ -121,7 +191,7 @@ app.get('/api/leads', (req, res) => {
 });
 
 // Exportar CSV
-app.get('/api/leads/export/csv', (req, res) => {
+app.get('/api/leads/export/csv', requireAuth, (req, res) => {
   try {
     const leads = db.prepare('SELECT * FROM leads ORDER BY created_at DESC').all();
     if (!leads.length) return res.status(404).json({ error: 'Nenhum lead' });
@@ -150,13 +220,13 @@ app.get('/api/leads/export/csv', (req, res) => {
 });
 
 // Deletar lead
-app.delete('/api/leads/:id', (req, res) => {
+app.delete('/api/leads/:id', requireAuth, (req, res) => {
   db.prepare('DELETE FROM leads WHERE id = ?').run(req.params.id);
   res.json({ success: true });
 });
 
 // Criar formulário
-app.post('/api/forms', (req, res) => {
+app.post('/api/forms', requireAuth, (req, res) => {
   try {
     const { name, fields, webhookUrl } = req.body;
     if (!name || !fields) {
@@ -173,7 +243,7 @@ app.post('/api/forms', (req, res) => {
 });
 
 // Listar formulários
-app.get('/api/forms', (req, res) => {
+app.get('/api/forms', requireAuth, (req, res) => {
   try {
     const forms = db.prepare(`
       SELECT f.*, (SELECT COUNT(*) FROM leads WHERE form_id = f.id) as leads_count 
@@ -190,13 +260,13 @@ app.get('/api/forms', (req, res) => {
 });
 
 // Deletar formulário
-app.delete('/api/forms/:id', (req, res) => {
+app.delete('/api/forms/:id', requireAuth, (req, res) => {
   db.prepare('UPDATE forms SET active = 0 WHERE id = ?').run(req.params.id);
   res.json({ success: true });
 });
 
 // Criar webhook
-app.post('/api/webhooks', (req, res) => {
+app.post('/api/webhooks', requireAuth, (req, res) => {
   try {
     const { formId, url, isGlobal } = req.body;
     if (!url) return res.status(400).json({ success: false, error: 'URL obrigatória' });
@@ -209,31 +279,31 @@ app.post('/api/webhooks', (req, res) => {
 });
 
 // Listar webhooks
-app.get('/api/webhooks', (req, res) => {
+app.get('/api/webhooks', requireAuth, (req, res) => {
   res.json({ success: true, webhooks: db.prepare('SELECT * FROM webhooks WHERE active = 1').all() });
 });
 
 // Deletar webhook
-app.delete('/api/webhooks/:id', (req, res) => {
+app.delete('/api/webhooks/:id', requireAuth, (req, res) => {
   db.prepare('UPDATE webhooks SET active = 0 WHERE id = ?').run(req.params.id);
   res.json({ success: true });
 });
 
 // Settings
-app.get('/api/settings', (req, res) => {
+app.get('/api/settings', requireAuth, (req, res) => {
   const settings = {};
   db.prepare('SELECT * FROM settings').all().forEach(s => settings[s.key] = s.value);
   res.json({ success: true, settings });
 });
 
-app.put('/api/settings', (req, res) => {
+app.put('/api/settings', requireAuth, (req, res) => {
   const stmt = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value');
   Object.entries(req.body).forEach(([k, v]) => stmt.run(k, v));
   res.json({ success: true });
 });
 
 // Stats
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', requireAuth, (req, res) => {
   try {
     res.json({
       success: true,
@@ -249,6 +319,9 @@ app.get('/api/stats', (req, res) => {
   }
 });
 
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Fallback para SPA
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -256,6 +329,9 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log('========================================');
-  console.log('  Barosac Forms rodando na porta ' + PORT);
+  console.log('  v4 Forms rodando na porta ' + PORT);
+  console.log('========================================');
+  console.log('  Usuario: ' + ADMIN_USER);
+  console.log('  Senha: ' + ADMIN_PASS);
   console.log('========================================');
 });
