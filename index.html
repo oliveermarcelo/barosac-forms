@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barosac Forms - Sistema de Formulários</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --accent: #ef4444;
+            --accent-dim: #dc2626;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px;
+            margin-bottom: 32px;
+        }
+
+        .logo-svg {
+            color: var(--text-primary);
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            padding: 0 8px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            border-left: 2px solid var(--accent);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dim);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 8px;
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Fields Builder */
+        .fields-list {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .field-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .field-item:last-child {
+            border-bottom: none;
+        }
+
+        .field-drag {
+            cursor: grab;
+            color: var(--text-secondary);
+        }
+
+        .field-info {
+            flex: 1;
+        }
+
+        .field-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .field-type {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .field-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .field-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .field-btn.delete:hover {
+            color: var(--danger);
+        }
+
+        /* Code Preview */
+        .code-container {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .code-tab {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .code-tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .code-content {
+            padding: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .code-content pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* View Sections */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Webhook Config */
+        .webhook-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .webhook-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .webhook-icon.make {
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+        }
+
+        .webhook-icon.n8n {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+
+        .webhook-icon.zapier {
+            background: linear-gradient(135deg, #f97316, #fbbf24);
+        }
+
+        .webhook-info {
+            flex: 1;
+        }
+
+        .webhook-name {
+            font-weight: 500;
+        }
+
+        .webhook-url {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* Action buttons row */
+        .action-row {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0.00 0.00 1882.00 521.00" class="logo-svg" width="120" height="33"><g fill="currentColor"><path d="M 114.63 0.00 Q 115.01 0.18 115.50 0.18 Q 384.19 0.12 435.08 0.14 Q 452.78 0.14 459.82 1.70 Q 472.60 4.52 482.76 11.53 Q 505.96 27.51 511.54 54.00 Q 513.24 62.08 513.06 82.12 Q 512.93 96.75 513.02 294.45 A 0.37 0.37 0.0 0 1 512.65 294.82 L 440.50 294.82 A 0.43 0.42 0.0 0 1 440.07 294.40 Q 440.10 84.81 440.05 67.30 C 440.04 61.95 435.70 56.91 431.11 54.90 Q 428.46 53.74 420.71 53.75 Q 374.28 53.84 362.18 53.75 C 357.96 53.72 353.41 54.84 350.75 57.50 Q 230.84 176.96 115.30 291.94 C 112.82 294.41 110.35 297.42 110.35 300.57 Q 110.30 351.30 110.35 369.69 A 3.85 3.55 -54.0 0 0 110.45 370.55 Q 111.72 375.78 116.06 378.51 Q 118.45 380.01 126.20 379.86 Q 129.33 379.80 342.79 379.83 A 2.69 2.39 -34.4 0 1 343.43 379.91 Q 352.48 382.23 352.77 391.51 Q 352.77 391.56 352.78 449.00 Q 352.78 453.20 356.02 455.95 C 358.62 458.17 361.36 458.06 365.28 458.06 Q 427.62 458.05 435.35 458.06 A 0.60 0.59 90.0 0 0 435.94 457.46 L 435.94 382.24 A 0.40 0.40 0.0 0 1 436.34 381.84 L 512.61 381.84 A 0.42 0.42 0.0 0 1 513.03 382.26 Q 512.90 430.53 513.05 440.15 Q 513.34 458.22 511.52 466.76 Q 505.25 496.15 479.47 511.72 Q 465.63 520.08 447.59 521.00 L 66.01 521.00 Q 34.43 519.28 14.88 494.91 Q 3.61 480.87 1.11 462.99 Q 0.63 459.49 0.00 456.04 L 0.00 65.13 C 1.19 56.89 1.99 49.99 5.56 41.53 C 14.96 19.22 34.66 4.76 58.56 0.71 A 0.47 0.47 0.0 0 1 59.11 1.17 Q 59.09 22.94 59.11 228.68 Q 59.11 232.17 61.22 234.27 Q 74.14 247.08 98.43 271.28 A 0.66 0.66 0.0 0 0 99.37 271.28 L 320.67 50.89 A 0.32 0.32 0.0 0 0 320.45 50.34 Q 284.17 50.45 272.75 50.31 Q 259.37 50.15 253.80 51.77 Q 244.60 54.44 237.02 62.01 Q 202.28 96.69 114.48 184.08 A 0.28 0.28 0.0 0 1 114.01 183.88 L 114.02 0.00 L 114.63 0.00 Z"/><rect x="588.00" y="2.39" width="5.84" height="516.26" rx="0.40"/><path d="M 1127.98 198.53 A 0.22 0.22 0.0 0 0 1127.55 198.58 L 1126.09 223.61 A 0.58 0.57 1.6 0 1 1125.51 224.15 L 1095.64 224.15 A 0.61 0.60 0.0 0 1 1095.03 223.55 L 1095.03 39.11 A 0.32 0.31 0.0 0 1 1095.35 38.80 L 1129.88 38.80 A 0.59 0.59 0.0 0 1 1130.47 39.39 L 1130.47 115.73 A 0.17 0.17 0.0 0 0 1130.78 115.82 C 1141.51 97.32 1160.55 89.86 1181.20 93.48 C 1200.14 96.81 1213.52 110.16 1220.53 127.96 Q 1221.22 129.71 1222.54 134.00 Q 1223.62 137.47 1224.02 140.16 Q 1224.32 142.23 1225.19 147.38 C 1226.32 154.13 1226.34 161.70 1225.73 168.25 Q 1225.38 171.93 1223.33 183.19 A 7.11 7.08 -28.2 0 1 1222.83 184.83 C 1221.81 187.14 1221.37 189.71 1220.41 192.01 C 1213.11 209.51 1200.23 222.23 1181.57 225.71 C 1158.89 229.94 1138.40 220.89 1128.47 200.00 Q 1128.34 199.74 1127.98 198.53 Z M 1130.47 159.43 Q 1130.38 167.79 1131.10 171.24 Q 1132.15 176.24 1133.73 180.44 C 1139.12 194.76 1151.98 202.10 1167.05 198.92 C 1175.25 197.19 1181.28 192.35 1185.11 185.11 C 1186.08 183.27 1187.38 180.41 1187.92 178.39 C 1189.49 172.47 1190.62 166.09 1190.68 160.06 C 1190.75 154.03 1189.75 147.62 1188.30 141.67 C 1187.80 139.64 1186.56 136.76 1185.63 134.90 C 1181.95 127.58 1176.03 122.61 1167.86 120.71 C 1152.86 117.22 1139.85 124.29 1134.17 138.50 Q 1132.50 142.66 1131.35 147.64 Q 1130.55 151.07 1130.47 159.43 Z"/><path d="M 771.86 137.89 A 0.27 0.27 0.0 0 0 771.87 138.42 C 786.15 140.46 797.74 147.51 804.29 160.06 Q 805.76 162.86 806.42 165.81 C 807.15 169.07 807.98 170.94 808.09 173.80 Q 808.41 181.69 807.89 184.01 C 806.69 189.27 806.25 192.68 804.21 196.95 C 796.30 213.59 778.92 221.33 761.24 223.23 C 756.46 223.75 753.13 224.16 749.16 224.15 Q 695.27 224.15 669.45 224.17 A 0.62 0.62 0.0 0 1 668.83 223.55 L 668.83 54.33 A 0.31 0.31 0.0 0 1 669.14 54.02 Q 722.75 53.83 749.48 54.15 C 761.82 54.31 776.91 57.48 786.98 64.65 Q 799.75 73.74 802.88 90.05 Q 803.90 95.39 803.64 102.67 Q 803.41 109.46 801.13 115.02 Q 793.36 134.04 771.86 137.89 Z M 703.54 81.98 L 703.54 125.08 A 0.22 0.22 0.0 0 0 703.76 125.30 L 744.01 125.30 A 22.75 20.02 0.0 0 0 766.76 105.28 L 766.76 101.78 A 22.75 20.02 -0.0 0 0 744.01 81.76 L 703.76 81.76 A 0.22 0.22 0.0 0 0 703.54 81.98 Z M 703.54 153.03 L 703.54 196.91 A 0.23 0.23 0.0 0 0 703.77 197.14 L 747.42 197.14 A 23.62 20.29 -0.0 0 0 771.04 176.85 L 771.04 173.09 A 23.62 20.29 0.0 0 0 747.42 152.80 L 703.77 152.80 A 0.23 0.23 0.0 0 0 703.54 153.03 Z"/><path d="M 964.51 201.85 L 962.46 222.57 A 0.82 0.82 0.0 0 1 962.03 223.22 Q 959.92 224.34 958.46 224.74 C 942.43 229.12 922.29 226.31 915.70 208.84 A 0.35 0.35 0.0 0 0 915.13 208.72 Q 914.81 209.05 913.17 210.92 C 902.57 223.05 885.48 227.56 869.49 226.62 C 847.03 225.29 830.18 213.56 831.81 188.99 Q 832.73 175.07 843.02 166.48 Q 851.66 159.26 863.85 156.63 Q 888.32 151.34 911.11 146.93 A 0.58 0.57 -4.6 0 0 911.57 146.40 Q 911.77 142.03 911.47 138.12 C 910.41 124.64 898.97 117.49 886.24 118.64 Q 867.15 120.36 861.97 139.04 A 0.59 0.59 0.0 0 1 861.23 139.45 L 832.07 130.71 A 0.88 0.87 16.4 0 1 831.48 129.63 Q 836.61 112.49 849.88 103.42 C 865.94 92.44 888.31 90.71 907.33 94.14 C 925.75 97.46 939.98 107.81 945.33 126.15 Q 947.06 132.08 947.01 148.78 Q 946.90 188.92 946.94 192.52 C 947.04 203.69 955.63 203.26 963.93 201.34 A 0.48 0.47 86.1 0 1 964.51 201.85 Z M 910.98 168.96 Q 888.39 173.43 881.23 174.98 Q 875.66 176.18 871.86 178.64 C 867.27 181.61 865.87 188.38 868.00 193.26 Q 870.77 199.61 878.47 201.08 C 886.36 202.59 896.84 200.88 903.31 195.97 C 911.87 189.47 912.25 179.49 911.59 169.43 A 0.51 0.51 0.0 0 0 910.98 168.96 Z"/><path d="M 1019.18 119.52 Q 1019.19 119.50 1021.70 114.47 C 1027.16 103.53 1036.63 96.06 1048.66 93.63 C 1056.49 92.04 1065.37 91.94 1072.62 95.22 A 0.55 0.54 16.4 0 1 1072.93 95.78 L 1068.93 124.68 A 0.45 0.45 0.0 0 1 1068.36 125.05 Q 1060.17 122.74 1050.73 123.33 C 1035.82 124.26 1025.77 133.92 1022.33 148.10 Q 1021.39 151.95 1021.44 161.98 Q 1021.52 177.79 1021.47 223.53 A 0.63 0.63 0.0 0 1 1020.84 224.16 L 986.31 224.16 A 0.41 0.40 0.0 0 1 985.90 223.76 L 985.90 95.70 A 0.47 0.46 -0.0 0 1 986.37 95.24 L 1016.32 95.24 A 0.50 0.50 0.0 0 1 1016.82 95.70 L 1019.10 119.50 A 0.04 0.04 0.0 0 0 1019.18 119.52 Z"/><path d="M 1315.32 92.61 C 1341.86 92.61 1364.98 104.48 1375.67 129.42 Q 1379.60 138.60 1380.81 149.66 Q 1381.45 155.56 1381.45 159.70 Q 1381.45 163.83 1380.81 169.74 Q 1379.60 180.80 1375.67 189.97 C 1364.99 214.91 1341.86 226.78 1315.33 226.78 C 1288.79 226.79 1265.67 214.91 1254.98 189.98 Q 1251.05 180.80 1249.84 169.74 Q 1249.20 163.84 1249.20 159.70 Q 1249.20 155.57 1249.84 149.66 Q 1251.05 138.60 1254.98 129.42 C 1265.67 104.49 1288.79 92.61 1315.32 92.61 Z M 1284.76 159.68 C 1284.75 179.49 1291.13 200.27 1315.19 200.29 C 1339.24 200.31 1345.66 179.54 1345.68 159.73 C 1345.69 139.92 1339.30 119.13 1315.25 119.11 C 1291.20 119.09 1284.78 139.87 1284.76 159.68 Z"/><path d="M 1497.29 136.93 Q 1489.20 125.39 1477.44 121.27 Q 1465.69 117.16 1453.05 119.86 C 1448.39 120.86 1443.48 123.06 1441.73 127.58 C 1438.20 136.65 1447.49 141.21 1454.38 142.64 Q 1478.88 147.72 1487.60 149.63 C 1500.68 152.48 1513.98 159.73 1518.00 173.20 Q 1520.32 180.98 1519.00 190.53 C 1516.18 210.84 1497.95 222.19 1479.12 225.35 C 1451.55 229.97 1419.06 223.61 1400.78 200.59 A 0.84 0.82 48.5 0 1 1400.84 199.48 L 1420.45 179.96 A 0.43 0.43 0.0 0 1 1421.09 179.99 C 1422.66 181.92 1423.26 182.81 1424.64 184.39 C 1436.67 198.15 1455.54 203.29 1473.11 199.35 C 1477.78 198.30 1482.94 195.33 1483.70 190.25 C 1484.95 181.84 1478.82 178.64 1471.78 177.00 Q 1467.26 175.95 1446.11 171.70 C 1429.97 168.47 1412.30 161.41 1407.25 144.66 Q 1405.39 138.52 1405.95 130.46 C 1406.82 117.74 1415.45 106.99 1426.47 100.89 C 1442.39 92.08 1462.53 91.04 1480.38 94.11 C 1495.56 96.73 1509.16 103.60 1518.50 116.13 A 0.67 0.66 -40.8 0 1 1518.43 117.00 L 1498.10 137.01 A 0.53 0.53 0.0 0 1 1497.29 136.93 Z"/><path d="M 1673.06 201.34 A 0.48 0.47 86.1 0 1 1673.64 201.85 L 1671.59 222.57 A 0.82 0.82 0.0 0 1 1671.16 223.22 Q 1669.05 224.34 1667.59 224.74 C 1651.56 229.12 1631.42 226.31 1624.83 208.84 A 0.35 0.35 0.0 0 0 1624.26 208.72 Q 1623.94 209.05 1622.30 210.92 C 1611.70 223.05 1594.62 227.56 1578.63 226.61 C 1556.17 225.28 1539.32 213.55 1540.95 188.99 Q 1541.87 175.07 1552.16 166.48 Q 1560.80 159.26 1572.99 156.63 Q 1597.46 151.34 1620.25 146.94 A 0.58 0.57 -4.6 0 0 1620.71 146.41 Q 1620.91 142.04 1620.61 138.13 C 1619.55 124.65 1608.11 117.50 1595.38 118.65 Q 1576.29 120.37 1571.11 139.04 A 0.59 0.59 0.0 0 1 1570.37 139.45 L 1541.22 130.71 A 0.88 0.87 16.4 0 1 1540.63 129.63 Q 1545.76 112.50 1559.03 103.43 C 1575.09 92.45 1597.45 90.72 1616.47 94.15 C 1634.89 97.47 1649.12 107.82 1654.46 126.16 Q 1656.19 132.09 1656.14 148.79 Q 1656.03 188.92 1656.07 192.52 C 1656.17 203.69 1664.76 203.26 1673.06 201.34 Z M 1620.11 169.00 Q 1597.52 173.44 1590.36 174.98 Q 1584.78 176.17 1580.98 178.63 C 1576.39 181.59 1574.98 188.36 1577.10 193.24 Q 1579.87 199.60 1587.56 201.08 C 1595.45 202.60 1605.93 200.90 1612.41 196.00 C 1620.97 189.51 1621.37 179.53 1620.72 169.47 A 0.51 0.51 0.0 0 0 1620.11 169.00 Z"/><path d="M 355.85 291.42 L 232.16 291.42 A 0.32 0.32 0.0 0 1 231.94 290.87 L 355.63 169.16 A 0.32 0.32 0.0 0 1 356.17 169.38 L 356.17 291.10 A 0.32 0.32 0.0 0 1 355.85 291.42 Z"/><path d="M 781.47 362.91 Q 779.71 360.91 776.47 357.29 Q 763.66 343.02 745.29 338.98 C 732.46 336.15 710.06 335.59 701.55 347.61 C 697.92 352.72 697.06 361.62 701.11 366.82 C 705.18 372.06 712.19 374.86 718.46 376.40 Q 729.11 379.02 757.95 385.51 Q 762.28 386.48 770.50 389.50 C 785.15 394.89 797.09 404.68 800.17 420.51 C 802.78 433.91 800.28 448.44 792.26 459.36 C 775.33 482.42 742.28 486.10 715.99 482.98 C 691.85 480.13 669.25 469.86 653.57 451.04 A 0.53 0.53 0.0 0 1 653.57 450.36 L 673.04 427.15 A 0.49 0.48 -43.3 0 1 673.79 427.17 Q 690.55 449.02 718.01 453.96 C 731.71 456.42 762.08 457.02 764.33 436.97 C 765.70 424.75 755.83 419.26 745.73 416.81 Q 745.60 416.77 706.19 407.81 Q 696.27 405.55 687.38 401.39 Q 661.84 389.42 661.30 363.15 C 661.03 350.01 666.32 337.11 675.30 328.16 C 694.13 309.39 724.29 306.10 749.25 309.99 Q 781.08 314.95 801.27 339.79 A 0.56 0.55 -45.1 0 1 801.26 340.50 L 782.46 362.90 A 0.65 0.65 0.0 0 1 781.47 362.91 Z"/><path d="M 1696.24 365.82 Q 1694.98 362.13 1693.89 359.36 Q 1691.00 352.05 1685.64 346.61 C 1677.09 337.94 1662.06 336.68 1650.96 338.61 Q 1630.60 342.14 1621.06 360.86 Q 1616.83 369.16 1615.20 378.83 C 1612.64 394.00 1613.26 410.54 1618.04 425.46 Q 1619.79 430.95 1623.77 436.99 Q 1632.31 449.98 1648.27 453.49 C 1658.13 455.65 1669.93 455.05 1678.81 450.48 Q 1690.68 444.37 1696.07 430.58 Q 1696.79 428.75 1698.05 425.02 A 0.54 0.54 0.0 0 1 1698.72 424.68 L 1730.69 434.25 A 0.28 0.28 0.0 0 1 1730.88 434.61 C 1722.04 463.99 1697.61 481.42 1667.48 483.54 C 1648.21 484.89 1629.94 482.14 1614.09 472.82 Q 1597.13 462.85 1587.37 444.40 Q 1583.81 437.68 1582.25 432.53 C 1580.71 427.46 1578.97 422.26 1578.47 417.37 C 1578.04 413.12 1577.08 409.19 1576.91 405.28 Q 1576.26 390.75 1577.23 384.19 Q 1578.25 377.29 1578.56 374.54 C 1579.07 370.07 1580.35 366.63 1582.07 360.77 Q 1584.49 352.57 1590.04 343.54 C 1608.19 314.00 1641.28 305.24 1674.01 309.69 C 1699.56 313.16 1720.07 326.99 1728.49 352.24 A 0.61 0.61 0.0 0 1 1728.15 352.99 L 1697.05 366.18 A 0.60 0.60 0.0 0 1 1696.24 365.82 Z"/><path d="M 1564.19 473.94 A 0.31 0.31 0.0 0 1 1564.49 474.35 L 1561.78 483.40 A 0.65 0.65 0.0 0 1 1561.17 483.87 C 1545.18 484.24 1533.78 473.59 1523.70 462.72 A 0.58 0.58 0.0 0 0 1522.85 462.73 C 1508.47 478.84 1487.96 485.27 1466.51 483.73 C 1449.49 482.50 1433.06 475.73 1425.11 460.45 Q 1419.80 450.24 1420.87 436.88 Q 1421.88 424.25 1429.36 413.70 C 1437.02 402.88 1450.11 394.46 1462.50 388.28 A 0.39 0.38 59.0 0 0 1462.64 387.70 Q 1456.81 379.81 1452.07 372.68 C 1445.16 362.29 1441.24 351.15 1443.42 338.41 Q 1444.92 329.59 1450.14 322.92 Q 1457.96 312.92 1471.71 310.15 C 1492.48 305.96 1515.22 313.81 1518.06 337.48 Q 1518.27 339.17 1518.12 344.49 C 1517.71 359.62 1509.29 370.69 1497.72 379.47 Q 1489.28 385.88 1480.07 390.84 A 0.54 0.53 56.6 0 0 1479.91 391.65 L 1522.14 445.17 A 0.63 0.63 0.0 0 0 1523.18 445.08 Q 1527.56 437.23 1529.54 431.54 Q 1536.70 411.08 1535.51 389.40 A 0.59 0.59 0.0 0 1 1536.13 388.78 L 1546.30 389.38 A 0.66 0.66 0.0 0 1 1546.93 390.02 Q 1547.18 396.90 1546.77 401.53 Q 1545.83 412.19 1545.19 416.48 A 7.52 7.41 -32.1 0 1 1544.92 417.62 Q 1543.95 420.54 1543.50 424.03 A 9.53 9.34 -32.5 0 1 1543.07 425.89 Q 1541.70 430.04 1540.27 434.08 Q 1536.39 445.01 1530.39 453.33 A 0.60 0.60 0.0 0 0 1530.43 454.08 Q 1535.09 459.30 1542.56 465.68 Q 1552.42 474.11 1564.19 473.94 Z M 1473.92 382.37 Q 1480.07 379.24 1489.84 372.37 Q 1497.65 366.87 1502.26 359.73 Q 1505.12 355.29 1506.13 349.54 C 1507.28 342.97 1506.91 335.23 1503.06 329.89 C 1496.70 321.08 1485.16 319.08 1474.97 320.95 Q 1464.36 322.90 1459.05 331.08 Q 1455.53 336.52 1455.25 343.57 Q 1454.96 351.01 1456.94 356.48 Q 1459.05 362.28 1463.98 369.58 Q 1470.85 379.75 1473.04 382.21 A 0.73 0.73 0.0 0 0 1473.92 382.37 Z M 1468.54 396.27 C 1456.86 402.56 1445.28 409.49 1438.01 420.58 C 1436.83 422.38 1436.18 424.64 1435.32 426.26 Q 1434.56 427.69 1433.97 430.75 Q 1432.22 439.86 1433.88 448.44 C 1434.55 451.95 1436.67 456.14 1438.74 458.73 C 1449.42 472.13 1468.07 475.11 1484.31 472.29 Q 1503.13 469.03 1515.79 454.70 A 0.42 0.42 0.0 0 0 1515.79 454.14 Q 1508.60 446.10 1499.86 435.14 Q 1483.76 414.95 1469.16 396.40 A 0.49 0.48 -32.7 0 0 1468.54 396.27 Z"/><path d="M 955.74 416.96 C 955.73 427.30 954.12 437.40 950.16 446.94 C 942.25 466.01 926.02 478.37 905.63 482.40 Q 886.37 486.21 867.56 480.86 C 842.15 473.63 826.52 452.24 824.20 426.26 Q 823.63 419.91 823.64 416.78 Q 823.64 413.66 824.23 407.31 C 826.61 381.33 842.30 359.99 867.73 352.82 Q 886.55 347.52 905.80 351.38 C 926.18 355.47 942.38 367.87 950.24 386.96 C 954.17 396.51 955.76 406.61 955.74 416.96 Z M 920.10 416.88 C 920.10 397.07 913.69 376.29 889.64 376.29 C 865.58 376.29 859.18 397.07 859.18 416.88 C 859.18 436.69 865.58 457.47 889.64 457.47 C 913.69 457.47 920.10 436.69 920.10 416.88 Z"/><path d="M 1404.73 458.55 A 0.48 0.47 86.1 0 1 1405.31 459.06 L 1403.25 479.77 A 0.82 0.82 0.0 0 1 1402.82 480.42 Q 1400.71 481.54 1399.25 481.94 C 1383.22 486.32 1363.09 483.51 1356.50 466.04 A 0.35 0.35 0.0 0 0 1355.93 465.92 Q 1355.61 466.25 1353.97 468.12 C 1343.37 480.24 1326.28 484.75 1310.29 483.81 C 1287.83 482.47 1270.99 470.74 1272.62 446.17 Q 1273.54 432.26 1283.84 423.67 Q 1292.48 416.45 1304.66 413.82 Q 1329.13 408.54 1351.92 404.13 A 0.58 0.57 -4.6 0 0 1352.38 403.60 Q 1352.58 399.23 1352.28 395.32 C 1351.23 381.84 1339.79 374.69 1327.06 375.84 Q 1307.97 377.56 1302.79 396.23 A 0.59 0.59 0.0 0 1 1302.05 396.64 L 1272.89 387.90 A 0.88 0.87 16.5 0 1 1272.30 386.82 Q 1277.44 369.68 1290.71 360.62 C 1306.77 349.64 1329.13 347.91 1348.15 351.35 C 1366.57 354.67 1380.80 365.02 1386.14 383.36 Q 1387.87 389.29 1387.82 405.99 Q 1387.70 446.13 1387.74 449.72 C 1387.84 460.89 1396.43 460.47 1404.73 458.55 Z M 1351.67 426.19 Q 1329.13 430.67 1321.99 432.23 Q 1316.44 433.43 1312.65 435.89 C 1308.07 438.86 1306.68 445.61 1308.81 450.48 Q 1311.58 456.81 1319.27 458.27 C 1327.14 459.77 1337.60 458.05 1344.05 453.14 C 1352.58 446.65 1352.95 436.69 1352.28 426.66 A 0.51 0.51 0.0 0 0 1351.67 426.19 Z"/><path d="M 1882.00 408.00 L 1882.00 425.72 Q 1881.19 434.38 1878.67 441.97 C 1871.27 464.30 1853.78 478.69 1830.83 482.67 C 1800.47 487.94 1769.87 477.52 1756.44 448.28 Q 1754.45 443.94 1752.63 437.02 Q 1751.05 431.02 1750.76 425.33 Q 1750.26 415.41 1751.04 404.99 Q 1751.28 401.78 1752.07 399.22 Q 1752.08 399.16 1753.63 393.54 Q 1758.42 376.12 1772.18 364.49 Q 1785.09 353.57 1803.77 350.73 C 1836.58 345.74 1868.13 359.35 1878.87 392.29 Q 1881.20 399.43 1882.00 408.00 Z M 1785.82 416.85 C 1785.80 436.66 1792.19 457.45 1816.24 457.47 C 1840.30 457.48 1846.72 436.71 1846.73 416.90 C 1846.75 397.09 1840.36 376.30 1816.30 376.29 C 1792.25 376.27 1785.83 397.04 1785.82 416.85 Z"/><path d="M 1074.71 459.81 A 0.14 0.14 0.0 0 0 1074.45 459.75 C 1064.55 478.88 1045.89 485.13 1025.25 483.73 C 1005.77 482.40 991.04 472.61 986.20 453.15 Q 985.54 450.50 984.94 444.40 Q 984.55 440.37 984.55 435.57 Q 984.58 358.14 984.58 352.90 A 0.50 0.50 0.0 0 1 985.08 352.40 L 1019.63 352.40 A 0.37 0.37 0.0 0 1 1020.00 352.77 Q 1019.99 377.84 1020.01 430.00 Q 1020.01 434.69 1021.24 440.49 C 1023.94 453.32 1034.88 456.74 1046.56 455.76 C 1060.72 454.58 1068.69 444.62 1071.33 431.43 Q 1072.17 427.23 1072.15 419.00 Q 1072.12 397.66 1072.13 352.84 A 0.43 0.43 0.0 0 1 1072.56 352.41 L 1107.19 352.41 A 0.50 0.50 0.0 0 1 1107.69 352.91 L 1107.69 480.69 A 0.65 0.65 0.0 0 1 1107.04 481.34 L 1076.83 481.34 A 0.62 0.62 0.0 0 1 1076.21 480.76 L 1074.71 459.81 Z"/><path d="M 1136.95 480.63 L 1136.95 459.25 A 1.42 1.41 -24.5 0 1 1137.30 458.32 Q 1137.67 457.87 1190.54 396.88 C 1196.16 390.41 1202.26 384.76 1208.51 378.43 A 0.34 0.34 0.0 0 0 1208.22 377.85 Q 1205.64 378.25 1202.75 378.30 Q 1175.23 378.79 1138.10 378.57 A 0.65 0.64 -90.0 0 1 1137.46 377.92 L 1137.46 353.01 A 0.61 0.60 -90.0 0 1 1138.06 352.40 L 1247.90 352.40 A 0.39 0.38 -90.0 0 1 1248.28 352.79 L 1248.28 374.42 A 1.91 1.87 65.9 0 1 1247.82 375.66 Q 1209.19 420.23 1197.60 433.65 C 1190.43 441.95 1185.13 447.17 1177.19 455.07 A 0.13 0.13 0.0 0 0 1177.28 455.29 L 1250.12 455.29 A 0.21 0.21 0.0 0 1 1250.33 455.50 L 1250.33 480.97 A 0.36 0.36 0.0 0 1 1249.97 481.33 L 1137.65 481.33 A 0.70 0.70 0.0 0 1 1136.95 480.63 Z"/></g></svg>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-label">Menu</div>
+                <div class="nav-item active" data-view="dashboard">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Dashboard
+                </div>
+                <div class="nav-item" data-view="forms">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Formulários
+                </div>
+                <div class="nav-item" data-view="leads">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Leads
+                </div>
+                <div class="nav-item" data-view="integrations">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    Integrações
+                </div>
+            </nav>
+
+            <nav class="nav-section" style="margin-top: auto;">
+                <div class="nav-item" data-view="settings">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Configurações
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <button class="btn btn-primary" onclick="openModal('create-form')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Novo Formulário
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total de Leads</div>
+                        <div class="stat-value" id="stat-leads">0</div>
+                        <div class="stat-change">↑ 12% esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Formulários Ativos</div>
+                        <div class="stat-value" id="stat-forms">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Taxa de Conversão</div>
+                        <div class="stat-value">3.2%</div>
+                        <div class="stat-change">↑ 0.5% vs mês anterior</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Webhooks Ativos</div>
+                        <div class="stat-value" id="stat-webhooks">0</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Últimos Leads</h3>
+                        <button class="btn btn-secondary" onclick="switchView('leads')">Ver todos</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Formulário</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-leads">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-icon">📋</div>
+                                    <div class="empty-title">Nenhum lead ainda</div>
+                                    <div class="empty-desc">Crie um formulário e comece a capturar leads</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Forms View -->
+            <section id="view-forms" class="view-section">
+                <div class="header">
+                    <h1 class="page-title">Formulários</h1>
+                    <button class="btn btn-primary" onclick="openModal('create-form')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Novo Formulário
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Campos</th>
+                                <th>Leads</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forms-list">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-icon">📝</div>
+                                    <div class="empty-title">Nenhum formulário criado</div>
+                                    <div class="empty-desc">Clique em "Novo Formulário" para começar</div>
+                                    <button class="btn btn-primary" onclick="openModal('create-form')">Criar Formulário</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Leads View -->
+            <section id="view-leads" class="view-section">
+                <div class="header">
+                    <h1 class="page-title">Leads</h1>
+                    <button class="btn btn-secondary" onclick="exportLeads()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Exportar CSV
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Formulário</th>
+                                <th>Data</th>
+                                <th>Webhook</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-list">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    <div class="empty-icon">👥</div>
+                                    <div class="empty-title">Nenhum lead capturado</div>
+                                    <div class="empty-desc">Os leads aparecerão aqui quando forem enviados</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Integrations View -->
+            <section id="view-integrations" class="view-section">
+                <div class="header">
+                    <h1 class="page-title">Integrações</h1>
+                </div>
+
+                <div class="table-container" style="padding: 24px;">
+                    <h3 style="margin-bottom: 20px;">Configurar Webhooks</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                        Configure webhooks para enviar os dados dos formulários para Make, n8n, Zapier ou qualquer outra plataforma.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label">URL do Webhook Global</label>
+                        <input type="url" class="form-input" id="global-webhook" placeholder="https://hook.make.com/seu-webhook">
+                        <p class="form-hint">Este webhook receberá dados de todos os formulários</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveGlobalWebhook()">Salvar Webhook</button>
+
+                    <div style="margin-top: 40px;">
+                        <h4 style="margin-bottom: 16px;">Exemplos de configuração</h4>
+                        
+                        <div class="webhook-item">
+                            <div class="webhook-icon make">🔮</div>
+                            <div class="webhook-info">
+                                <div class="webhook-name">Make (Integromat)</div>
+                                <div class="webhook-url">https://hook.make.com/...</div>
+                            </div>
+                        </div>
+
+                        <div class="webhook-item">
+                            <div class="webhook-icon n8n">⚡</div>
+                            <div class="webhook-info">
+                                <div class="webhook-name">n8n</div>
+                                <div class="webhook-url">https://seu-n8n.com/webhook/...</div>
+                            </div>
+                        </div>
+
+                        <div class="webhook-item">
+                            <div class="webhook-icon zapier">🔗</div>
+                            <div class="webhook-info">
+                                <div class="webhook-name">Zapier</div>
+                                <div class="webhook-url">https://hooks.zapier.com/...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section">
+                <div class="header">
+                    <h1 class="page-title">Configurações</h1>
+                </div>
+
+                <div class="table-container" style="padding: 24px;">
+                    <h3 style="margin-bottom: 20px;">Configurações do Sistema</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Endpoint da API</label>
+                        <input type="url" class="form-input" id="api-endpoint" placeholder="https://sua-api.com/leads">
+                        <p class="form-hint">URL do seu backend para salvar os leads (opcional se usar apenas webhooks)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notificações por Email</label>
+                        <input type="email" class="form-input" id="notification-email" placeholder="seu@email.com">
+                        <p class="form-hint">Receba um email a cada novo lead (requer configuração de backend)</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveSettings()">Salvar Configurações</button>
+
+                    <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);">
+                        <h4 style="margin-bottom: 16px; color: var(--danger);">Zona de Perigo</h4>
+                        <button class="btn btn-danger" onclick="clearAllData()">Limpar Todos os Dados</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Create Form Modal -->
+    <div class="modal-overlay" id="modal-create-form">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Criar Novo Formulário</h3>
+                <button class="modal-close" onclick="closeModal('create-form')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome do Formulário</label>
+                    <input type="text" class="form-input" id="form-name" placeholder="Ex: Contato Landing Page">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Campos do Formulário</label>
+                    <div class="fields-list" id="fields-list">
+                        <!-- Fields will be added here -->
+                    </div>
+                    <button class="btn btn-secondary" onclick="addField()" style="width: 100%;">
+                        + Adicionar Campo
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Webhook específico (opcional)</label>
+                    <input type="url" class="form-input" id="form-webhook" placeholder="https://hook.make.com/...">
+                    <p class="form-hint">Deixe vazio para usar o webhook global</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">URL de redirecionamento após envio</label>
+                    <input type="url" class="form-input" id="form-redirect" placeholder="https://seusite.com/obrigado">
+                </div>
+
+                <button class="btn btn-primary" onclick="createForm()" style="width: 100%;">Criar Formulário</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Field Modal -->
+    <div class="modal-overlay" id="modal-add-field">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar Campo</h3>
+                <button class="modal-close" onclick="closeModal('add-field')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome do Campo</label>
+                    <input type="text" class="form-input" id="field-name" placeholder="Ex: Nome Completo">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo do Campo</label>
+                    <select class="form-select" id="field-type">
+                        <option value="text">Texto</option>
+                        <option value="email">Email</option>
+                        <option value="tel">Telefone</option>
+                        <option value="number">Número</option>
+                        <option value="textarea">Área de Texto</option>
+                        <option value="select">Seleção</option>
+                        <option value="checkbox">Checkbox</option>
+                        <option value="date">Data</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Placeholder</label>
+                    <input type="text" class="form-input" id="field-placeholder" placeholder="Ex: Digite seu nome">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="field-required" checked> Campo obrigatório
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveField()" style="width: 100%;">Adicionar Campo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Code Modal -->
+    <div class="modal-overlay" id="modal-view-code">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Código do Formulário</h3>
+                <button class="modal-close" onclick="closeModal('view-code')">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                    Copie este código HTML e cole na sua landing page. O formulário já está configurado para enviar os dados.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-tabs">
+                            <button class="code-tab active" onclick="showCodeTab('html')">HTML</button>
+                            <button class="code-tab" onclick="showCodeTab('css')">CSS (opcional)</button>
+                        </div>
+                        <button class="btn btn-secondary copy-btn" onclick="copyCode()">
+                            📋 Copiar
+                        </button>
+                    </div>
+                    <div class="code-content">
+                        <pre id="code-output"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Lead Modal -->
+    <div class="modal-overlay" id="modal-view-lead">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalhes do Lead</h3>
+                <button class="modal-close" onclick="closeModal('view-lead')">×</button>
+            </div>
+            <div class="modal-body" id="lead-details">
+                <!-- Lead details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Data Store
+        let store = {
+            forms: [],
+            leads: [],
+            settings: {
+                globalWebhook: '',
+                apiEndpoint: '',
+                notificationEmail: ''
+            }
+        };
+
+        // API Base URL - ajuste conforme seu ambiente
+        const API_URL = window.location.origin + '/api';
+
+        // Temp fields for form creation
+        let tempFields = [];
+
+        // Load from API
+        async function loadStore() {
+            try {
+                // Carrega estatísticas
+                const statsRes = await fetch(`${API_URL}/stats`);
+                const statsData = await statsRes.json();
+                
+                // Carrega formulários
+                const formsRes = await fetch(`${API_URL}/forms`);
+                const formsData = await formsRes.json();
+                
+                // Carrega leads
+                const leadsRes = await fetch(`${API_URL}/leads?limit=100`);
+                const leadsData = await leadsRes.json();
+                
+                // Carrega configurações
+                const settingsRes = await fetch(`${API_URL}/settings`);
+                const settingsData = await settingsRes.json();
+                
+                // Carrega webhooks
+                const webhooksRes = await fetch(`${API_URL}/webhooks`);
+                const webhooksData = await webhooksRes.json();
+
+                store.forms = formsData.forms || [];
+                store.leads = (leadsData.leads || []).map(l => ({
+                    id: l.id,
+                    formId: l.form_id,
+                    formName: l.form_name,
+                    data: l.data,
+                    webhookSent: l.webhook_sent,
+                    createdAt: l.created_at
+                }));
+                store.settings = settingsData.settings || {};
+                store.stats = statsData.stats || {};
+                store.webhooks = webhooksData.webhooks || [];
+
+                updateUI();
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                showToast('Erro ao conectar com a API', 'error');
+            }
+        }
+
+        // Save settings to API
+        async function saveSettings() {
+            try {
+                const settings = {
+                    globalWebhook: document.getElementById('global-webhook').value,
+                    apiEndpoint: document.getElementById('api-endpoint').value,
+                    notificationEmail: document.getElementById('notification-email').value
+                };
+
+                const response = await fetch(`${API_URL}/settings`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+
+                if (response.ok) {
+                    showToast('Configurações salvas!', 'success');
+                    loadStore();
+                }
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                showToast('Erro ao salvar configurações', 'error');
+            }
+        }
+
+        // Update UI with current data
+        function updateUI() {
+            // Update stats
+            document.getElementById('stat-leads').textContent = store.stats?.totalLeads || store.leads.length;
+            document.getElementById('stat-forms').textContent = store.stats?.totalForms || store.forms.length;
+            document.getElementById('stat-webhooks').textContent = store.stats?.totalWebhooks || 0;
+
+            // Update forms list
+            updateFormsList();
+            
+            // Update leads list
+            updateLeadsList();
+            
+            // Update recent leads
+            updateRecentLeads();
+            
+            // Update settings
+            document.getElementById('global-webhook').value = store.settings.globalWebhook || '';
+            document.getElementById('api-endpoint').value = store.settings.apiEndpoint || '';
+            document.getElementById('notification-email').value = store.settings.notificationEmail || '';
+        }
+
+        // Update forms list
+        function updateFormsList() {
+            const container = document.getElementById('forms-list');
+            if (store.forms.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <div class="empty-icon">📝</div>
+                            <div class="empty-title">Nenhum formulário criado</div>
+                            <div class="empty-desc">Clique em "Novo Formulário" para começar</div>
+                            <button class="btn btn-primary" onclick="openModal('create-form')">Criar Formulário</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = store.forms.map(form => {
+                const leadsCount = store.leads.filter(l => l.formId === form.id).length;
+                return `
+                    <tr>
+                        <td><strong>${form.name}</strong></td>
+                        <td>${form.fields.length} campos</td>
+                        <td>${leadsCount}</td>
+                        <td>${formatDate(form.createdAt)}</td>
+                        <td>
+                            <div class="action-row">
+                                <button class="btn btn-secondary" onclick="viewFormCode('${form.id}')" style="padding: 8px 12px; font-size: 12px;">
+                                    &lt;/&gt; Código
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteForm('${form.id}')" style="padding: 8px 12px; font-size: 12px;">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Update leads list
+        function updateLeadsList() {
+            const container = document.getElementById('leads-list');
+            if (store.leads.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <div class="empty-icon">👥</div>
+                            <div class="empty-title">Nenhum lead capturado</div>
+                            <div class="empty-desc">Os leads aparecerão aqui quando forem enviados</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = store.leads.map(lead => {
+                const form = store.forms.find(f => f.id === lead.formId);
+                return `
+                    <tr>
+                        <td>${lead.data.nome || lead.data.name || '-'}</td>
+                        <td>${lead.data.email || '-'}</td>
+                        <td>${lead.data.telefone || lead.data.phone || lead.data.tel || '-'}</td>
+                        <td>${form ? form.name : 'Formulário deletado'}</td>
+                        <td>${formatDate(lead.createdAt)}</td>
+                        <td>
+                            <span class="badge ${lead.webhookSent ? 'badge-success' : 'badge-warning'}">
+                                ${lead.webhookSent ? 'Enviado' : 'Pendente'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="viewLead('${lead.id}')" style="padding: 8px 12px; font-size: 12px;">
+                                👁️ Ver
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Update recent leads
+        function updateRecentLeads() {
+            const container = document.getElementById('recent-leads');
+            const recent = store.leads.slice(-5).reverse();
+            
+            if (recent.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <div class="empty-title">Nenhum lead ainda</div>
+                            <div class="empty-desc">Crie um formulário e comece a capturar leads</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = recent.map(lead => {
+                const form = store.forms.find(f => f.id === lead.formId);
+                return `
+                    <tr>
+                        <td>${lead.data.nome || lead.data.name || '-'}</td>
+                        <td>${lead.data.email || '-'}</td>
+                        <td>${form ? form.name : '-'}</td>
+                        <td>${formatDate(lead.createdAt)}</td>
+                        <td>
+                            <span class="badge ${lead.webhookSent ? 'badge-success' : 'badge-warning'}">
+                                ${lead.webhookSent ? 'Enviado' : 'Pendente'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const view = item.dataset.view;
+                switchView(view);
+            });
+        });
+
+        function switchView(view) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+            
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`view-${view}`).classList.add('active');
+        }
+
+        // Modal functions
+        function openModal(name) {
+            document.getElementById(`modal-${name}`).classList.add('active');
+            if (name === 'create-form') {
+                tempFields = [
+                    { name: 'Nome', type: 'text', placeholder: 'Seu nome', required: true },
+                    { name: 'Email', type: 'email', placeholder: 'seu@email.com', required: true },
+                    { name: 'Telefone', type: 'tel', placeholder: '(00) 00000-0000', required: false }
+                ];
+                renderFields();
+            }
+        }
+
+        function closeModal(name) {
+            document.getElementById(`modal-${name}`).classList.remove('active');
+        }
+
+        // Fields management
+        function renderFields() {
+            const container = document.getElementById('fields-list');
+            container.innerHTML = tempFields.map((field, index) => `
+                <div class="field-item">
+                    <span class="field-drag">⋮⋮</span>
+                    <div class="field-info">
+                        <div class="field-name">${field.name} ${field.required ? '*' : ''}</div>
+                        <div class="field-type">${field.type}</div>
+                    </div>
+                    <div class="field-actions">
+                        <button class="field-btn delete" onclick="removeField(${index})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addField() {
+            openModal('add-field');
+        }
+
+        function saveField() {
+            const name = document.getElementById('field-name').value;
+            const type = document.getElementById('field-type').value;
+            const placeholder = document.getElementById('field-placeholder').value;
+            const required = document.getElementById('field-required').checked;
+
+            if (!name) {
+                showToast('Digite o nome do campo', 'error');
+                return;
+            }
+
+            tempFields.push({ name, type, placeholder, required });
+            renderFields();
+            closeModal('add-field');
+            
+            // Clear fields
+            document.getElementById('field-name').value = '';
+            document.getElementById('field-placeholder').value = '';
+        }
+
+        function removeField(index) {
+            tempFields.splice(index, 1);
+            renderFields();
+        }
+
+        // Create form
+        async function createForm() {
+            const name = document.getElementById('form-name').value;
+            const webhook = document.getElementById('form-webhook').value;
+            const redirect = document.getElementById('form-redirect').value;
+
+            if (!name) {
+                showToast('Digite o nome do formulário', 'error');
+                return;
+            }
+
+            if (tempFields.length === 0) {
+                showToast('Adicione pelo menos um campo', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/forms`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        fields: [...tempFields],
+                        webhookUrl: webhook,
+                        redirectUrl: redirect
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('create-form');
+                    showToast('Formulário criado com sucesso!', 'success');
+                    loadStore();
+                    
+                    // Clear form
+                    document.getElementById('form-name').value = '';
+                    document.getElementById('form-webhook').value = '';
+                    document.getElementById('form-redirect').value = '';
+                } else {
+                    showToast(data.error || 'Erro ao criar formulário', 'error');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showToast('Erro ao criar formulário', 'error');
+            }
+        }
+
+        // Delete form
+        async function deleteForm(id) {
+            if (confirm('Tem certeza que deseja excluir este formulário?')) {
+                try {
+                    const response = await fetch(`${API_URL}/forms/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        showToast('Formulário excluído', 'success');
+                        loadStore();
+                    }
+                } catch (error) {
+                    showToast('Erro ao excluir formulário', 'error');
+                }
+            }
+        }
+
+        // View form code
+        function viewFormCode(formId) {
+            const form = store.forms.find(f => f.id === formId);
+            if (!form) return;
+
+            const code = generateFormHTML(form);
+            document.getElementById('code-output').textContent = code;
+            openModal('view-code');
+        }
+
+        // Generate form HTML
+        function generateFormHTML(form) {
+            const apiEndpoint = window.location.origin + '/api/leads';
+            const formId = form.id;
+            
+            let fieldsHTML = form.fields.map(field => {
+                const fieldId = field.name.toLowerCase().replace(/\s+/g, '_');
+                const required = field.required ? 'required' : '';
+                
+                if (field.type === 'textarea') {
+                    return `    <div class="form-group">
+        <label for="${fieldId}">${field.name}${field.required ? ' *' : ''}</label>
+        <textarea id="${fieldId}" name="${fieldId}" placeholder="${field.placeholder || ''}" ${required}></textarea>
+    </div>`;
+                }
+                
+                if (field.type === 'checkbox') {
+                    return `    <div class="form-group checkbox">
+        <input type="checkbox" id="${fieldId}" name="${fieldId}" ${required}>
+        <label for="${fieldId}">${field.name}</label>
+    </div>`;
+                }
+
+                if (field.type === 'select') {
+                    return `    <div class="form-group">
+        <label for="${fieldId}">${field.name}${field.required ? ' *' : ''}</label>
+        <select id="${fieldId}" name="${fieldId}" ${required}>
+            <option value="">Selecione...</option>
+            <!-- Adicione suas opções aqui -->
+        </select>
+    </div>`;
+                }
+
+                return `    <div class="form-group">
+        <label for="${fieldId}">${field.name}${field.required ? ' *' : ''}</label>
+        <input type="${field.type}" id="${fieldId}" name="${fieldId}" placeholder="${field.placeholder || ''}" ${required}>
+    </div>`;
+            }).join('\n\n');
+
+            return `<!-- Barosac Forms - ${form.name} -->
+<!-- IMPORTANTE: Substitua SEU_DOMINIO pelo domínio onde o Barosac Forms está rodando -->
+<form id="barosac-form-${formId}" class="barosac-form" onsubmit="return submitBarosacForm(event)">
+${fieldsHTML}
+
+    <button type="submit">Enviar</button>
+    <div id="form-message" class="form-message"></div>
+</form>
+
+<script>
+// CONFIGURE AQUI: URL da sua API Barosac Forms
+const BAROSAC_API_URL = '${apiEndpoint}';
+
+async function submitBarosacForm(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const messageEl = document.getElementById('form-message');
+    
+    // Disable button
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+    
+    // Collect form data
+    const formData = new FormData(form);
+    const data = {
+        formId: '${formId}',
+        formName: '${form.name}',
+        data: {}
+    };
+    
+    formData.forEach((value, key) => {
+        data.data[key] = value;
+    });
+    
+    try {
+        // Send to Barosac Forms API
+        const response = await fetch(BAROSAC_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            messageEl.className = 'form-message success';
+            messageEl.textContent = 'Enviado com sucesso!';
+            form.reset();
+            ${form.redirect_url ? `\n            // Redirect after success\n            setTimeout(() => {\n                window.location.href = '${form.redirect_url}';\n            }, 1500);` : ''}
+        } else {
+            throw new Error('Erro ao enviar');
+        }
+    } catch (error) {
+        messageEl.className = 'form-message error';
+        messageEl.textContent = 'Erro ao enviar. Tente novamente.';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar';
+    }
+    
+    return false;
+}
+<\/script>
+
+<style>
+.barosac-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.barosac-form .form-group {
+    margin-bottom: 16px;
+}
+
+.barosac-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.barosac-form input,
+.barosac-form textarea,
+.barosac-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.barosac-form input:focus,
+.barosac-form textarea:focus,
+.barosac-form select:focus {
+    outline: none;
+    border-color: #ef4444;
+}
+
+.barosac-form .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.barosac-form .checkbox input {
+    width: auto;
+}
+
+.barosac-form button {
+    width: 100%;
+    padding: 14px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.barosac-form button:hover {
+    background: #dc2626;
+}
+
+.barosac-form button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.form-message {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.form-message.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.form-message.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+</style>`;
+        }
+
+        // Show code tab
+        function showCodeTab(tab) {
+            document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[onclick="showCodeTab('${tab}')"]`).classList.add('active');
+            // For simplicity, we're showing the same code for now
+        }
+
+        // Copy code
+        function copyCode() {
+            const code = document.getElementById('code-output').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Código copiado!', 'success');
+            });
+        }
+
+        // View lead details
+        function viewLead(leadId) {
+            const lead = store.leads.find(l => l.id === leadId);
+            if (!lead) return;
+
+            const form = store.forms.find(f => f.id === lead.formId);
+            
+            document.getElementById('lead-details').innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <strong>Formulário:</strong> ${form ? form.name : 'Deletado'}<br>
+                    <strong>Data:</strong> ${formatDate(lead.createdAt)}<br>
+                    <strong>Webhook:</strong> ${lead.webhookSent ? '✅ Enviado' : '⏳ Pendente'}
+                </div>
+                <h4 style="margin-bottom: 12px;">Dados enviados:</h4>
+                ${Object.entries(lead.data).map(([key, value]) => `
+                    <div style="padding: 12px; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 8px;">
+                        <strong>${key}:</strong> ${value}
+                    </div>
+                `).join('')}
+            `;
+            
+            openModal('view-lead');
+        }
+
+        // Export leads to CSV
+        function exportLeads() {
+            // Abre o endpoint de exportação direto da API
+            window.open(`${API_URL}/leads/export/csv`, '_blank');
+            showToast('Download iniciado!', 'success');
+        }
+
+        // Save global webhook
+        async function saveGlobalWebhook() {
+            try {
+                const url = document.getElementById('global-webhook').value;
+                
+                if (url) {
+                    const response = await fetch(`${API_URL}/webhooks`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: url,
+                            isGlobal: true
+                        })
+                    });
+
+                    if (response.ok) {
+                        showToast('Webhook salvo!', 'success');
+                        loadStore();
+                    }
+                }
+            } catch (error) {
+                showToast('Erro ao salvar webhook', 'error');
+            }
+        }
+
+        // Clear all data - não disponível via API por segurança
+        function clearAllData() {
+            showToast('Esta função não está disponível por segurança. Use o banco de dados diretamente.', 'error');
+        }
+
+        // Utility functions
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : '⚠️'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Simulate receiving a lead (for testing)
+        function simulateLead(formId) {
+            const form = store.forms.find(f => f.id === formId);
+            if (!form) return;
+
+            const lead = {
+                id: generateId(),
+                formId: formId,
+                data: {
+                    nome: 'João Silva',
+                    email: 'joao@email.com',
+                    telefone: '(11) 99999-9999'
+                },
+                webhookSent: Math.random() > 0.3,
+                createdAt: new Date().toISOString()
+            };
+
+            store.leads.push(lead);
+            saveStore();
+            showToast('Lead simulado adicionado!', 'success');
+        }
+
+        // Initialize
+        loadStore();
+    </script>
+</body>
+</html>

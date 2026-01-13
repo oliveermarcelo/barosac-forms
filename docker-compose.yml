@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  barosac-forms:
+    build: .
+    container_name: barosac-forms
+    volumes:
+      - barosac_data:/app/data
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/app/data/leads.db
+    restart: unless-stopped
+
+volumes:
+  barosac_data:
