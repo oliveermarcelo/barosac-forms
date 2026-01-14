@@ -13,63 +13,93 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min
 .login-box p{text-align:center;color:var(--text2);margin-bottom:32px}
 .login-logo{text-align:center;margin-bottom:24px}
 .login-logo svg{width:180px;height:auto}
-.form-group{margin-bottom:20px}
-.form-group label{display:block;font-size:14px;margin-bottom:8px;color:var(--text2)}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--accent)}
-.form-group textarea{min-height:80px;resize:vertical}
-.btn{padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none}
-.btn-primary{background:var(--accent);color:#fff;width:100%}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;margin-bottom:6px;color:var(--text2)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent)}
+.form-group textarea{min-height:70px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover{background:#dc2626}
 .btn-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
-.error{background:rgba(239,68,68,.1);color:var(--accent);padding:12px;border-radius:8px;margin-bottom:20px;display:none;text-align:center}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-full{width:100%}
+.error{background:rgba(239,68,68,.1);color:var(--accent);padding:12px;border-radius:8px;margin-bottom:16px;display:none;text-align:center}
 .error.show{display:block}
 .app{display:none;min-height:100vh}
 .app.active{display:flex}
-.sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column}
-.logo{margin-bottom:32px;padding:8px}
-.logo svg{width:140px;height:auto;color:var(--text)}
-.nav-item{padding:12px;border-radius:8px;cursor:pointer;color:var(--text2);margin-bottom:4px}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column}
+.logo{margin-bottom:24px;padding:8px}
+.logo svg{width:120px;height:auto;color:var(--text)}
+.nav-item{padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--text2);margin-bottom:4px;font-size:14px}
 .nav-item:hover,.nav-item.active{background:var(--card);color:var(--text)}
 .nav-item.logout{color:var(--accent);margin-top:auto}
-.main{flex:1;padding:32px;overflow-y:auto}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px}
-.title{font-size:24px;font-weight:700}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
-.stat-label{font-size:12px;color:var(--text2);margin-bottom:4px}
-.stat-value{font-size:28px;font-weight:700}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);font-weight:600}
+.main{flex:1;padding:24px;overflow-y:auto}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.title{font-size:22px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.stat-value{font-size:24px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.card-header{padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:14px}
+.card-body{padding:16px}
 table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px 20px;border-bottom:1px solid var(--border)}
-th{font-size:11px;text-transform:uppercase;color:var(--text2)}
+th,td{text-align:left;padding:10px 16px;border-bottom:1px solid var(--border);font-size:13px}
+th{font-size:10px;text-transform:uppercase;color:var(--text2)}
 tr:last-child td{border-bottom:none}
-.badge{padding:4px 8px;border-radius:12px;font-size:11px}
+tr:hover{background:var(--bg2)}
+.badge{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600}
 .badge-ok{background:rgba(34,197,94,.15);color:var(--success)}
 .badge-wait{background:rgba(245,158,11,.15);color:var(--warning)}
+.badge-info{background:rgba(59,130,246,.15);color:#3b82f6}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;visibility:hidden}
 .modal.active{opacity:1;visibility:visible}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid var(--border)}
-.modal-close{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer}
-.modal-body{padding:20px}
-.fields{border:1px solid var(--border);border-radius:8px;margin-bottom:16px;max-height:250px;overflow-y:auto}
-.field{display:flex;align-items:center;padding:12px;border-bottom:1px solid var(--border)}
-.field:last-child{border-bottom:none}
-.field-info{flex:1}
-.field-name{font-weight:500;font-size:14px}
-.field-type{font-size:12px;color:var(--text2)}
-.field-del{background:none;border:none;color:var(--text2);cursor:pointer;padding:8px}
-.code-box{background:#000;border-radius:8px;margin-top:16px}
-.code-header{display:flex;justify-content:space-between;padding:12px;background:var(--bg2)}
-.code-content{padding:16px;font-family:monospace;font-size:12px;white-space:pre-wrap;max-height:400px;overflow:auto;color:#10b981}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:12px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+.modal-box.sm{max-width:500px}
+.modal-box.lg{max-width:1200px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-header h3{font-size:16px}
+.modal-close{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;line-height:1}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.modal-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px}
+.tab{padding:8px 16px;border-radius:6px;cursor:pointer;color:var(--text2);font-size:13px}
+.tab.active{background:var(--accent);color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.fields-list{border:1px solid var(--border);border-radius:8px;max-height:200px;overflow-y:auto}
+.field-item{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);gap:10px}
+.field-item:last-child{border-bottom:none}
+.field-item .drag{cursor:grab;color:var(--text2)}
+.field-item .info{flex:1}
+.field-item .name{font-weight:500;font-size:13px}
+.field-item .type{font-size:11px;color:var(--text2)}
+.field-item .del{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px}
+.preview-frame{background:#fff;border-radius:8px;padding:24px;min-height:300px}
+.color-row{display:flex;gap:8px;align-items:center}
+.color-row input[type="color"]{width:40px;height:32px;border:none;border-radius:6px;cursor:pointer}
+.color-row input[type="text"]{flex:1}
+.lead-detail{display:grid;gap:16px}
+.lead-section{background:var(--bg2);border-radius:8px;padding:16px}
+.lead-section h4{font-size:12px;color:var(--text2);margin-bottom:12px;text-transform:uppercase}
+.lead-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.lead-row:last-child{border-bottom:none}
+.lead-row .label{color:var(--text2)}
+.lead-row .value{font-weight:500;word-break:break-all}
+.empty{text-align:center;padding:32px;color:var(--text2)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);padding:12px 20px;border-radius:8px;z-index:2000;font-size:14px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filters input,.filters select{padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px}
+.code-box{background:#000;border-radius:8px;overflow:hidden}
+.code-header{display:flex;justify-content:space-between;padding:10px 14px;background:var(--bg2)}
+.code-content{padding:14px;font-family:monospace;font-size:11px;white-space:pre-wrap;max-height:350px;overflow:auto;color:#10b981;line-height:1.5}
+.utm-check{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px}
 .view{display:none}
 .view.active{display:block}
-.empty{text-align:center;padding:40px;color:var(--text2)}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);padding:12px 20px;border-radius:8px;z-index:2000}
-.actions{display:flex;gap:8px}
-@media(max-width:900px){.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}}
+.actions{display:flex;gap:6px}
+@media(max-width:900px){.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}.modal-box{margin:10px}}
 </style>
 </head>
 <body>
@@ -81,7 +111,7 @@ tr:last-child td{border-bottom:none}
 <form id="login-form">
 <div class="form-group"><label>Usuário</label><input type="text" id="user" required></div>
 <div class="form-group"><label>Senha</label><input type="password" id="pass" required></div>
-<button type="submit" class="btn btn-primary" id="btn-login">Entrar</button>
+<button type="submit" class="btn btn-primary btn-full" id="btn-login">Entrar</button>
 </form>
 </div>
 </div>
@@ -99,339 +129,113 @@ tr:last-child td{border-bottom:none}
 </aside>
 <main class="main">
 <section id="v-dash" class="view active">
-<div class="header"><h1 class="title">Dashboard</h1><button class="btn btn-primary" onclick="openM('form')" style="width:auto">+ Novo Formulário</button></div>
+<div class="header"><h1 class="title">Dashboard</h1><button class="btn btn-primary" onclick="openFormBuilder()">+ Novo Formulário</button></div>
 <div class="stats"><div class="stat"><div class="stat-label">Total Leads</div><div class="stat-value" id="st-leads">0</div></div><div class="stat"><div class="stat-label">Formulários</div><div class="stat-value" id="st-forms">0</div></div><div class="stat"><div class="stat-label">Webhooks</div><div class="stat-value" id="st-hooks">0</div></div><div class="stat"><div class="stat-label">Enviados</div><div class="stat-value" id="st-sent">0</div></div></div>
-<div class="card"><div class="card-header">Últimos Leads</div><table><thead><tr><th>Nome</th><th>Email</th><th>Formulário</th><th>Data</th><th>Status</th></tr></thead><tbody id="tbl-recent"></tbody></table></div>
+<div class="card"><div class="card-header">Últimos Leads</div><table><thead><tr><th>Nome</th><th>Email</th><th>Formulário</th><th>Origem</th><th>Data</th><th></th></tr></thead><tbody id="tbl-recent"></tbody></table></div>
 </section>
 <section id="v-forms" class="view">
-<div class="header"><h1 class="title">Formulários</h1><button class="btn btn-primary" onclick="openM('form')" style="width:auto">+ Novo</button></div>
-<div class="card"><table><thead><tr><th>Nome</th><th>Campos</th><th>Leads</th><th>Ações</th></tr></thead><tbody id="tbl-forms"></tbody></table></div>
+<div class="header"><h1 class="title">Formulários</h1><button class="btn btn-primary" onclick="openFormBuilder()">+ Novo</button></div>
+<div class="card"><table><thead><tr><th>Nome</th><th>Campos</th><th>Leads</th><th>Criado</th><th>Ações</th></tr></thead><tbody id="tbl-forms"></tbody></table></div>
 </section>
 <section id="v-leads" class="view">
 <div class="header"><h1 class="title">Leads</h1><button class="btn btn-secondary" onclick="csvExport()">📥 Exportar CSV</button></div>
-<div class="card"><table><thead><tr><th>Nome</th><th>Email</th><th>Tel</th><th>Form</th><th>Data</th><th>Status</th></tr></thead><tbody id="tbl-leads"></tbody></table></div>
+<div class="filters"><input type="text" id="fl-search" placeholder="Buscar..." onkeyup="filterLeads()"><select id="fl-form" onchange="filterLeads()"><option value="">Todos formulários</option></select><select id="fl-source" onchange="filterLeads()"><option value="">Todas origens</option></select></div>
+<div class="card"><table><thead><tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Formulário</th><th>Origem</th><th>Data</th><th></th></tr></thead><tbody id="tbl-leads"></tbody></table></div>
 </section>
 <section id="v-hooks" class="view">
 <div class="header"><h1 class="title">Integrações</h1></div>
-<div class="card" style="padding:20px">
-<h3>Webhook Global</h3>
-<p style="color:var(--text2);margin:12px 0">Receba leads no Make, n8n ou Zapier</p>
-<div class="form-group"><label>URL</label><input type="url" id="hook-url" placeholder="https://hook.make.com/..."></div>
-<button class="btn btn-primary" onclick="saveHook()" style="width:auto">Salvar</button>
-<div id="hook-list" style="margin-top:20px"></div>
-</div>
+<div class="card"><div class="card-body"><h3 style="margin-bottom:12px">Webhook Global</h3><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Receba leads no Make, n8n ou Zapier</p><div class="form-group"><label>URL do Webhook</label><input type="url" id="hook-url" placeholder="https://hook.make.com/..."></div><button class="btn btn-primary" onclick="saveHook()">Salvar</button><div id="hook-list" style="margin-top:20px"></div></div></div>
 </section>
 </main>
 </div>
 
-<div class="modal" id="m-form"><div class="modal-box"><div class="modal-header"><h3>Novo Formulário</h3><button class="modal-close" onclick="closeM('form')">×</button></div><div class="modal-body"><div class="form-group"><label>Nome</label><input type="text" id="f-name" placeholder="Ex: Contato"></div><div class="form-group"><label>Campos</label><div class="fields" id="f-fields"></div><button class="btn btn-secondary" onclick="openM('field')" style="width:100%">+ Campo</button></div><button class="btn btn-primary" onclick="createForm()" style="width:100%;margin-top:16px">Criar</button></div></div></div>
+<div class="modal" id="m-builder"><div class="modal-box lg"><div class="modal-header"><h3>Criar Formulário</h3><button class="modal-close" onclick="closeM('builder')">×</button></div><div class="modal-body" style="display:flex;gap:20px"><div style="flex:1;min-width:0">
+<div class="tabs"><div class="tab active" onclick="switchTab('fields')">Campos</div><div class="tab" onclick="switchTab('style')">Estilo</div><div class="tab" onclick="switchTab('utm')">UTMs</div><div class="tab" onclick="switchTab('settings')">Config</div></div>
+<div id="tab-fields" class="tab-content active"><div class="form-group"><label>Nome do Formulário</label><input type="text" id="f-name" placeholder="Ex: Contato Site"></div><div class="form-group"><label>Campos</label><div class="fields-list" id="f-fields"></div><button class="btn btn-secondary btn-full" onclick="openFieldModal()" style="margin-top:8px">+ Adicionar Campo</button></div></div>
+<div id="tab-style" class="tab-content"><div class="form-row"><div class="form-group"><label>Cor do Fundo</label><div class="color-row"><input type="color" id="st-bg" value="#ffffff" oninput="updatePreview()"><input type="text" id="st-bg-t" value="#ffffff" oninput="syncColor('bg')"></div></div><div class="form-group"><label>Cor do Texto</label><div class="color-row"><input type="color" id="st-text" value="#1f2937" oninput="updatePreview()"><input type="text" id="st-text-t" value="#1f2937" oninput="syncColor('text')"></div></div></div><div class="form-row"><div class="form-group"><label>Cor do Botão</label><div class="color-row"><input type="color" id="st-btn" value="#ef4444" oninput="updatePreview()"><input type="text" id="st-btn-t" value="#ef4444" oninput="syncColor('btn')"></div></div><div class="form-group"><label>Texto do Botão</label><div class="color-row"><input type="color" id="st-btn-text" value="#ffffff" oninput="updatePreview()"><input type="text" id="st-btn-text-t" value="#ffffff" oninput="syncColor('btn-text')"></div></div></div><div class="form-row"><div class="form-group"><label>Cor da Borda</label><div class="color-row"><input type="color" id="st-border" value="#e5e7eb" oninput="updatePreview()"><input type="text" id="st-border-t" value="#e5e7eb" oninput="syncColor('border')"></div></div><div class="form-group"><label>Borda Arredondada</label><select id="st-radius" onchange="updatePreview()"><option value="0">Sem (0px)</option><option value="4">Pequena (4px)</option><option value="8" selected>Média (8px)</option><option value="12">Grande (12px)</option></select></div></div><div class="form-row"><div class="form-group"><label>Fonte</label><select id="st-font" onchange="updatePreview()"><option value="system-ui">Sistema</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option></select></div><div class="form-group"><label>Tamanho</label><select id="st-size" onchange="updatePreview()"><option value="13">Pequeno</option><option value="14" selected>Normal</option><option value="16">Grande</option></select></div></div><div class="form-group"><label>Texto do Botão</label><input type="text" id="st-btn-label" value="Enviar" oninput="updatePreview()"></div></div>
+<div id="tab-utm" class="tab-content"><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Marque os UTMs para capturar automaticamente:</p><div class="utm-check"><input type="checkbox" id="utm-source" checked><label for="utm-source">utm_source</label></div><div class="utm-check"><input type="checkbox" id="utm-medium" checked><label for="utm-medium">utm_medium</label></div><div class="utm-check"><input type="checkbox" id="utm-campaign" checked><label for="utm-campaign">utm_campaign</label></div><div class="utm-check"><input type="checkbox" id="utm-term" checked><label for="utm-term">utm_term</label></div><div class="utm-check"><input type="checkbox" id="utm-content" checked><label for="utm-content">utm_content</label></div><div class="utm-check"><input type="checkbox" id="utm-referrer" checked><label for="utm-referrer">Página de origem</label></div><div class="utm-check"><input type="checkbox" id="utm-page" checked><label for="utm-page">URL da página</label></div></div>
+<div id="tab-settings" class="tab-content"><div class="form-group"><label>Mensagem de Sucesso</label><input type="text" id="set-success" value="Enviado com sucesso!"></div><div class="form-group"><label>Mensagem de Erro</label><input type="text" id="set-error" value="Erro ao enviar. Tente novamente."></div><div class="form-group"><label>Redirecionar após envio</label><input type="url" id="set-redirect" placeholder="https://seusite.com/obrigado"></div></div>
+</div><div style="width:350px;flex-shrink:0"><h4 style="margin-bottom:12px;font-size:13px;color:var(--text2)">Preview</h4><div class="preview-frame" id="preview"></div></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">Criar Formulário</button></div></div></div>
 
-<div class="modal" id="m-field"><div class="modal-box" style="max-width:450px"><div class="modal-header"><h3>Campo</h3><button class="modal-close" onclick="closeM('field')">×</button></div><div class="modal-body"><div class="form-group"><label>Nome</label><input type="text" id="fd-name"></div><div class="form-group"><label>Tipo</label><select id="fd-type" onchange="togOpts()"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="number">Número</option><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="cep">CEP</option><option value="date">Data</option><option value="url">URL</option><option value="textarea">Texto Longo</option><option value="select">Seleção</option><option value="radio">Múltipla Escolha</option><option value="checkbox">Checkbox</option><option value="hidden">Oculto</option></select></div><div class="form-group" id="fg-opts" style="display:none"><label>Opções</label><textarea id="fd-opts" rows="3" placeholder="Opção 1&#10;Opção 2"></textarea></div><div class="form-group"><label>Placeholder</label><input type="text" id="fd-ph"></div><div class="form-group" id="fg-val" style="display:none"><label>Valor</label><input type="text" id="fd-val"></div><div class="form-group"><label><input type="checkbox" id="fd-req" checked> Obrigatório</label></div><button class="btn btn-primary" onclick="addField()" style="width:100%">Adicionar</button></div></div></div>
+<div class="modal" id="m-field"><div class="modal-box sm"><div class="modal-header"><h3>Adicionar Campo</h3><button class="modal-close" onclick="closeM('field')">×</button></div><div class="modal-body"><div class="form-group"><label>Nome do Campo</label><input type="text" id="fd-name" placeholder="Ex: Nome Completo"></div><div class="form-group"><label>Tipo</label><select id="fd-type" onchange="toggleFieldOpts()"><optgroup label="Texto"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="textarea">Texto Longo</option></optgroup><optgroup label="Números"><option value="number">Número</option><option value="currency">Valor (R$)</option></optgroup><optgroup label="Documentos BR"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="cep">CEP</option></optgroup><optgroup label="Data/Hora"><option value="date">Data</option><option value="time">Hora</option></optgroup><optgroup label="Escolhas"><option value="select">Seleção (Dropdown)</option><option value="radio">Múltipla Escolha</option><option value="checkbox">Checkbox</option></optgroup><optgroup label="Outros"><option value="url">URL</option><option value="hidden">Campo Oculto</option></optgroup></select></div><div class="form-group" id="fg-opts" style="display:none"><label>Opções (uma por linha)</label><textarea id="fd-opts" rows="4" placeholder="Opção 1&#10;Opção 2"></textarea></div><div class="form-group"><label>Placeholder</label><input type="text" id="fd-ph" placeholder="Ex: Digite seu nome"></div><div class="form-group" id="fg-val" style="display:none"><label>Valor Padrão</label><input type="text" id="fd-val"></div><div class="form-group"><label><input type="checkbox" id="fd-req" checked> Campo obrigatório</label></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('field')">Cancelar</button><button class="btn btn-primary" onclick="addField()">Adicionar</button></div></div></div>
 
-<div class="modal" id="m-code"><div class="modal-box" style="max-width:800px"><div class="modal-header"><h3>Código HTML</h3><button class="modal-close" onclick="closeM('code')">×</button></div><div class="modal-body"><p style="color:var(--text2)">Cole na sua landing page:</p><div class="code-box"><div class="code-header"><span>HTML</span><button class="btn btn-secondary" onclick="copyCode()">📋 Copiar</button></div><div class="code-content" id="code-out"></div></div></div></div></div>
+<div class="modal" id="m-code"><div class="modal-box"><div class="modal-header"><h3>Código do Formulário</h3><button class="modal-close" onclick="closeM('code')">×</button></div><div class="modal-body"><p style="color:var(--text2);margin-bottom:12px;font-size:13px">Cole este código na sua landing page:</p><div class="code-box"><div class="code-header"><span>HTML + JS</span><button class="btn btn-secondary btn-sm" onclick="copyCode()">📋 Copiar</button></div><pre class="code-content" id="code-out"></pre></div></div></div></div>
+
+<div class="modal" id="m-lead"><div class="modal-box"><div class="modal-header"><h3>Detalhes do Lead</h3><button class="modal-close" onclick="closeM('lead')">×</button></div><div class="modal-body" id="lead-detail"></div></div></div>
 
 <script>
-const API = '/api';
-const TYPES = {text:'Texto',email:'Email',tel:'Telefone',number:'Número',cpf:'CPF',cnpj:'CNPJ',cep:'CEP',date:'Data',url:'URL',textarea:'Texto Longo',select:'Seleção',radio:'Múltipla Escolha',checkbox:'Checkbox',hidden:'Oculto'};
+const API='/api',TYPES={text:'Texto',email:'Email',tel:'Telefone',number:'Número',currency:'Valor',cpf:'CPF',cnpj:'CNPJ',cep:'CEP',date:'Data',time:'Hora',textarea:'Texto Longo',select:'Seleção',radio:'Múltipla Escolha',checkbox:'Checkbox',url:'URL',hidden:'Oculto'};
+let tk=localStorage.getItem('tk'),D={forms:[],leads:[],stats:{},hooks:[]},TF=[];
 
-let tk = localStorage.getItem('tk');
-let D = {forms:[],leads:[],stats:{},hooks:[]};
-let TF = [];
+async function init(){if(!tk)return showLogin();try{const r=await f('GET','/session');r&&r.authenticated?(showApp(),load()):doLogout()}catch(e){showLogin()}}
+function showLogin(){document.getElementById('login').style.display='flex';document.getElementById('app').classList.remove('active')}
+function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').classList.add('active')}
+function doLogout(){tk=null;localStorage.removeItem('tk');showLogin()}
 
-async function init() {
-  if (!tk) return showLogin();
-  try {
-    const r = await f('GET','/session');
-    if (r && r.authenticated) { showApp(); load(); }
-    else doLogout();
-  } catch(e) { showLogin(); }
-}
+document.getElementById('login-form').onsubmit=async function(e){e.preventDefault();const u=document.getElementById('user').value,p=document.getElementById('pass').value,b=document.getElementById('btn-login'),er=document.getElementById('err');b.disabled=true;b.textContent='...';er.classList.remove('show');try{const r=await fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const d=await r.json();if(d.success){tk=d.token;localStorage.setItem('tk',tk);showApp();load()}else er.classList.add('show')}catch(x){er.textContent='Erro de conexão';er.classList.add('show')}b.disabled=false;b.textContent='Entrar'};
 
-function showLogin() {
-  document.getElementById('login').style.display = 'flex';
-  document.getElementById('app').classList.remove('active');
-}
+async function logout(){await f('POST','/logout');doLogout()}
+async function f(m,url,body){const o={method:m,headers:{Authorization:'Bearer '+tk}};if(body){o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}const r=await fetch(API+url,o);if(r.status===401){doLogout();return null}return r.json()}
 
-function showApp() {
-  document.getElementById('login').style.display = 'none';
-  document.getElementById('app').classList.add('active');
-}
+async function load(){const[s,fo,le,ho]=await Promise.all([f('GET','/stats'),f('GET','/forms'),f('GET','/leads?limit=100'),f('GET','/webhooks')]);if(!s)return;D.stats=s.stats||{};D.forms=fo.forms||[];D.leads=le.leads||[];D.hooks=ho.webhooks||[];render()}
 
-function doLogout() {
-  tk = null;
-  localStorage.removeItem('tk');
-  showLogin();
-}
+function render(){
+document.getElementById('st-leads').textContent=D.stats.totalLeads||0;
+document.getElementById('st-forms').textContent=D.stats.totalForms||0;
+document.getElementById('st-hooks').textContent=D.stats.totalWebhooks||0;
+document.getElementById('st-sent').textContent=D.stats.webhooksSent||0;
+document.getElementById('tbl-forms').innerHTML=D.forms.length?D.forms.map(function(x){return'<tr><td><b>'+x.name+'</b></td><td>'+x.fields.length+'</td><td>'+x.leads_count+'</td><td>'+fdt(x.created_at)+'</td><td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="showCode(\''+x.id+'\')">Código</button><button class="btn btn-secondary btn-sm" onclick="delForm(\''+x.id+'\')" style="color:var(--accent)">🗑️</button></div></td></tr>'}).join(''):'<tr><td colspan="5" class="empty">Nenhum formulário</td></tr>';
+document.getElementById('tbl-leads').innerHTML=D.leads.length?D.leads.map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.data.telefone||x.data.phone||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join(''):'<tr><td colspan="7" class="empty">Nenhum lead</td></tr>';
+document.getElementById('tbl-recent').innerHTML=D.leads.slice(0,5).map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join('')||'<tr><td colspan="6" class="empty">Nenhum lead</td></tr>';
+var formSel=document.getElementById('fl-form');formSel.innerHTML='<option value="">Todos formulários</option>'+D.forms.map(function(x){return'<option value="'+x.id+'">'+x.name+'</option>'}).join('');
+var sources=D.leads.map(function(x){return x.utm_source}).filter(function(x,i,a){return x&&a.indexOf(x)===i});document.getElementById('fl-source').innerHTML='<option value="">Todas origens</option>'+sources.map(function(x){return'<option value="'+x+'">'+x+'</option>'}).join('');
+document.getElementById('hook-list').innerHTML=D.hooks.map(function(h){return'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><div><code style="font-size:11px;word-break:break-all">'+h.url+'</code><div style="font-size:11px;color:var(--text2);margin-top:4px">✓ '+(h.success_count||0)+' | ✗ '+(h.fail_count||0)+'</div></div><button class="btn btn-secondary btn-sm" onclick="delHook('+h.id+')" style="color:var(--accent)">🗑️</button></div>'}).join('')}
 
-document.getElementById('login-form').onsubmit = async function(e) {
-  e.preventDefault();
-  const u = document.getElementById('user').value;
-  const p = document.getElementById('pass').value;
-  const b = document.getElementById('btn-login');
-  const er = document.getElementById('err');
-  
-  b.disabled = true;
-  b.textContent = '...';
-  er.classList.remove('show');
-  
-  try {
-    const r = await fetch(API + '/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username: u, password: p})
-    });
-    const d = await r.json();
-    if (d.success) {
-      tk = d.token;
-      localStorage.setItem('tk', tk);
-      showApp();
-      load();
-    } else {
-      er.classList.add('show');
-    }
-  } catch(x) {
-    er.textContent = 'Erro de conexão';
-    er.classList.add('show');
-  }
-  
-  b.disabled = false;
-  b.textContent = 'Entrar';
-};
+function filterLeads(){var search=document.getElementById('fl-search').value.toLowerCase(),formId=document.getElementById('fl-form').value,source=document.getElementById('fl-source').value;var filtered=D.leads.filter(function(x){if(formId&&x.form_id!==formId)return false;if(source&&x.utm_source!==source)return false;if(search){var str=JSON.stringify(x.data).toLowerCase();if(str.indexOf(search)===-1)return false}return true});document.getElementById('tbl-leads').innerHTML=filtered.length?filtered.map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.data.telefone||x.data.phone||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join(''):'<tr><td colspan="7" class="empty">Nenhum resultado</td></tr>'}
 
-async function logout() {
-  await f('POST','/logout');
-  doLogout();
-}
+function showLead(id){var lead=D.leads.find(function(x){return x.id===id});if(!lead)return;var html='<div class="lead-detail"><div class="lead-section"><h4>📝 Dados do Formulário</h4>';for(var k in lead.data){html+='<div class="lead-row"><span class="label">'+k+'</span><span class="value">'+lead.data[k]+'</span></div>'}html+='</div><div class="lead-section"><h4>📊 UTMs / Rastreamento</h4>';html+='<div class="lead-row"><span class="label">Source</span><span class="value">'+(lead.utm_source||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Medium</span><span class="value">'+(lead.utm_medium||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Campaign</span><span class="value">'+(lead.utm_campaign||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Term</span><span class="value">'+(lead.utm_term||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Content</span><span class="value">'+(lead.utm_content||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Referrer</span><span class="value">'+(lead.referrer||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Página</span><span class="value">'+(lead.page_url||'-')+'</span></div>';html+='</div><div class="lead-section"><h4>💻 Info Técnicas</h4>';html+='<div class="lead-row"><span class="label">IP</span><span class="value">'+(lead.ip_address||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Dispositivo</span><span class="value">'+(lead.device_type||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Navegador</span><span class="value">'+(lead.browser||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Sistema</span><span class="value">'+(lead.os||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Webhook</span><span class="value">'+(lead.webhook_sent?'✓ Enviado':'⏳ Pendente')+'</span></div>';html+='<div class="lead-row"><span class="label">Data</span><span class="value">'+fdt(lead.created_at)+'</span></div>';html+='</div></div>';document.getElementById('lead-detail').innerHTML=html;openM('lead')}
 
-async function f(m, url, body) {
-  const o = {method: m, headers: {Authorization: 'Bearer ' + tk}};
-  if (body) {
-    o.headers['Content-Type'] = 'application/json';
-    o.body = JSON.stringify(body);
-  }
-  const r = await fetch(API + url, o);
-  if (r.status === 401) { doLogout(); return null; }
-  return r.json();
-}
+document.querySelectorAll('.nav-item[data-v]').forEach(function(n){n.onclick=function(){document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active')});n.classList.add('active');document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.getElementById('v-'+n.dataset.v).classList.add('active')}});
 
-async function load() {
-  const [s,fo,le,ho] = await Promise.all([
-    f('GET','/stats'),
-    f('GET','/forms'),
-    f('GET','/leads?limit=100'),
-    f('GET','/webhooks')
-  ]);
-  if (!s) return;
-  D.stats = s.stats || {};
-  D.forms = fo.forms || [];
-  D.leads = (le.leads || []).map(function(l) {
-    return {id:l.id, fid:l.form_id, fn:l.form_name, d:l.data, ws:l.webhook_sent, dt:l.created_at};
-  });
-  D.hooks = ho.webhooks || [];
-  render();
-}
+function openM(n){document.getElementById('m-'+n).classList.add('active')}
+function closeM(n){document.getElementById('m-'+n).classList.remove('active')}
+function switchTab(t){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.querySelector('.tab[onclick*="'+t+'"]').classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
 
-function render() {
-  document.getElementById('st-leads').textContent = D.stats.totalLeads || 0;
-  document.getElementById('st-forms').textContent = D.stats.totalForms || 0;
-  document.getElementById('st-hooks').textContent = D.stats.totalWebhooks || 0;
-  document.getElementById('st-sent').textContent = D.stats.webhooksSent || 0;
-  
-  if (D.forms.length) {
-    document.getElementById('tbl-forms').innerHTML = D.forms.map(function(x) {
-      return '<tr><td><b>' + x.name + '</b></td><td>' + x.fields.length + '</td><td>' + (x.leads_count||0) + '</td><td><div class="actions"><button class="btn btn-secondary" onclick="showCode(\'' + x.id + '\')">Código</button><button class="btn btn-secondary" onclick="delForm(\'' + x.id + '\')" style="color:var(--accent)">🗑️</button></div></td></tr>';
-    }).join('');
-  } else {
-    document.getElementById('tbl-forms').innerHTML = '<tr><td colspan="4" class="empty">Nenhum formulário</td></tr>';
-  }
-  
-  if (D.leads.length) {
-    document.getElementById('tbl-leads').innerHTML = D.leads.map(function(x) {
-      return '<tr><td>' + (x.d.nome||x.d.name||'-') + '</td><td>' + (x.d.email||'-') + '</td><td>' + (x.d.telefone||x.d.phone||'-') + '</td><td>' + (x.fn||'-') + '</td><td>' + fdt(x.dt) + '</td><td><span class="badge ' + (x.ws?'badge-ok':'badge-wait') + '">' + (x.ws?'✓':'⏳') + '</span></td></tr>';
-    }).join('');
-    document.getElementById('tbl-recent').innerHTML = D.leads.slice(0,5).map(function(x) {
-      return '<tr><td>' + (x.d.nome||x.d.name||'-') + '</td><td>' + (x.d.email||'-') + '</td><td>' + (x.fn||'-') + '</td><td>' + fdt(x.dt) + '</td><td><span class="badge ' + (x.ws?'badge-ok':'badge-wait') + '">' + (x.ws?'✓':'⏳') + '</span></td></tr>';
-    }).join('');
-  } else {
-    document.getElementById('tbl-leads').innerHTML = '<tr><td colspan="6" class="empty">Nenhum lead</td></tr>';
-    document.getElementById('tbl-recent').innerHTML = '<tr><td colspan="5" class="empty">Nenhum lead</td></tr>';
-  }
-  
-  document.getElementById('hook-list').innerHTML = D.hooks.map(function(h) {
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><code style="font-size:11px;word-break:break-all">' + h.url + '</code><button class="btn btn-secondary" onclick="delHook(' + h.id + ')" style="margin-left:12px;color:var(--accent)">🗑️</button></div>';
-  }).join('');
-}
+function openFormBuilder(){TF=[{name:'Nome',type:'text',placeholder:'Seu nome completo',required:true},{name:'Email',type:'email',placeholder:'seu@email.com',required:true},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true}];document.getElementById('f-name').value='';renderFields();updatePreview();openM('builder')}
 
-document.querySelectorAll('.nav-item[data-v]').forEach(function(n) {
-  n.onclick = function() {
-    document.querySelectorAll('.nav-item').forEach(function(x) { x.classList.remove('active'); });
-    n.classList.add('active');
-    document.querySelectorAll('.view').forEach(function(x) { x.classList.remove('active'); });
-    document.getElementById('v-' + n.dataset.v).classList.add('active');
-  };
-});
+function renderFields(){document.getElementById('f-fields').innerHTML=TF.length?TF.map(function(x,i){return'<div class="field-item"><span class="drag">⋮⋮</span><div class="info"><div class="name">'+x.name+(x.required?' *':'')+'</div><div class="type">'+(TYPES[x.type]||x.type)+'</div></div><button class="del" onclick="rmField('+i+')">🗑️</button></div>'}).join(''):'<div class="empty">Adicione campos</div>'}
 
-function openM(n) {
-  document.getElementById('m-' + n).classList.add('active');
-  if (n === 'form') {
-    TF = [
-      {name:'Nome',type:'text',placeholder:'Seu nome',required:true},
-      {name:'Email',type:'email',placeholder:'seu@email.com',required:true},
-      {name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:false}
-    ];
-    renderF();
-  }
-  if (n === 'field') {
-    document.getElementById('fd-name').value = '';
-    document.getElementById('fd-type').value = 'text';
-    document.getElementById('fd-ph').value = '';
-    document.getElementById('fd-opts').value = '';
-    document.getElementById('fd-val').value = '';
-    document.getElementById('fd-req').checked = true;
-    togOpts();
-  }
-}
+function openFieldModal(){document.getElementById('fd-name').value='';document.getElementById('fd-type').value='text';document.getElementById('fd-ph').value='';document.getElementById('fd-opts').value='';document.getElementById('fd-val').value='';document.getElementById('fd-req').checked=true;toggleFieldOpts();openM('field')}
 
-function closeM(n) {
-  document.getElementById('m-' + n).classList.remove('active');
-}
+function toggleFieldOpts(){var t=document.getElementById('fd-type').value;document.getElementById('fg-opts').style.display=['select','radio'].indexOf(t)>-1?'block':'none';document.getElementById('fg-val').style.display=t==='hidden'?'block':'none'}
 
-function togOpts() {
-  var t = document.getElementById('fd-type').value;
-  document.getElementById('fg-opts').style.display = (t === 'select' || t === 'radio') ? 'block' : 'none';
-  document.getElementById('fg-val').style.display = (t === 'hidden') ? 'block' : 'none';
-}
+function addField(){var n=document.getElementById('fd-name').value.trim(),t=document.getElementById('fd-type').value,p=document.getElementById('fd-ph').value,r=document.getElementById('fd-req').checked,opts=document.getElementById('fd-opts').value.trim(),val=document.getElementById('fd-val').value.trim();if(!n)return toast('Digite o nome','e');if(['select','radio'].indexOf(t)>-1&&!opts)return toast('Digite opções','e');var fld={name:n,type:t,placeholder:p,required:r};if(opts)fld.options=opts.split('\n').filter(function(o){return o.trim()});if(val)fld.value=val;TF.push(fld);renderFields();updatePreview();closeM('field');toast('Campo adicionado!')}
 
-function renderF() {
-  if (TF.length) {
-    document.getElementById('f-fields').innerHTML = TF.map(function(x, i) {
-      return '<div class="field"><div class="field-info"><div class="field-name">' + x.name + (x.required?' *':'') + '</div><div class="field-type">' + (TYPES[x.type]||x.type) + '</div></div><button class="field-del" onclick="rmField(' + i + ')">🗑️</button></div>';
-    }).join('');
-  } else {
-    document.getElementById('f-fields').innerHTML = '<div class="empty" style="padding:20px">Adicione campos</div>';
-  }
-}
+function rmField(i){TF.splice(i,1);renderFields();updatePreview()}
+function syncColor(n){var t=document.getElementById('st-'+n+'-t').value;document.getElementById('st-'+n).value=t;updatePreview()}
+function getStyles(){return{bg:document.getElementById('st-bg').value,text:document.getElementById('st-text').value,btn:document.getElementById('st-btn').value,btnText:document.getElementById('st-btn-text').value,border:document.getElementById('st-border').value,radius:document.getElementById('st-radius').value,font:document.getElementById('st-font').value,size:document.getElementById('st-size').value,btnLabel:document.getElementById('st-btn-label').value||'Enviar'}}
+function getUtmConfig(){return{source:document.getElementById('utm-source').checked,medium:document.getElementById('utm-medium').checked,campaign:document.getElementById('utm-campaign').checked,term:document.getElementById('utm-term').checked,content:document.getElementById('utm-content').checked,referrer:document.getElementById('utm-referrer').checked,page:document.getElementById('utm-page').checked}}
+function getSettings(){return{successMsg:document.getElementById('set-success').value||'Enviado!',errorMsg:document.getElementById('set-error').value||'Erro.',redirect:document.getElementById('set-redirect').value||''}}
 
-function addField() {
-  var n = document.getElementById('fd-name').value.trim();
-  var t = document.getElementById('fd-type').value;
-  var p = document.getElementById('fd-ph').value;
-  var r = document.getElementById('fd-req').checked;
-  var opts = document.getElementById('fd-opts').value.trim();
-  var val = document.getElementById('fd-val').value.trim();
-  
-  if (!n) return toast('Digite nome', 'e');
-  if ((t === 'select' || t === 'radio') && !opts) return toast('Digite opções', 'e');
-  
-  var fld = {name:n, type:t, placeholder:p, required:r};
-  if (opts) fld.options = opts.split('\n').filter(function(o) { return o.trim(); });
-  if (val) fld.value = val;
-  
-  TF.push(fld);
-  renderF();
-  closeM('field');
-  toast('Adicionado!');
-}
+function updatePreview(){var s=getStyles();var html='<div style="font-family:'+s.font+';font-size:'+s.size+'px;background:'+s.bg+';color:'+s.text+';padding:20px;border-radius:'+s.radius+'px">';TF.forEach(function(f){var lbl=f.name+(f.required?' *':'');if(f.type==='hidden')return;if(f.type==='checkbox'){html+='<div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox"> '+f.name+'</label></div>';return}if(f.type==='radio'&&f.options){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label>';f.options.forEach(function(o){html+='<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><input type="radio"> '+o+'</label>'});html+='</div>';return}if(f.type==='select'&&f.options){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><select style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px"><option>Selecione...</option>';f.options.forEach(function(o){html+='<option>'+o+'</option>'});html+='</select></div>';return}if(f.type==='textarea'){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><textarea style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;min-height:80px" placeholder="'+(f.placeholder||'')+'"></textarea></div>';return}html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><input type="text" style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px" placeholder="'+(f.placeholder||'')+'"></div>'});html+='<button style="width:100%;padding:12px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-weight:600">'+s.btnLabel+'</button></div>';document.getElementById('preview').innerHTML=html}
 
-function rmField(i) {
-  TF.splice(i, 1);
-  renderF();
-}
+async function saveForm(){var name=document.getElementById('f-name').value.trim();if(!name)return toast('Digite o nome','e');if(!TF.length)return toast('Adicione campos','e');var styles=getStyles(),settings=getSettings();settings.utm=getUtmConfig();var r=await f('POST','/forms',{name:name,fields:TF,styles:styles,settings:settings});if(r&&r.success){closeM('builder');toast('Formulário criado!');load()}else toast('Erro','e')}
 
-async function createForm() {
-  var n = document.getElementById('f-name').value.trim();
-  if (!n) return toast('Nome', 'e');
-  if (!TF.length) return toast('Campos', 'e');
-  var r = await f('POST', '/forms', {name:n, fields:TF});
-  if (r && r.success) {
-    closeM('form');
-    toast('Criado!');
-    load();
-    document.getElementById('f-name').value = '';
-  }
-}
+async function delForm(id){if(confirm('Excluir?')){await f('DELETE','/forms/'+id);toast('Excluído');load()}}
 
-async function delForm(id) {
-  if (confirm('Excluir?')) {
-    await f('DELETE', '/forms/' + id);
-    toast('Excluído');
-    load();
-  }
-}
+function showCode(id){var fo=D.forms.find(function(x){return x.id===id});if(!fo)return;var url=location.origin+'/api/leads';var s=fo.styles||{bg:'#ffffff',text:'#1f2937',btn:'#ef4444',btnText:'#ffffff',border:'#e5e7eb',radius:'8',font:'system-ui',size:'14',btnLabel:'Enviar'};var set=fo.settings||{successMsg:'Enviado!',errorMsg:'Erro.',redirect:'',utm:{}};var utm=set.utm||{};
+var fields=fo.fields.map(function(x){var k=x.name.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[éèê]/g,'e').replace(/[íìî]/g,'i').replace(/[óòõô]/g,'o').replace(/[úùû]/g,'u').replace(/ç/g,'c').replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');var rq=x.required?'required':'';var ph=x.placeholder||'';if(x.type==='hidden')return'  <input type="hidden" name="'+k+'" value="'+(x.value||'')+'">';if(x.type==='checkbox')return'  <div class="v4fg"><label class="v4cb"><input type="checkbox" name="'+k+'"> '+x.name+'</label></div>';if(x.type==='textarea')return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><textarea name="'+k+'" placeholder="'+ph+'" '+rq+'></textarea></div>';if(x.type==='select'){var opts=(x.options||[]).map(function(o){return'<option value="'+o+'">'+o+'</option>'}).join('');return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><select name="'+k+'" '+rq+'><option value="">Selecione...</option>'+opts+'</select></div>'}if(x.type==='radio'){var opts=(x.options||[]).map(function(o){return'<label class="v4ro"><input type="radio" name="'+k+'" value="'+o+'" '+rq+'> '+o+'</label>'}).join('');return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><div class="v4rg">'+opts+'</div></div>'}var inputType=x.type;var extra='';if(x.type==='cpf'){inputType='text';extra=' maxlength="14" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d{1,2})$/,\\'$1-$2\\')"'}if(x.type==='cnpj'){inputType='text';extra=' maxlength="18" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{2})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1/$2\\').replace(/(\\\\d{4})(\\\\d{1,2})$/,\\'$1-$2\\')"'}if(x.type==='cep'){inputType='text';extra=' maxlength="9" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{5})(\\\\d)/,\\'$1-$2\\')"'}if(x.type==='tel'){extra=' maxlength="15" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{2})(\\\\d)/,\\'($1) $2\\').replace(/(\\\\d{5})(\\\\d)/,\\'$1-$2\\')"'}if(x.type==='currency'){inputType='text';extra=' oninput="this.value=\\'R$ \\'+this.value.replace(/\\\\D/g,\\'\\')"'}return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><input type="'+inputType+'" name="'+k+'" placeholder="'+ph+'"'+extra+' '+rq+'></div>'}).join('\n');
+var utmCapture='';if(utm.source||utm.medium||utm.campaign||utm.term||utm.content||utm.referrer||utm.page){utmCapture='\n  var params=new URLSearchParams(window.location.search);\n';if(utm.source)utmCapture+='  if(params.get("utm_source"))meta.utm_source=params.get("utm_source");\n';if(utm.medium)utmCapture+='  if(params.get("utm_medium"))meta.utm_medium=params.get("utm_medium");\n';if(utm.campaign)utmCapture+='  if(params.get("utm_campaign"))meta.utm_campaign=params.get("utm_campaign");\n';if(utm.term)utmCapture+='  if(params.get("utm_term"))meta.utm_term=params.get("utm_term");\n';if(utm.content)utmCapture+='  if(params.get("utm_content"))meta.utm_content=params.get("utm_content");\n';if(utm.referrer)utmCapture+='  meta.referrer=document.referrer||null;\n';if(utm.page)utmCapture+='  meta.page_url=window.location.href;\n'}
+var redirect=set.redirect?'\n      window.location.href="'+set.redirect+'";':'';
+var code='<!-- v4 Forms - '+fo.name+' -->\n<form id="v4f" onsubmit="return v4send(event)">\n'+fields+'\n  <button type="submit">'+s.btnLabel+'</button>\n  <div id="v4msg"></div>\n</form>\n\n<script>\nasync function v4send(e){\n  e.preventDefault();\n  var btn=e.target.querySelector("button"),msg=document.getElementById("v4msg");\n  btn.disabled=true;btn.textContent="Enviando...";\n  var fd=new FormData(e.target),data={};\n  fd.forEach(function(v,k){data[k]=v});\n  var meta={};'+utmCapture+'\n  try{\n    var r=await fetch("'+url+'",{\n      method:"POST",\n      headers:{"Content-Type":"application/json"},\n      body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:data,meta:meta})\n    });\n    if(r.ok){\n      msg.className="v4msg ok";msg.textContent="'+set.successMsg+'";e.target.reset();'+redirect+'\n    }else throw 0;\n  }catch(x){msg.className="v4msg err";msg.textContent="'+set.errorMsg+'";}\n  btn.disabled=false;btn.textContent="'+s.btnLabel+'";return false;\n}\n<\/script>\n\n<style>\n#v4f{max-width:500px;font-family:'+s.font+',sans-serif;background:'+s.bg+';padding:24px;border-radius:'+s.radius+'px}\n#v4f .v4fg{margin-bottom:16px}\n#v4f label{display:block;margin-bottom:6px;font-weight:500;color:'+s.text+';font-size:'+s.size+'px}\n#v4f input,#v4f select,#v4f textarea{width:100%;padding:12px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;font-size:'+s.size+'px;color:'+s.text+'}\n#v4f input:focus,#v4f select:focus,#v4f textarea:focus{outline:none;border-color:'+s.btn+'}\n#v4f textarea{min-height:100px}\n#v4f .v4cb{display:flex;align-items:center;gap:8px;font-weight:normal}\n#v4f .v4ro{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-weight:normal}\n#v4f .v4rg{margin-top:8px}\n#v4f button{width:100%;padding:14px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-size:'+s.size+'px;font-weight:600;cursor:pointer}\n#v4f button:hover{opacity:0.9}\n#v4f button:disabled{opacity:0.6}\n.v4msg{margin-top:16px;padding:12px;border-radius:'+s.radius+'px;text-align:center}\n.v4msg.ok{background:#dcfce7;color:#166534}\n.v4msg.err{background:#fee2e2;color:#991b1b}\n</style>';
+document.getElementById('code-out').textContent=code;openM('code')}
 
-function showCode(id) {
-  var fo = D.forms.find(function(x) { return x.id === id; });
-  if (!fo) return;
-  var url = location.origin + '/api/leads';
-  
-  var flds = fo.fields.map(function(x) {
-    var k = x.name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');
-    var rq = x.required ? 'required' : '';
-    var ph = x.placeholder || '';
-    
-    if (x.type === 'textarea') {
-      return '  <div class="fg">\n    <label>' + x.name + (x.required?' *':'') + '</label>\n    <textarea name="' + k + '" placeholder="' + ph + '" ' + rq + '></textarea>\n  </div>';
-    }
-    if (x.type === 'select') {
-      var opts = (x.options||[]).map(function(o) { return '      <option value="' + o + '">' + o + '</option>'; }).join('\n');
-      return '  <div class="fg">\n    <label>' + x.name + (x.required?' *':'') + '</label>\n    <select name="' + k + '" ' + rq + '>\n      <option value="">Selecione...</option>\n' + opts + '\n    </select>\n  </div>';
-    }
-    if (x.type === 'radio') {
-      var opts = (x.options||[]).map(function(o) { return '      <label class="ro"><input type="radio" name="' + k + '" value="' + o + '" ' + rq + '> ' + o + '</label>'; }).join('\n');
-      return '  <div class="fg">\n    <label>' + x.name + (x.required?' *':'') + '</label>\n    <div class="rg">\n' + opts + '\n    </div>\n  </div>';
-    }
-    if (x.type === 'checkbox') {
-      return '  <div class="fg cb">\n    <label><input type="checkbox" name="' + k + '" ' + rq + '> ' + x.name + '</label>\n  </div>';
-    }
-    if (x.type === 'hidden') {
-      return '  <input type="hidden" name="' + k + '" value="' + (x.value||'') + '">';
-    }
-    return '  <div class="fg">\n    <label>' + x.name + (x.required?' *':'') + '</label>\n    <input type="' + x.type + '" name="' + k + '" placeholder="' + ph + '" ' + rq + '>\n  </div>';
-  }).join('\n');
-  
-  var code = '<!-- v4 Forms - ' + fo.name + ' -->\n<form id="v4f" onsubmit="return sendV4(event)">\n' + flds + '\n  <button type="submit">Enviar</button>\n  <div id="v4msg"></div>\n</form>\n\n<script>\nasync function sendV4(e) {\n  e.preventDefault();\n  var b = e.target.querySelector("button");\n  var m = document.getElementById("v4msg");\n  b.disabled = true;\n  b.textContent = "Enviando...";\n  var fd = new FormData(e.target);\n  var data = {formId:"' + fo.id + '", formName:"' + fo.name + '", data:{}};\n  fd.forEach(function(v,k) { data.data[k] = v; });\n  try {\n    var r = await fetch("' + url + '", {\n      method: "POST",\n      headers: {"Content-Type": "application/json"},\n      body: JSON.stringify(data)\n    });\n    if (r.ok) {\n      m.className = "v4msg ok";\n      m.textContent = "Enviado!";\n      e.target.reset();\n    } else throw 0;\n  } catch(x) {\n    m.className = "v4msg err";\n    m.textContent = "Erro";\n  }\n  b.disabled = false;\n  b.textContent = "Enviar";\n  return false;\n}\n<\/script>\n\n<style>\n#v4f{max-width:500px;font-family:sans-serif}\n#v4f .fg{margin-bottom:16px}\n#v4f label{display:block;margin-bottom:6px;font-weight:500}\n#v4f input,#v4f select,#v4f textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px}\n#v4f textarea{min-height:100px}\n#v4f .cb label,.ro{display:flex;align-items:center;gap:8px;font-weight:normal}\n#v4f .rg{display:flex;flex-direction:column;gap:8px}\n#v4f button{width:100%;padding:14px;background:#ef4444;color:#fff;border:none;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer}\n.v4msg{margin-top:16px;padding:12px;border-radius:6px;text-align:center}\n.v4msg.ok{background:#dcfce7;color:#166534}\n.v4msg.err{background:#fee2e2;color:#991b1b}\n</style>';
-  
-  document.getElementById('code-out').textContent = code;
-  openM('code');
-}
-
-function copyCode() {
-  navigator.clipboard.writeText(document.getElementById('code-out').textContent);
-  toast('Copiado!');
-}
-
-async function saveHook() {
-  var u = document.getElementById('hook-url').value.trim();
-  if (!u) return toast('URL', 'e');
-  await f('POST', '/webhooks', {url:u, isGlobal:true});
-  toast('Salvo!');
-  load();
-  document.getElementById('hook-url').value = '';
-}
-
-async function delHook(id) {
-  await f('DELETE', '/webhooks/' + id);
-  toast('Removido');
-  load();
-}
-
-function csvExport() {
-  window.open(API + '/leads/export/csv', '_blank');
-}
-
-function fdt(s) {
-  if (!s) return '-';
-  return new Date(s).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit'});
-}
-
-function toast(m, t) {
-  var el = document.createElement('div');
-  el.className = 'toast';
-  el.innerHTML = (t === 'e' ? '⚠️' : '✓') + ' ' + m;
-  document.body.appendChild(el);
-  setTimeout(function() { el.remove(); }, 3000);
-}
-
+function copyCode(){navigator.clipboard.writeText(document.getElementById('code-out').textContent);toast('Código copiado!')}
+async function saveHook(){var u=document.getElementById('hook-url').value.trim();if(!u)return toast('Digite URL','e');await f('POST','/webhooks',{url:u,isGlobal:true});toast('Webhook salvo!');load();document.getElementById('hook-url').value=''}
+async function delHook(id){await f('DELETE','/webhooks/'+id);toast('Removido');load()}
+function csvExport(){window.open(API+'/leads/export/csv','_blank')}
+function fdt(s){if(!s)return'-';return new Date(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function toast(m,t){var el=document.createElement('div');el.className='toast';el.innerHTML=(t==='e'?'⚠️':'✓')+' '+m;document.body.appendChild(el);setTimeout(function(){el.remove()},3000)}
 init();
 </script>
 </body>
