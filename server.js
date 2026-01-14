@@ -15,7 +15,11 @@ const ADMIN_PASS = process.env.ADMIN_PASS || 'v4123';
 // Sessões ativas (em memória)
 const sessions = new Map();
 
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 const db = new Database(DB_PATH);
