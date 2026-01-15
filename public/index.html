@@ -75,7 +75,12 @@ tr:hover{background:var(--bg2)}
 .field-item .info{flex:1}
 .field-item .name{font-weight:500;font-size:13px}
 .field-item .type{font-size:11px;color:var(--text2)}
-.field-item .del{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px}
+.field-item .field-actions{display:flex;gap:4px}
+.field-item .field-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:pointer;padding:4px 8px;border-radius:4px;font-size:12px}
+.field-item .field-btn:hover{background:var(--card);color:var(--text)}
+.field-item .field-btn:disabled{opacity:0.3;cursor:not-allowed}
+.field-item .field-btn.del:hover{color:var(--accent)}
+.form-group small{display:block;margin-top:4px;color:var(--text2);font-size:11px}
 .preview-frame{background:#fff;border-radius:8px;padding:24px;min-height:300px}
 .color-row{display:flex;gap:8px;align-items:center}
 .color-row input[type="color"]{width:40px;height:32px;border:none;border-radius:6px;cursor:pointer}
@@ -154,7 +159,7 @@ tr:hover{background:var(--bg2)}
 <div id="tab-fields" class="tab-content active"><div class="form-group"><label>Nome do Formulário</label><input type="text" id="f-name" placeholder="Ex: Contato Site"></div><div class="form-group"><label>Campos</label><div class="fields-list" id="f-fields"></div><button class="btn btn-secondary btn-full" onclick="openFieldModal()" style="margin-top:8px">+ Adicionar Campo</button></div></div>
 <div id="tab-style" class="tab-content"><div class="form-row"><div class="form-group"><label>Cor do Fundo</label><div class="color-row"><input type="color" id="st-bg" value="#ffffff" onchange="updatePreview()"><input type="text" id="st-bg-t" value="#ffffff" onchange="document.getElementById('st-bg').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Cor do Texto</label><div class="color-row"><input type="color" id="st-text" value="#1f2937" onchange="updatePreview()"><input type="text" id="st-text-t" value="#1f2937" onchange="document.getElementById('st-text').value=this.value;updatePreview()"></div></div></div><div class="form-row"><div class="form-group"><label>Cor do Botão</label><div class="color-row"><input type="color" id="st-btn" value="#ef4444" onchange="updatePreview()"><input type="text" id="st-btn-t" value="#ef4444" onchange="document.getElementById('st-btn').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Texto do Botão</label><div class="color-row"><input type="color" id="st-btn-text" value="#ffffff" onchange="updatePreview()"><input type="text" id="st-btn-text-t" value="#ffffff" onchange="document.getElementById('st-btn-text').value=this.value;updatePreview()"></div></div></div><div class="form-row"><div class="form-group"><label>Cor da Borda</label><div class="color-row"><input type="color" id="st-border" value="#e5e7eb" onchange="updatePreview()"><input type="text" id="st-border-t" value="#e5e7eb" onchange="document.getElementById('st-border').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Borda Arredondada</label><select id="st-radius" onchange="updatePreview()"><option value="0">Sem (0px)</option><option value="4">Pequena (4px)</option><option value="8" selected>Média (8px)</option><option value="12">Grande (12px)</option></select></div></div><div class="form-row"><div class="form-group"><label>Fonte</label><select id="st-font" onchange="updatePreview()"><option value="system-ui">Sistema</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option></select></div><div class="form-group"><label>Tamanho</label><select id="st-size" onchange="updatePreview()"><option value="13">Pequeno</option><option value="14" selected>Normal</option><option value="16">Grande</option></select></div></div><div class="form-group"><label>Texto do Botão</label><input type="text" id="st-btn-label" value="Enviar" onchange="updatePreview()"></div></div>
 <div id="tab-utm" class="tab-content"><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Marque os UTMs para capturar automaticamente:</p><div class="utm-check"><input type="checkbox" id="utm-source" checked><label for="utm-source">utm_source</label></div><div class="utm-check"><input type="checkbox" id="utm-medium" checked><label for="utm-medium">utm_medium</label></div><div class="utm-check"><input type="checkbox" id="utm-campaign" checked><label for="utm-campaign">utm_campaign</label></div><div class="utm-check"><input type="checkbox" id="utm-term" checked><label for="utm-term">utm_term</label></div><div class="utm-check"><input type="checkbox" id="utm-content" checked><label for="utm-content">utm_content</label></div><div class="utm-check"><input type="checkbox" id="utm-referrer" checked><label for="utm-referrer">Página de origem</label></div><div class="utm-check"><input type="checkbox" id="utm-page" checked><label for="utm-page">URL da página</label></div></div>
-<div id="tab-settings" class="tab-content"><div class="form-group"><label>Mensagem de Sucesso</label><input type="text" id="set-success" value="Enviado com sucesso!"></div><div class="form-group"><label>Mensagem de Erro</label><input type="text" id="set-error" value="Erro ao enviar. Tente novamente."></div><div class="form-group"><label>Redirecionar após envio</label><input type="url" id="set-redirect" placeholder="https://seusite.com/obrigado"></div></div>
+<div id="tab-settings" class="tab-content"><div class="form-group"><label>Webhook do Formulário</label><input type="url" id="set-webhook" placeholder="https://hook.make.com/..."><small>Receba os leads deste formulário no Make, n8n, Zapier, etc</small></div><div class="form-group"><label>Mensagem de Sucesso</label><input type="text" id="set-success" value="Enviado com sucesso!"></div><div class="form-group"><label>Mensagem de Erro</label><input type="text" id="set-error" value="Erro ao enviar. Tente novamente."></div><div class="form-group"><label>Redirecionar após envio</label><input type="url" id="set-redirect" placeholder="https://seusite.com/obrigado"></div></div>
 </div><div style="width:320px;flex-shrink:0"><h4 style="margin-bottom:12px;font-size:13px;color:var(--text2)">Preview</h4><div class="preview-frame" id="preview"></div></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">Criar Formulário</button></div></div></div>
 
 <!-- Modal Campo -->
@@ -367,6 +372,10 @@ function switchTab(el,t){
 function openFormBuilder(){
   TF=[{name:'Nome',type:'text',placeholder:'Seu nome completo',required:true},{name:'Email',type:'email',placeholder:'seu@email.com',required:true},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true}];
   document.getElementById('f-name').value='';
+  document.getElementById('set-webhook').value='';
+  document.getElementById('set-success').value='Enviado com sucesso!';
+  document.getElementById('set-error').value='Erro ao enviar. Tente novamente.';
+  document.getElementById('set-redirect').value='';
   renderFields();
   updatePreview();
   openM('builder');
@@ -377,13 +386,19 @@ function renderFields(){
   if(TF.length){
     for(var i=0;i<TF.length;i++){
       var x=TF[i];
-      html+='<div class="field-item"><div class="info"><div class="name">'+esc(x.name)+(x.required?' *':'')+'</div><div class="type">'+(TYPES[x.type]||x.type)+'</div></div><button class="del" onclick="rmField('+i+')">🗑️</button></div>';
+      html+='<div class="field-item"><div class="info"><div class="name">'+esc(x.name)+(x.required?' *':'')+'</div><div class="type">'+(TYPES[x.type]||x.type)+'</div></div><div class="field-actions">';
+      html+='<button class="field-btn" onclick="moveField('+i+',-1)" title="Mover para cima"'+(i===0?' disabled':'')+'>↑</button>';
+      html+='<button class="field-btn" onclick="moveField('+i+',1)" title="Mover para baixo"'+(i===TF.length-1?' disabled':'')+'>↓</button>';
+      html+='<button class="field-btn" onclick="editField('+i+')" title="Editar">✏️</button>';
+      html+='<button class="field-btn del" onclick="rmField('+i+')" title="Excluir">🗑️</button>';
+      html+='</div></div>';
     }
   }else{html='<div class="empty" style="padding:20px">Adicione campos</div>';}
   document.getElementById('f-fields').innerHTML=html;
 }
 
 function openFieldModal(){
+  editingFieldIndex=-1;
   document.getElementById('fd-name').value='';
   document.getElementById('fd-type').value='text';
   document.getElementById('fd-ph').value='';
@@ -391,6 +406,8 @@ function openFieldModal(){
   document.getElementById('fd-val').value='';
   document.getElementById('fd-req').checked=true;
   toggleFieldOpts();
+  document.querySelector('#m-field .modal-header h3').textContent='Adicionar Campo';
+  document.querySelector('#m-field .modal-footer .btn-primary').textContent='Adicionar';
   openM('field');
 }
 
@@ -417,14 +434,48 @@ function addField(){
     fld.options=filtered;
   }
   if(val)fld.value=val;
-  TF.push(fld);
+  
+  if(editingFieldIndex>=0){
+    TF[editingFieldIndex]=fld;
+    toast('Campo atualizado!');
+  }else{
+    TF.push(fld);
+    toast('Campo adicionado!');
+  }
+  editingFieldIndex=-1;
   renderFields();
   updatePreview();
   closeM('field');
-  toast('Campo adicionado!');
 }
 
 function rmField(i){TF.splice(i,1);renderFields();updatePreview();}
+
+function moveField(i,dir){
+  var newIndex=i+dir;
+  if(newIndex<0||newIndex>=TF.length)return;
+  var temp=TF[i];
+  TF[i]=TF[newIndex];
+  TF[newIndex]=temp;
+  renderFields();
+  updatePreview();
+}
+
+var editingFieldIndex=-1;
+
+function editField(i){
+  editingFieldIndex=i;
+  var f=TF[i];
+  document.getElementById('fd-name').value=f.name;
+  document.getElementById('fd-type').value=f.type;
+  document.getElementById('fd-ph').value=f.placeholder||'';
+  document.getElementById('fd-opts').value=f.options?f.options.join('\n'):'';
+  document.getElementById('fd-val').value=f.value||'';
+  document.getElementById('fd-req').checked=f.required;
+  toggleFieldOpts();
+  document.querySelector('#m-field .modal-header h3').textContent='Editar Campo';
+  document.querySelector('#m-field .modal-footer .btn-primary').textContent='Salvar';
+  openM('field');
+}
 
 function getStyles(){
   return{
@@ -454,6 +505,7 @@ function getUtmConfig(){
 
 function getSettings(){
   return{
+    webhook:document.getElementById('set-webhook').value||'',
     successMsg:document.getElementById('set-success').value||'Enviado!',
     errorMsg:document.getElementById('set-error').value||'Erro.',
     redirect:document.getElementById('set-redirect').value||''
@@ -500,7 +552,8 @@ function saveForm(){
   var styles=getStyles();
   var settings=getSettings();
   settings.utm=getUtmConfig();
-  f('POST','/forms',{name:name,fields:TF,styles:styles,settings:settings})
+  var webhookUrl=settings.webhook||null;
+  f('POST','/forms',{name:name,fields:TF,styles:styles,settings:settings,webhookUrl:webhookUrl})
   .then(function(r){
     if(r&&r.success){closeM('builder');toast('Formulário criado!');load();}
     else toast('Erro','e');
