@@ -24,41 +24,24 @@ const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 
 // Schema atualizado com mais campos
+// Criar tabelas básicas primeiro
 db.exec(`
   CREATE TABLE IF NOT EXISTS leads (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     form_id TEXT NOT NULL,
     form_name TEXT,
     data TEXT NOT NULL,
-    utm_source TEXT,
-    utm_medium TEXT,
-    utm_campaign TEXT,
-    utm_term TEXT,
-    utm_content TEXT,
-    utm_id TEXT,
-    referrer TEXT,
-    page_url TEXT,
     ip_address TEXT,
-    user_agent TEXT,
-    device_type TEXT,
-    browser TEXT,
-    os TEXT,
-    country TEXT,
-    city TEXT,
     webhook_sent INTEGER DEFAULT 0,
-    webhook_response TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   CREATE TABLE IF NOT EXISTS forms (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     fields TEXT NOT NULL,
-    styles TEXT,
-    settings TEXT,
     webhook_url TEXT,
     active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   CREATE TABLE IF NOT EXISTS webhooks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,40 +49,41 @@ db.exec(`
     url TEXT NOT NULL,
     is_global INTEGER DEFAULT 0,
     active INTEGER DEFAULT 1,
-    last_triggered DATETIME,
-    success_count INTEGER DEFAULT 0,
-    fail_count INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
   );
-  CREATE INDEX IF NOT EXISTS idx_leads_form_id ON leads(form_id);
-  CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
-  CREATE INDEX IF NOT EXISTS idx_leads_utm_source ON leads(utm_source);
-  CREATE INDEX IF NOT EXISTS idx_leads_utm_campaign ON leads(utm_campaign);
 `);
 
-// Adicionar colunas se não existirem (migração)
-const columns = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'referrer', 'page_url', 'user_agent', 'device_type', 'browser', 'os', 'country', 'city', 'webhook_response'];
-columns.forEach(col => {
-  try {
-    db.exec(`ALTER TABLE leads ADD COLUMN ${col} TEXT`);
+// Migração: adicionar novas colunas se não existirem
+const leadColumns = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'referrer', 'page_url', 'user_agent', 'device_type', 'browser', 'os', 'country', 'city', 'webhook_response'];
+leadColumns.forEach(col => {
+  try { db.exec(`ALTER TABLE leads ADD COLUMN ${col} TEXT`); } catch (e) {}
+});
+
+const formColumns = ['styles', 'settings', 'updated_at'];
+formColumns.forEach(col => {
+  try { db.exec(`ALTER TABLE forms ADD COLUMN ${col} TEXT`); } catch (e) {}
+});
+
+const webhookColumns = ['last_triggered', 'success_count', 'fail_count'];
+webhookColumns.forEach(col => {
+  try { 
+    if (col.includes('count')) {
+      db.exec(`ALTER TABLE webhooks ADD COLUMN ${col} INTEGER DEFAULT 0`);
+    } else {
+      db.exec(`ALTER TABLE webhooks ADD COLUMN ${col} TEXT`);
+    }
   } catch (e) {}
 });
 
-try {
-  db.exec(`ALTER TABLE forms ADD COLUMN styles TEXT`);
-  db.exec(`ALTER TABLE forms ADD COLUMN settings TEXT`);
-  db.exec(`ALTER TABLE forms ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP`);
-} catch (e) {}
-
-try {
-  db.exec(`ALTER TABLE webhooks ADD COLUMN last_triggered DATETIME`);
-  db.exec(`ALTER TABLE webhooks ADD COLUMN success_count INTEGER DEFAULT 0`);
-  db.exec(`ALTER TABLE webhooks ADD COLUMN fail_count INTEGER DEFAULT 0`);
-} catch (e) {}
+// Criar índices após colunas existirem
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_form_id ON leads(form_id)`); } catch (e) {}
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at)`); } catch (e) {}
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_utm_source ON leads(utm_source)`); } catch (e) {}
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_utm_campaign ON leads(utm_campaign)`); } catch (e) {}
 
 // Funções auxiliares
 function generateToken() {
