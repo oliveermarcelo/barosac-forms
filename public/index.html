@@ -58,7 +58,7 @@ tr:hover{background:var(--bg2)}
 .modal.active{opacity:1;visibility:visible}
 .modal-box{background:var(--card);border:1px solid var(--border);border-radius:12px;width:100%;max-width:900px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
 .modal-box.sm{max-width:500px}
-.modal-box.lg{max-width:1200px}
+.modal-box.lg{max-width:1100px}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
 .modal-header h3{font-size:16px}
 .modal-close{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;line-height:1}
@@ -72,7 +72,6 @@ tr:hover{background:var(--bg2)}
 .fields-list{border:1px solid var(--border);border-radius:8px;max-height:200px;overflow-y:auto}
 .field-item{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);gap:10px}
 .field-item:last-child{border-bottom:none}
-.field-item .drag{cursor:grab;color:var(--text2)}
 .field-item .info{flex:1}
 .field-item .name{font-weight:500;font-size:13px}
 .field-item .type{font-size:11px;color:var(--text2)}
@@ -87,7 +86,7 @@ tr:hover{background:var(--bg2)}
 .lead-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
 .lead-row:last-child{border-bottom:none}
 .lead-row .label{color:var(--text2)}
-.lead-row .value{font-weight:500;word-break:break-all}
+.lead-row .value{font-weight:500;word-break:break-all;max-width:60%}
 .empty{text-align:center;padding:32px;color:var(--text2)}
 .toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);padding:12px 20px;border-radius:8px;z-index:2000;font-size:14px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
@@ -95,11 +94,11 @@ tr:hover{background:var(--bg2)}
 .code-box{background:#000;border-radius:8px;overflow:hidden}
 .code-header{display:flex;justify-content:space-between;padding:10px 14px;background:var(--bg2)}
 .code-content{padding:14px;font-family:monospace;font-size:11px;white-space:pre-wrap;max-height:350px;overflow:auto;color:#10b981;line-height:1.5}
-.utm-check{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px}
+.utm-check{display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px}
 .view{display:none}
 .view.active{display:block}
 .actions{display:flex;gap:6px}
-@media(max-width:900px){.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}.modal-box{margin:10px}}
+@media(max-width:900px){.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -149,93 +148,518 @@ tr:hover{background:var(--bg2)}
 </main>
 </div>
 
+<!-- Modal Form Builder -->
 <div class="modal" id="m-builder"><div class="modal-box lg"><div class="modal-header"><h3>Criar Formulário</h3><button class="modal-close" onclick="closeM('builder')">×</button></div><div class="modal-body" style="display:flex;gap:20px"><div style="flex:1;min-width:0">
-<div class="tabs"><div class="tab active" onclick="switchTab('fields')">Campos</div><div class="tab" onclick="switchTab('style')">Estilo</div><div class="tab" onclick="switchTab('utm')">UTMs</div><div class="tab" onclick="switchTab('settings')">Config</div></div>
+<div class="tabs"><div class="tab active" onclick="switchTab(this,'fields')">Campos</div><div class="tab" onclick="switchTab(this,'style')">Estilo</div><div class="tab" onclick="switchTab(this,'utm')">UTMs</div><div class="tab" onclick="switchTab(this,'settings')">Config</div></div>
 <div id="tab-fields" class="tab-content active"><div class="form-group"><label>Nome do Formulário</label><input type="text" id="f-name" placeholder="Ex: Contato Site"></div><div class="form-group"><label>Campos</label><div class="fields-list" id="f-fields"></div><button class="btn btn-secondary btn-full" onclick="openFieldModal()" style="margin-top:8px">+ Adicionar Campo</button></div></div>
-<div id="tab-style" class="tab-content"><div class="form-row"><div class="form-group"><label>Cor do Fundo</label><div class="color-row"><input type="color" id="st-bg" value="#ffffff" oninput="updatePreview()"><input type="text" id="st-bg-t" value="#ffffff" oninput="syncColor('bg')"></div></div><div class="form-group"><label>Cor do Texto</label><div class="color-row"><input type="color" id="st-text" value="#1f2937" oninput="updatePreview()"><input type="text" id="st-text-t" value="#1f2937" oninput="syncColor('text')"></div></div></div><div class="form-row"><div class="form-group"><label>Cor do Botão</label><div class="color-row"><input type="color" id="st-btn" value="#ef4444" oninput="updatePreview()"><input type="text" id="st-btn-t" value="#ef4444" oninput="syncColor('btn')"></div></div><div class="form-group"><label>Texto do Botão</label><div class="color-row"><input type="color" id="st-btn-text" value="#ffffff" oninput="updatePreview()"><input type="text" id="st-btn-text-t" value="#ffffff" oninput="syncColor('btn-text')"></div></div></div><div class="form-row"><div class="form-group"><label>Cor da Borda</label><div class="color-row"><input type="color" id="st-border" value="#e5e7eb" oninput="updatePreview()"><input type="text" id="st-border-t" value="#e5e7eb" oninput="syncColor('border')"></div></div><div class="form-group"><label>Borda Arredondada</label><select id="st-radius" onchange="updatePreview()"><option value="0">Sem (0px)</option><option value="4">Pequena (4px)</option><option value="8" selected>Média (8px)</option><option value="12">Grande (12px)</option></select></div></div><div class="form-row"><div class="form-group"><label>Fonte</label><select id="st-font" onchange="updatePreview()"><option value="system-ui">Sistema</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option></select></div><div class="form-group"><label>Tamanho</label><select id="st-size" onchange="updatePreview()"><option value="13">Pequeno</option><option value="14" selected>Normal</option><option value="16">Grande</option></select></div></div><div class="form-group"><label>Texto do Botão</label><input type="text" id="st-btn-label" value="Enviar" oninput="updatePreview()"></div></div>
+<div id="tab-style" class="tab-content"><div class="form-row"><div class="form-group"><label>Cor do Fundo</label><div class="color-row"><input type="color" id="st-bg" value="#ffffff" onchange="updatePreview()"><input type="text" id="st-bg-t" value="#ffffff" onchange="document.getElementById('st-bg').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Cor do Texto</label><div class="color-row"><input type="color" id="st-text" value="#1f2937" onchange="updatePreview()"><input type="text" id="st-text-t" value="#1f2937" onchange="document.getElementById('st-text').value=this.value;updatePreview()"></div></div></div><div class="form-row"><div class="form-group"><label>Cor do Botão</label><div class="color-row"><input type="color" id="st-btn" value="#ef4444" onchange="updatePreview()"><input type="text" id="st-btn-t" value="#ef4444" onchange="document.getElementById('st-btn').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Texto do Botão</label><div class="color-row"><input type="color" id="st-btn-text" value="#ffffff" onchange="updatePreview()"><input type="text" id="st-btn-text-t" value="#ffffff" onchange="document.getElementById('st-btn-text').value=this.value;updatePreview()"></div></div></div><div class="form-row"><div class="form-group"><label>Cor da Borda</label><div class="color-row"><input type="color" id="st-border" value="#e5e7eb" onchange="updatePreview()"><input type="text" id="st-border-t" value="#e5e7eb" onchange="document.getElementById('st-border').value=this.value;updatePreview()"></div></div><div class="form-group"><label>Borda Arredondada</label><select id="st-radius" onchange="updatePreview()"><option value="0">Sem (0px)</option><option value="4">Pequena (4px)</option><option value="8" selected>Média (8px)</option><option value="12">Grande (12px)</option></select></div></div><div class="form-row"><div class="form-group"><label>Fonte</label><select id="st-font" onchange="updatePreview()"><option value="system-ui">Sistema</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option></select></div><div class="form-group"><label>Tamanho</label><select id="st-size" onchange="updatePreview()"><option value="13">Pequeno</option><option value="14" selected>Normal</option><option value="16">Grande</option></select></div></div><div class="form-group"><label>Texto do Botão</label><input type="text" id="st-btn-label" value="Enviar" onchange="updatePreview()"></div></div>
 <div id="tab-utm" class="tab-content"><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Marque os UTMs para capturar automaticamente:</p><div class="utm-check"><input type="checkbox" id="utm-source" checked><label for="utm-source">utm_source</label></div><div class="utm-check"><input type="checkbox" id="utm-medium" checked><label for="utm-medium">utm_medium</label></div><div class="utm-check"><input type="checkbox" id="utm-campaign" checked><label for="utm-campaign">utm_campaign</label></div><div class="utm-check"><input type="checkbox" id="utm-term" checked><label for="utm-term">utm_term</label></div><div class="utm-check"><input type="checkbox" id="utm-content" checked><label for="utm-content">utm_content</label></div><div class="utm-check"><input type="checkbox" id="utm-referrer" checked><label for="utm-referrer">Página de origem</label></div><div class="utm-check"><input type="checkbox" id="utm-page" checked><label for="utm-page">URL da página</label></div></div>
 <div id="tab-settings" class="tab-content"><div class="form-group"><label>Mensagem de Sucesso</label><input type="text" id="set-success" value="Enviado com sucesso!"></div><div class="form-group"><label>Mensagem de Erro</label><input type="text" id="set-error" value="Erro ao enviar. Tente novamente."></div><div class="form-group"><label>Redirecionar após envio</label><input type="url" id="set-redirect" placeholder="https://seusite.com/obrigado"></div></div>
-</div><div style="width:350px;flex-shrink:0"><h4 style="margin-bottom:12px;font-size:13px;color:var(--text2)">Preview</h4><div class="preview-frame" id="preview"></div></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">Criar Formulário</button></div></div></div>
+</div><div style="width:320px;flex-shrink:0"><h4 style="margin-bottom:12px;font-size:13px;color:var(--text2)">Preview</h4><div class="preview-frame" id="preview"></div></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">Criar Formulário</button></div></div></div>
 
-<div class="modal" id="m-field"><div class="modal-box sm"><div class="modal-header"><h3>Adicionar Campo</h3><button class="modal-close" onclick="closeM('field')">×</button></div><div class="modal-body"><div class="form-group"><label>Nome do Campo</label><input type="text" id="fd-name" placeholder="Ex: Nome Completo"></div><div class="form-group"><label>Tipo</label><select id="fd-type" onchange="toggleFieldOpts()"><optgroup label="Texto"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="textarea">Texto Longo</option></optgroup><optgroup label="Números"><option value="number">Número</option><option value="currency">Valor (R$)</option></optgroup><optgroup label="Documentos BR"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="cep">CEP</option></optgroup><optgroup label="Data/Hora"><option value="date">Data</option><option value="time">Hora</option></optgroup><optgroup label="Escolhas"><option value="select">Seleção (Dropdown)</option><option value="radio">Múltipla Escolha</option><option value="checkbox">Checkbox</option></optgroup><optgroup label="Outros"><option value="url">URL</option><option value="hidden">Campo Oculto</option></optgroup></select></div><div class="form-group" id="fg-opts" style="display:none"><label>Opções (uma por linha)</label><textarea id="fd-opts" rows="4" placeholder="Opção 1&#10;Opção 2"></textarea></div><div class="form-group"><label>Placeholder</label><input type="text" id="fd-ph" placeholder="Ex: Digite seu nome"></div><div class="form-group" id="fg-val" style="display:none"><label>Valor Padrão</label><input type="text" id="fd-val"></div><div class="form-group"><label><input type="checkbox" id="fd-req" checked> Campo obrigatório</label></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('field')">Cancelar</button><button class="btn btn-primary" onclick="addField()">Adicionar</button></div></div></div>
+<!-- Modal Campo -->
+<div class="modal" id="m-field"><div class="modal-box sm"><div class="modal-header"><h3>Adicionar Campo</h3><button class="modal-close" onclick="closeM('field')">×</button></div><div class="modal-body"><div class="form-group"><label>Nome do Campo</label><input type="text" id="fd-name" placeholder="Ex: Nome Completo"></div><div class="form-group"><label>Tipo</label><select id="fd-type" onchange="toggleFieldOpts()"><optgroup label="Texto"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="textarea">Texto Longo</option></optgroup><optgroup label="Números"><option value="number">Número</option></optgroup><optgroup label="Documentos BR"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="cep">CEP</option></optgroup><optgroup label="Data/Hora"><option value="date">Data</option><option value="time">Hora</option></optgroup><optgroup label="Escolhas"><option value="select">Seleção (Dropdown)</option><option value="radio">Múltipla Escolha</option><option value="checkbox">Checkbox</option></optgroup><optgroup label="Outros"><option value="url">URL</option><option value="hidden">Campo Oculto</option></optgroup></select></div><div class="form-group" id="fg-opts" style="display:none"><label>Opções (uma por linha)</label><textarea id="fd-opts" rows="4" placeholder="Opção 1&#10;Opção 2"></textarea></div><div class="form-group"><label>Placeholder</label><input type="text" id="fd-ph" placeholder="Ex: Digite seu nome"></div><div class="form-group" id="fg-val" style="display:none"><label>Valor Padrão</label><input type="text" id="fd-val"></div><div class="form-group"><label><input type="checkbox" id="fd-req" checked> Campo obrigatório</label></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('field')">Cancelar</button><button class="btn btn-primary" onclick="addField()">Adicionar</button></div></div></div>
 
+<!-- Modal Código -->
 <div class="modal" id="m-code"><div class="modal-box"><div class="modal-header"><h3>Código do Formulário</h3><button class="modal-close" onclick="closeM('code')">×</button></div><div class="modal-body"><p style="color:var(--text2);margin-bottom:12px;font-size:13px">Cole este código na sua landing page:</p><div class="code-box"><div class="code-header"><span>HTML + JS</span><button class="btn btn-secondary btn-sm" onclick="copyCode()">📋 Copiar</button></div><pre class="code-content" id="code-out"></pre></div></div></div></div>
 
+<!-- Modal Lead -->
 <div class="modal" id="m-lead"><div class="modal-box"><div class="modal-header"><h3>Detalhes do Lead</h3><button class="modal-close" onclick="closeM('lead')">×</button></div><div class="modal-body" id="lead-detail"></div></div></div>
 
 <script>
-const API='/api',TYPES={text:'Texto',email:'Email',tel:'Telefone',number:'Número',currency:'Valor',cpf:'CPF',cnpj:'CNPJ',cep:'CEP',date:'Data',time:'Hora',textarea:'Texto Longo',select:'Seleção',radio:'Múltipla Escolha',checkbox:'Checkbox',url:'URL',hidden:'Oculto'};
-let tk=localStorage.getItem('tk'),D={forms:[],leads:[],stats:{},hooks:[]},TF=[];
+var API='/api';
+var TYPES={text:'Texto',email:'Email',tel:'Telefone',number:'Número',cpf:'CPF',cnpj:'CNPJ',cep:'CEP',date:'Data',time:'Hora',textarea:'Texto Longo',select:'Seleção',radio:'Múltipla Escolha',checkbox:'Checkbox',url:'URL',hidden:'Oculto'};
+var tk=localStorage.getItem('tk');
+var D={forms:[],leads:[],stats:{},hooks:[]};
+var TF=[];
 
-async function init(){if(!tk)return showLogin();try{const r=await f('GET','/session');r&&r.authenticated?(showApp(),load()):doLogout()}catch(e){showLogin()}}
-function showLogin(){document.getElementById('login').style.display='flex';document.getElementById('app').classList.remove('active')}
-function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').classList.add('active')}
-function doLogout(){tk=null;localStorage.removeItem('tk');showLogin()}
+function init(){
+  if(!tk){showLogin();return;}
+  f('GET','/session').then(function(r){
+    if(r&&r.authenticated){showApp();load();}
+    else doLogout();
+  }).catch(function(){showLogin();});
+}
 
-document.getElementById('login-form').onsubmit=async function(e){e.preventDefault();const u=document.getElementById('user').value,p=document.getElementById('pass').value,b=document.getElementById('btn-login'),er=document.getElementById('err');b.disabled=true;b.textContent='...';er.classList.remove('show');try{const r=await fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const d=await r.json();if(d.success){tk=d.token;localStorage.setItem('tk',tk);showApp();load()}else er.classList.add('show')}catch(x){er.textContent='Erro de conexão';er.classList.add('show')}b.disabled=false;b.textContent='Entrar'};
+function showLogin(){
+  document.getElementById('login').style.display='flex';
+  document.getElementById('app').classList.remove('active');
+}
 
-async function logout(){await f('POST','/logout');doLogout()}
-async function f(m,url,body){const o={method:m,headers:{Authorization:'Bearer '+tk}};if(body){o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}const r=await fetch(API+url,o);if(r.status===401){doLogout();return null}return r.json()}
+function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').classList.add('active');
+}
 
-async function load(){const[s,fo,le,ho]=await Promise.all([f('GET','/stats'),f('GET','/forms'),f('GET','/leads?limit=100'),f('GET','/webhooks')]);if(!s)return;D.stats=s.stats||{};D.forms=fo.forms||[];D.leads=le.leads||[];D.hooks=ho.webhooks||[];render()}
+function doLogout(){
+  tk=null;
+  localStorage.removeItem('tk');
+  showLogin();
+}
+
+document.getElementById('login-form').onsubmit=function(e){
+  e.preventDefault();
+  var u=document.getElementById('user').value;
+  var p=document.getElementById('pass').value;
+  var b=document.getElementById('btn-login');
+  var er=document.getElementById('err');
+  b.disabled=true;b.textContent='...';er.classList.remove('show');
+  fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})})
+  .then(function(r){return r.json()})
+  .then(function(d){
+    if(d.success){tk=d.token;localStorage.setItem('tk',tk);showApp();load();}
+    else er.classList.add('show');
+  })
+  .catch(function(){er.textContent='Erro de conexão';er.classList.add('show');})
+  .finally(function(){b.disabled=false;b.textContent='Entrar';});
+};
+
+function logout(){
+  f('POST','/logout').then(function(){doLogout();});
+}
+
+function f(m,url,body){
+  var o={method:m,headers:{Authorization:'Bearer '+tk}};
+  if(body){o.headers['Content-Type']='application/json';o.body=JSON.stringify(body);}
+  return fetch(API+url,o).then(function(r){
+    if(r.status===401){doLogout();return null;}
+    return r.json();
+  });
+}
+
+function load(){
+  Promise.all([f('GET','/stats'),f('GET','/forms'),f('GET','/leads?limit=100'),f('GET','/webhooks')])
+  .then(function(res){
+    if(!res[0])return;
+    D.stats=res[0].stats||{};
+    D.forms=res[1].forms||[];
+    D.leads=res[2].leads||[];
+    D.hooks=res[3].webhooks||[];
+    render();
+  });
+}
 
 function render(){
-document.getElementById('st-leads').textContent=D.stats.totalLeads||0;
-document.getElementById('st-forms').textContent=D.stats.totalForms||0;
-document.getElementById('st-hooks').textContent=D.stats.totalWebhooks||0;
-document.getElementById('st-sent').textContent=D.stats.webhooksSent||0;
-document.getElementById('tbl-forms').innerHTML=D.forms.length?D.forms.map(function(x){return'<tr><td><b>'+x.name+'</b></td><td>'+x.fields.length+'</td><td>'+x.leads_count+'</td><td>'+fdt(x.created_at)+'</td><td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="showCode(\''+x.id+'\')">Código</button><button class="btn btn-secondary btn-sm" onclick="delForm(\''+x.id+'\')" style="color:var(--accent)">🗑️</button></div></td></tr>'}).join(''):'<tr><td colspan="5" class="empty">Nenhum formulário</td></tr>';
-document.getElementById('tbl-leads').innerHTML=D.leads.length?D.leads.map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.data.telefone||x.data.phone||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join(''):'<tr><td colspan="7" class="empty">Nenhum lead</td></tr>';
-document.getElementById('tbl-recent').innerHTML=D.leads.slice(0,5).map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join('')||'<tr><td colspan="6" class="empty">Nenhum lead</td></tr>';
-var formSel=document.getElementById('fl-form');formSel.innerHTML='<option value="">Todos formulários</option>'+D.forms.map(function(x){return'<option value="'+x.id+'">'+x.name+'</option>'}).join('');
-var sources=D.leads.map(function(x){return x.utm_source}).filter(function(x,i,a){return x&&a.indexOf(x)===i});document.getElementById('fl-source').innerHTML='<option value="">Todas origens</option>'+sources.map(function(x){return'<option value="'+x+'">'+x+'</option>'}).join('');
-document.getElementById('hook-list').innerHTML=D.hooks.map(function(h){return'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><div><code style="font-size:11px;word-break:break-all">'+h.url+'</code><div style="font-size:11px;color:var(--text2);margin-top:4px">✓ '+(h.success_count||0)+' | ✗ '+(h.fail_count||0)+'</div></div><button class="btn btn-secondary btn-sm" onclick="delHook('+h.id+')" style="color:var(--accent)">🗑️</button></div>'}).join('')}
+  document.getElementById('st-leads').textContent=D.stats.totalLeads||0;
+  document.getElementById('st-forms').textContent=D.stats.totalForms||0;
+  document.getElementById('st-hooks').textContent=D.stats.totalWebhooks||0;
+  document.getElementById('st-sent').textContent=D.stats.webhooksSent||0;
+  
+  var formsHtml='';
+  if(D.forms.length){
+    for(var i=0;i<D.forms.length;i++){
+      var x=D.forms[i];
+      formsHtml+='<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.fields.length+'</td><td>'+x.leads_count+'</td><td>'+fdt(x.created_at)+'</td><td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="showCode(\''+x.id+'\')">Código</button><button class="btn btn-secondary btn-sm" onclick="delForm(\''+x.id+'\')" style="color:var(--accent)">🗑️</button></div></td></tr>';
+    }
+  }else{formsHtml='<tr><td colspan="5" class="empty">Nenhum formulário</td></tr>';}
+  document.getElementById('tbl-forms').innerHTML=formsHtml;
+  
+  var leadsHtml='';
+  if(D.leads.length){
+    for(var i=0;i<D.leads.length;i++){
+      var x=D.leads[i];
+      leadsHtml+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||x.data.phone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';
+    }
+  }else{leadsHtml='<tr><td colspan="7" class="empty">Nenhum lead</td></tr>';}
+  document.getElementById('tbl-leads').innerHTML=leadsHtml;
+  
+  var recentHtml='';
+  var recent=D.leads.slice(0,5);
+  for(var i=0;i<recent.length;i++){
+    var x=recent[i];
+    recentHtml+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';
+  }
+  if(!recentHtml)recentHtml='<tr><td colspan="6" class="empty">Nenhum lead</td></tr>';
+  document.getElementById('tbl-recent').innerHTML=recentHtml;
+  
+  var formOpts='<option value="">Todos formulários</option>';
+  for(var i=0;i<D.forms.length;i++){formOpts+='<option value="'+D.forms[i].id+'">'+esc(D.forms[i].name)+'</option>';}
+  document.getElementById('fl-form').innerHTML=formOpts;
+  
+  var sources={};
+  for(var i=0;i<D.leads.length;i++){if(D.leads[i].utm_source)sources[D.leads[i].utm_source]=1;}
+  var sourceOpts='<option value="">Todas origens</option>';
+  for(var s in sources){sourceOpts+='<option value="'+esc(s)+'">'+esc(s)+'</option>';}
+  document.getElementById('fl-source').innerHTML=sourceOpts;
+  
+  var hooksHtml='';
+  for(var i=0;i<D.hooks.length;i++){
+    var h=D.hooks[i];
+    hooksHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><div><code style="font-size:11px;word-break:break-all">'+esc(h.url)+'</code><div style="font-size:11px;color:var(--text2);margin-top:4px">✓ '+(h.success_count||0)+' | ✗ '+(h.fail_count||0)+'</div></div><button class="btn btn-secondary btn-sm" onclick="delHook('+h.id+')" style="color:var(--accent)">🗑️</button></div>';
+  }
+  document.getElementById('hook-list').innerHTML=hooksHtml;
+}
 
-function filterLeads(){var search=document.getElementById('fl-search').value.toLowerCase(),formId=document.getElementById('fl-form').value,source=document.getElementById('fl-source').value;var filtered=D.leads.filter(function(x){if(formId&&x.form_id!==formId)return false;if(source&&x.utm_source!==source)return false;if(search){var str=JSON.stringify(x.data).toLowerCase();if(str.indexOf(search)===-1)return false}return true});document.getElementById('tbl-leads').innerHTML=filtered.length?filtered.map(function(x){return'<tr><td>'+(x.data.nome||x.data.name||'-')+'</td><td>'+(x.data.email||'-')+'</td><td>'+(x.data.telefone||x.data.phone||'-')+'</td><td>'+(x.form_name||'-')+'</td><td><span class="badge badge-info">'+(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>'}).join(''):'<tr><td colspan="7" class="empty">Nenhum resultado</td></tr>'}
+function filterLeads(){
+  var search=document.getElementById('fl-search').value.toLowerCase();
+  var formId=document.getElementById('fl-form').value;
+  var source=document.getElementById('fl-source').value;
+  var filtered=[];
+  for(var i=0;i<D.leads.length;i++){
+    var x=D.leads[i];
+    if(formId&&x.form_id!==formId)continue;
+    if(source&&x.utm_source!==source)continue;
+    if(search&&JSON.stringify(x.data).toLowerCase().indexOf(search)===-1)continue;
+    filtered.push(x);
+  }
+  var html='';
+  for(var i=0;i<filtered.length;i++){
+    var x=filtered[i];
+    html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||x.data.phone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';
+  }
+  if(!html)html='<tr><td colspan="7" class="empty">Nenhum resultado</td></tr>';
+  document.getElementById('tbl-leads').innerHTML=html;
+}
 
-function showLead(id){var lead=D.leads.find(function(x){return x.id===id});if(!lead)return;var html='<div class="lead-detail"><div class="lead-section"><h4>📝 Dados do Formulário</h4>';for(var k in lead.data){html+='<div class="lead-row"><span class="label">'+k+'</span><span class="value">'+lead.data[k]+'</span></div>'}html+='</div><div class="lead-section"><h4>📊 UTMs / Rastreamento</h4>';html+='<div class="lead-row"><span class="label">Source</span><span class="value">'+(lead.utm_source||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Medium</span><span class="value">'+(lead.utm_medium||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Campaign</span><span class="value">'+(lead.utm_campaign||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Term</span><span class="value">'+(lead.utm_term||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Content</span><span class="value">'+(lead.utm_content||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Referrer</span><span class="value">'+(lead.referrer||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Página</span><span class="value">'+(lead.page_url||'-')+'</span></div>';html+='</div><div class="lead-section"><h4>💻 Info Técnicas</h4>';html+='<div class="lead-row"><span class="label">IP</span><span class="value">'+(lead.ip_address||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Dispositivo</span><span class="value">'+(lead.device_type||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Navegador</span><span class="value">'+(lead.browser||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Sistema</span><span class="value">'+(lead.os||'-')+'</span></div>';html+='<div class="lead-row"><span class="label">Webhook</span><span class="value">'+(lead.webhook_sent?'✓ Enviado':'⏳ Pendente')+'</span></div>';html+='<div class="lead-row"><span class="label">Data</span><span class="value">'+fdt(lead.created_at)+'</span></div>';html+='</div></div>';document.getElementById('lead-detail').innerHTML=html;openM('lead')}
+function showLead(id){
+  var lead=null;
+  for(var i=0;i<D.leads.length;i++){if(D.leads[i].id===id){lead=D.leads[i];break;}}
+  if(!lead)return;
+  var html='<div class="lead-detail">';
+  html+='<div class="lead-section"><h4>📝 Dados do Formulário</h4>';
+  for(var k in lead.data){html+='<div class="lead-row"><span class="label">'+esc(k)+'</span><span class="value">'+esc(lead.data[k])+'</span></div>';}
+  html+='</div>';
+  html+='<div class="lead-section"><h4>📊 UTMs / Rastreamento</h4>';
+  html+='<div class="lead-row"><span class="label">Source</span><span class="value">'+esc(lead.utm_source||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Medium</span><span class="value">'+esc(lead.utm_medium||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Campaign</span><span class="value">'+esc(lead.utm_campaign||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Term</span><span class="value">'+esc(lead.utm_term||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Content</span><span class="value">'+esc(lead.utm_content||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Referrer</span><span class="value">'+esc(lead.referrer||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Página</span><span class="value">'+esc(lead.page_url||'-')+'</span></div>';
+  html+='</div>';
+  html+='<div class="lead-section"><h4>💻 Info Técnicas</h4>';
+  html+='<div class="lead-row"><span class="label">IP</span><span class="value">'+esc(lead.ip_address||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Dispositivo</span><span class="value">'+esc(lead.device_type||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Navegador</span><span class="value">'+esc(lead.browser||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Sistema</span><span class="value">'+esc(lead.os||'-')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Webhook</span><span class="value">'+(lead.webhook_sent?'✓ Enviado':'⏳ Pendente')+'</span></div>';
+  html+='<div class="lead-row"><span class="label">Data</span><span class="value">'+fdt(lead.created_at)+'</span></div>';
+  html+='</div></div>';
+  document.getElementById('lead-detail').innerHTML=html;
+  openM('lead');
+}
 
-document.querySelectorAll('.nav-item[data-v]').forEach(function(n){n.onclick=function(){document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active')});n.classList.add('active');document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.getElementById('v-'+n.dataset.v).classList.add('active')}});
+var navItems=document.querySelectorAll('.nav-item[data-v]');
+for(var i=0;i<navItems.length;i++){
+  navItems[i].onclick=function(){
+    var allNav=document.querySelectorAll('.nav-item');
+    for(var j=0;j<allNav.length;j++){allNav[j].classList.remove('active');}
+    this.classList.add('active');
+    var allViews=document.querySelectorAll('.view');
+    for(var j=0;j<allViews.length;j++){allViews[j].classList.remove('active');}
+    document.getElementById('v-'+this.getAttribute('data-v')).classList.add('active');
+  };
+}
 
-function openM(n){document.getElementById('m-'+n).classList.add('active')}
-function closeM(n){document.getElementById('m-'+n).classList.remove('active')}
-function switchTab(t){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.querySelector('.tab[onclick*="'+t+'"]').classList.add('active');document.getElementById('tab-'+t).classList.add('active')}
+function openM(n){document.getElementById('m-'+n).classList.add('active');}
+function closeM(n){document.getElementById('m-'+n).classList.remove('active');}
 
-function openFormBuilder(){TF=[{name:'Nome',type:'text',placeholder:'Seu nome completo',required:true},{name:'Email',type:'email',placeholder:'seu@email.com',required:true},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true}];document.getElementById('f-name').value='';renderFields();updatePreview();openM('builder')}
+function switchTab(el,t){
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){tabs[i].classList.remove('active');}
+  el.classList.add('active');
+  var contents=document.querySelectorAll('.tab-content');
+  for(var i=0;i<contents.length;i++){contents[i].classList.remove('active');}
+  document.getElementById('tab-'+t).classList.add('active');
+}
 
-function renderFields(){document.getElementById('f-fields').innerHTML=TF.length?TF.map(function(x,i){return'<div class="field-item"><span class="drag">⋮⋮</span><div class="info"><div class="name">'+x.name+(x.required?' *':'')+'</div><div class="type">'+(TYPES[x.type]||x.type)+'</div></div><button class="del" onclick="rmField('+i+')">🗑️</button></div>'}).join(''):'<div class="empty">Adicione campos</div>'}
+function openFormBuilder(){
+  TF=[{name:'Nome',type:'text',placeholder:'Seu nome completo',required:true},{name:'Email',type:'email',placeholder:'seu@email.com',required:true},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true}];
+  document.getElementById('f-name').value='';
+  renderFields();
+  updatePreview();
+  openM('builder');
+}
 
-function openFieldModal(){document.getElementById('fd-name').value='';document.getElementById('fd-type').value='text';document.getElementById('fd-ph').value='';document.getElementById('fd-opts').value='';document.getElementById('fd-val').value='';document.getElementById('fd-req').checked=true;toggleFieldOpts();openM('field')}
+function renderFields(){
+  var html='';
+  if(TF.length){
+    for(var i=0;i<TF.length;i++){
+      var x=TF[i];
+      html+='<div class="field-item"><div class="info"><div class="name">'+esc(x.name)+(x.required?' *':'')+'</div><div class="type">'+(TYPES[x.type]||x.type)+'</div></div><button class="del" onclick="rmField('+i+')">🗑️</button></div>';
+    }
+  }else{html='<div class="empty" style="padding:20px">Adicione campos</div>';}
+  document.getElementById('f-fields').innerHTML=html;
+}
 
-function toggleFieldOpts(){var t=document.getElementById('fd-type').value;document.getElementById('fg-opts').style.display=['select','radio'].indexOf(t)>-1?'block':'none';document.getElementById('fg-val').style.display=t==='hidden'?'block':'none'}
+function openFieldModal(){
+  document.getElementById('fd-name').value='';
+  document.getElementById('fd-type').value='text';
+  document.getElementById('fd-ph').value='';
+  document.getElementById('fd-opts').value='';
+  document.getElementById('fd-val').value='';
+  document.getElementById('fd-req').checked=true;
+  toggleFieldOpts();
+  openM('field');
+}
 
-function addField(){var n=document.getElementById('fd-name').value.trim(),t=document.getElementById('fd-type').value,p=document.getElementById('fd-ph').value,r=document.getElementById('fd-req').checked,opts=document.getElementById('fd-opts').value.trim(),val=document.getElementById('fd-val').value.trim();if(!n)return toast('Digite o nome','e');if(['select','radio'].indexOf(t)>-1&&!opts)return toast('Digite opções','e');var fld={name:n,type:t,placeholder:p,required:r};if(opts)fld.options=opts.split('\n').filter(function(o){return o.trim()});if(val)fld.value=val;TF.push(fld);renderFields();updatePreview();closeM('field');toast('Campo adicionado!')}
+function toggleFieldOpts(){
+  var t=document.getElementById('fd-type').value;
+  document.getElementById('fg-opts').style.display=(t==='select'||t==='radio')?'block':'none';
+  document.getElementById('fg-val').style.display=(t==='hidden')?'block':'none';
+}
 
-function rmField(i){TF.splice(i,1);renderFields();updatePreview()}
-function syncColor(n){var t=document.getElementById('st-'+n+'-t').value;document.getElementById('st-'+n).value=t;updatePreview()}
-function getStyles(){return{bg:document.getElementById('st-bg').value,text:document.getElementById('st-text').value,btn:document.getElementById('st-btn').value,btnText:document.getElementById('st-btn-text').value,border:document.getElementById('st-border').value,radius:document.getElementById('st-radius').value,font:document.getElementById('st-font').value,size:document.getElementById('st-size').value,btnLabel:document.getElementById('st-btn-label').value||'Enviar'}}
-function getUtmConfig(){return{source:document.getElementById('utm-source').checked,medium:document.getElementById('utm-medium').checked,campaign:document.getElementById('utm-campaign').checked,term:document.getElementById('utm-term').checked,content:document.getElementById('utm-content').checked,referrer:document.getElementById('utm-referrer').checked,page:document.getElementById('utm-page').checked}}
-function getSettings(){return{successMsg:document.getElementById('set-success').value||'Enviado!',errorMsg:document.getElementById('set-error').value||'Erro.',redirect:document.getElementById('set-redirect').value||''}}
+function addField(){
+  var n=document.getElementById('fd-name').value.trim();
+  var t=document.getElementById('fd-type').value;
+  var p=document.getElementById('fd-ph').value;
+  var r=document.getElementById('fd-req').checked;
+  var opts=document.getElementById('fd-opts').value.trim();
+  var val=document.getElementById('fd-val').value.trim();
+  if(!n){toast('Digite o nome','e');return;}
+  if((t==='select'||t==='radio')&&!opts){toast('Digite opções','e');return;}
+  var fld={name:n,type:t,placeholder:p,required:r};
+  if(opts){
+    var arr=opts.split('\n');
+    var filtered=[];
+    for(var i=0;i<arr.length;i++){if(arr[i].trim())filtered.push(arr[i].trim());}
+    fld.options=filtered;
+  }
+  if(val)fld.value=val;
+  TF.push(fld);
+  renderFields();
+  updatePreview();
+  closeM('field');
+  toast('Campo adicionado!');
+}
 
-function updatePreview(){var s=getStyles();var html='<div style="font-family:'+s.font+';font-size:'+s.size+'px;background:'+s.bg+';color:'+s.text+';padding:20px;border-radius:'+s.radius+'px">';TF.forEach(function(f){var lbl=f.name+(f.required?' *':'');if(f.type==='hidden')return;if(f.type==='checkbox'){html+='<div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox"> '+f.name+'</label></div>';return}if(f.type==='radio'&&f.options){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label>';f.options.forEach(function(o){html+='<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><input type="radio"> '+o+'</label>'});html+='</div>';return}if(f.type==='select'&&f.options){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><select style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px"><option>Selecione...</option>';f.options.forEach(function(o){html+='<option>'+o+'</option>'});html+='</select></div>';return}if(f.type==='textarea'){html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><textarea style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;min-height:80px" placeholder="'+(f.placeholder||'')+'"></textarea></div>';return}html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+lbl+'</label><input type="text" style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px" placeholder="'+(f.placeholder||'')+'"></div>'});html+='<button style="width:100%;padding:12px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-weight:600">'+s.btnLabel+'</button></div>';document.getElementById('preview').innerHTML=html}
+function rmField(i){TF.splice(i,1);renderFields();updatePreview();}
 
-async function saveForm(){var name=document.getElementById('f-name').value.trim();if(!name)return toast('Digite o nome','e');if(!TF.length)return toast('Adicione campos','e');var styles=getStyles(),settings=getSettings();settings.utm=getUtmConfig();var r=await f('POST','/forms',{name:name,fields:TF,styles:styles,settings:settings});if(r&&r.success){closeM('builder');toast('Formulário criado!');load()}else toast('Erro','e')}
+function getStyles(){
+  return{
+    bg:document.getElementById('st-bg').value,
+    text:document.getElementById('st-text').value,
+    btn:document.getElementById('st-btn').value,
+    btnText:document.getElementById('st-btn-text').value,
+    border:document.getElementById('st-border').value,
+    radius:document.getElementById('st-radius').value,
+    font:document.getElementById('st-font').value,
+    size:document.getElementById('st-size').value,
+    btnLabel:document.getElementById('st-btn-label').value||'Enviar'
+  };
+}
 
-async function delForm(id){if(confirm('Excluir?')){await f('DELETE','/forms/'+id);toast('Excluído');load()}}
+function getUtmConfig(){
+  return{
+    source:document.getElementById('utm-source').checked,
+    medium:document.getElementById('utm-medium').checked,
+    campaign:document.getElementById('utm-campaign').checked,
+    term:document.getElementById('utm-term').checked,
+    content:document.getElementById('utm-content').checked,
+    referrer:document.getElementById('utm-referrer').checked,
+    page:document.getElementById('utm-page').checked
+  };
+}
 
-function showCode(id){var fo=D.forms.find(function(x){return x.id===id});if(!fo)return;var url=location.origin+'/api/leads';var s=fo.styles||{bg:'#ffffff',text:'#1f2937',btn:'#ef4444',btnText:'#ffffff',border:'#e5e7eb',radius:'8',font:'system-ui',size:'14',btnLabel:'Enviar'};var set=fo.settings||{successMsg:'Enviado!',errorMsg:'Erro.',redirect:'',utm:{}};var utm=set.utm||{};
-var fields=fo.fields.map(function(x){var k=x.name.toLowerCase().replace(/[áàãâ]/g,'a').replace(/[éèê]/g,'e').replace(/[íìî]/g,'i').replace(/[óòõô]/g,'o').replace(/[úùû]/g,'u').replace(/ç/g,'c').replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');var rq=x.required?'required':'';var ph=x.placeholder||'';if(x.type==='hidden')return'  <input type="hidden" name="'+k+'" value="'+(x.value||'')+'">';if(x.type==='checkbox')return'  <div class="v4fg"><label class="v4cb"><input type="checkbox" name="'+k+'"> '+x.name+'</label></div>';if(x.type==='textarea')return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><textarea name="'+k+'" placeholder="'+ph+'" '+rq+'></textarea></div>';if(x.type==='select'){var opts=(x.options||[]).map(function(o){return'<option value="'+o+'">'+o+'</option>'}).join('');return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><select name="'+k+'" '+rq+'><option value="">Selecione...</option>'+opts+'</select></div>'}if(x.type==='radio'){var opts=(x.options||[]).map(function(o){return'<label class="v4ro"><input type="radio" name="'+k+'" value="'+o+'" '+rq+'> '+o+'</label>'}).join('');return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><div class="v4rg">'+opts+'</div></div>'}var inputType=x.type;var extra='';if(x.type==='cpf'){inputType='text';extra=' maxlength="14" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d{1,2})$/,\\'$1-$2\\')"'}if(x.type==='cnpj'){inputType='text';extra=' maxlength="18" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{2})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1.$2\\').replace(/(\\\\d{3})(\\\\d)/,\\'$1/$2\\').replace(/(\\\\d{4})(\\\\d{1,2})$/,\\'$1-$2\\')"'}if(x.type==='cep'){inputType='text';extra=' maxlength="9" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{5})(\\\\d)/,\\'$1-$2\\')"'}if(x.type==='tel'){extra=' maxlength="15" oninput="this.value=this.value.replace(/\\\\D/g,\\'\\').replace(/(\\\\d{2})(\\\\d)/,\\'($1) $2\\').replace(/(\\\\d{5})(\\\\d)/,\\'$1-$2\\')"'}if(x.type==='currency'){inputType='text';extra=' oninput="this.value=\\'R$ \\'+this.value.replace(/\\\\D/g,\\'\\')"'}return'  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><input type="'+inputType+'" name="'+k+'" placeholder="'+ph+'"'+extra+' '+rq+'></div>'}).join('\n');
-var utmCapture='';if(utm.source||utm.medium||utm.campaign||utm.term||utm.content||utm.referrer||utm.page){utmCapture='\n  var params=new URLSearchParams(window.location.search);\n';if(utm.source)utmCapture+='  if(params.get("utm_source"))meta.utm_source=params.get("utm_source");\n';if(utm.medium)utmCapture+='  if(params.get("utm_medium"))meta.utm_medium=params.get("utm_medium");\n';if(utm.campaign)utmCapture+='  if(params.get("utm_campaign"))meta.utm_campaign=params.get("utm_campaign");\n';if(utm.term)utmCapture+='  if(params.get("utm_term"))meta.utm_term=params.get("utm_term");\n';if(utm.content)utmCapture+='  if(params.get("utm_content"))meta.utm_content=params.get("utm_content");\n';if(utm.referrer)utmCapture+='  meta.referrer=document.referrer||null;\n';if(utm.page)utmCapture+='  meta.page_url=window.location.href;\n'}
-var redirect=set.redirect?'\n      window.location.href="'+set.redirect+'";':'';
-var code='<!-- v4 Forms - '+fo.name+' -->\n<form id="v4f" onsubmit="return v4send(event)">\n'+fields+'\n  <button type="submit">'+s.btnLabel+'</button>\n  <div id="v4msg"></div>\n</form>\n\n<script>\nasync function v4send(e){\n  e.preventDefault();\n  var btn=e.target.querySelector("button"),msg=document.getElementById("v4msg");\n  btn.disabled=true;btn.textContent="Enviando...";\n  var fd=new FormData(e.target),data={};\n  fd.forEach(function(v,k){data[k]=v});\n  var meta={};'+utmCapture+'\n  try{\n    var r=await fetch("'+url+'",{\n      method:"POST",\n      headers:{"Content-Type":"application/json"},\n      body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:data,meta:meta})\n    });\n    if(r.ok){\n      msg.className="v4msg ok";msg.textContent="'+set.successMsg+'";e.target.reset();'+redirect+'\n    }else throw 0;\n  }catch(x){msg.className="v4msg err";msg.textContent="'+set.errorMsg+'";}\n  btn.disabled=false;btn.textContent="'+s.btnLabel+'";return false;\n}\n<\/script>\n\n<style>\n#v4f{max-width:500px;font-family:'+s.font+',sans-serif;background:'+s.bg+';padding:24px;border-radius:'+s.radius+'px}\n#v4f .v4fg{margin-bottom:16px}\n#v4f label{display:block;margin-bottom:6px;font-weight:500;color:'+s.text+';font-size:'+s.size+'px}\n#v4f input,#v4f select,#v4f textarea{width:100%;padding:12px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;font-size:'+s.size+'px;color:'+s.text+'}\n#v4f input:focus,#v4f select:focus,#v4f textarea:focus{outline:none;border-color:'+s.btn+'}\n#v4f textarea{min-height:100px}\n#v4f .v4cb{display:flex;align-items:center;gap:8px;font-weight:normal}\n#v4f .v4ro{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-weight:normal}\n#v4f .v4rg{margin-top:8px}\n#v4f button{width:100%;padding:14px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-size:'+s.size+'px;font-weight:600;cursor:pointer}\n#v4f button:hover{opacity:0.9}\n#v4f button:disabled{opacity:0.6}\n.v4msg{margin-top:16px;padding:12px;border-radius:'+s.radius+'px;text-align:center}\n.v4msg.ok{background:#dcfce7;color:#166534}\n.v4msg.err{background:#fee2e2;color:#991b1b}\n</style>';
-document.getElementById('code-out').textContent=code;openM('code')}
+function getSettings(){
+  return{
+    successMsg:document.getElementById('set-success').value||'Enviado!',
+    errorMsg:document.getElementById('set-error').value||'Erro.',
+    redirect:document.getElementById('set-redirect').value||''
+  };
+}
 
-function copyCode(){navigator.clipboard.writeText(document.getElementById('code-out').textContent);toast('Código copiado!')}
-async function saveHook(){var u=document.getElementById('hook-url').value.trim();if(!u)return toast('Digite URL','e');await f('POST','/webhooks',{url:u,isGlobal:true});toast('Webhook salvo!');load();document.getElementById('hook-url').value=''}
-async function delHook(id){await f('DELETE','/webhooks/'+id);toast('Removido');load()}
-function csvExport(){window.open(API+'/leads/export/csv','_blank')}
-function fdt(s){if(!s)return'-';return new Date(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
-function toast(m,t){var el=document.createElement('div');el.className='toast';el.innerHTML=(t==='e'?'⚠️':'✓')+' '+m;document.body.appendChild(el);setTimeout(function(){el.remove()},3000)}
+function updatePreview(){
+  var s=getStyles();
+  var html='<div style="font-family:'+s.font+';font-size:'+s.size+'px;background:'+s.bg+';color:'+s.text+';padding:20px;border-radius:'+s.radius+'px">';
+  for(var i=0;i<TF.length;i++){
+    var f=TF[i];
+    var lbl=f.name+(f.required?' *':'');
+    if(f.type==='hidden')continue;
+    if(f.type==='checkbox'){
+      html+='<div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox"> '+esc(f.name)+'</label></div>';
+      continue;
+    }
+    if(f.type==='radio'&&f.options){
+      html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+esc(lbl)+'</label>';
+      for(var j=0;j<f.options.length;j++){html+='<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><input type="radio"> '+esc(f.options[j])+'</label>';}
+      html+='</div>';
+      continue;
+    }
+    if(f.type==='select'&&f.options){
+      html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+esc(lbl)+'</label><select style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px"><option>Selecione...</option>';
+      for(var j=0;j<f.options.length;j++){html+='<option>'+esc(f.options[j])+'</option>';}
+      html+='</select></div>';
+      continue;
+    }
+    if(f.type==='textarea'){
+      html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+esc(lbl)+'</label><textarea style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;min-height:80px" placeholder="'+esc(f.placeholder||'')+'"></textarea></div>';
+      continue;
+    }
+    html+='<div style="margin-bottom:14px"><label style="display:block;margin-bottom:6px;font-weight:500">'+esc(lbl)+'</label><input type="text" style="width:100%;padding:10px;border:1px solid '+s.border+';border-radius:'+s.radius+'px" placeholder="'+esc(f.placeholder||'')+'"></div>';
+  }
+  html+='<button style="width:100%;padding:12px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-weight:600">'+esc(s.btnLabel)+'</button></div>';
+  document.getElementById('preview').innerHTML=html;
+}
+
+function saveForm(){
+  var name=document.getElementById('f-name').value.trim();
+  if(!name){toast('Digite o nome','e');return;}
+  if(!TF.length){toast('Adicione campos','e');return;}
+  var styles=getStyles();
+  var settings=getSettings();
+  settings.utm=getUtmConfig();
+  f('POST','/forms',{name:name,fields:TF,styles:styles,settings:settings})
+  .then(function(r){
+    if(r&&r.success){closeM('builder');toast('Formulário criado!');load();}
+    else toast('Erro','e');
+  });
+}
+
+function delForm(id){
+  if(confirm('Excluir formulário?')){
+    f('DELETE','/forms/'+id).then(function(){toast('Excluído');load();});
+  }
+}
+
+function showCode(id){
+  var fo=null;
+  for(var i=0;i<D.forms.length;i++){if(D.forms[i].id===id){fo=D.forms[i];break;}}
+  if(!fo)return;
+  
+  var url=location.origin+'/api/leads';
+  var s=fo.styles||{bg:'#ffffff',text:'#1f2937',btn:'#ef4444',btnText:'#ffffff',border:'#e5e7eb',radius:'8',font:'system-ui',size:'14',btnLabel:'Enviar'};
+  var set=fo.settings||{successMsg:'Enviado!',errorMsg:'Erro.',redirect:'',utm:{}};
+  var utm=set.utm||{};
+  
+  var fieldsHtml='';
+  for(var i=0;i<fo.fields.length;i++){
+    var x=fo.fields[i];
+    var k=slugify(x.name);
+    var rq=x.required?'required':'';
+    var ph=x.placeholder||'';
+    
+    if(x.type==='hidden'){
+      fieldsHtml+='  <input type="hidden" name="'+k+'" value="'+(x.value||'')+'">\n';
+    }else if(x.type==='checkbox'){
+      fieldsHtml+='  <div class="v4fg"><label class="v4cb"><input type="checkbox" name="'+k+'"> '+x.name+'</label></div>\n';
+    }else if(x.type==='textarea'){
+      fieldsHtml+='  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><textarea name="'+k+'" placeholder="'+ph+'" '+rq+'></textarea></div>\n';
+    }else if(x.type==='select'&&x.options){
+      var opts='';for(var j=0;j<x.options.length;j++){opts+='<option value="'+x.options[j]+'">'+x.options[j]+'</option>';}
+      fieldsHtml+='  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><select name="'+k+'" '+rq+'><option value="">Selecione...</option>'+opts+'</select></div>\n';
+    }else if(x.type==='radio'&&x.options){
+      var opts='';for(var j=0;j<x.options.length;j++){opts+='<label class="v4ro"><input type="radio" name="'+k+'" value="'+x.options[j]+'" '+rq+'> '+x.options[j]+'</label>';}
+      fieldsHtml+='  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><div class="v4rg">'+opts+'</div></div>\n';
+    }else{
+      var inputType=x.type;
+      if(x.type==='cpf'||x.type==='cnpj'||x.type==='cep')inputType='text';
+      fieldsHtml+='  <div class="v4fg"><label>'+x.name+(x.required?' *':'')+'</label><input type="'+inputType+'" name="'+k+'" placeholder="'+ph+'" '+rq+'></div>\n';
+    }
+  }
+  
+  var utmCode='';
+  if(utm.source)utmCode+='  if(params.get("utm_source"))meta.utm_source=params.get("utm_source");\n';
+  if(utm.medium)utmCode+='  if(params.get("utm_medium"))meta.utm_medium=params.get("utm_medium");\n';
+  if(utm.campaign)utmCode+='  if(params.get("utm_campaign"))meta.utm_campaign=params.get("utm_campaign");\n';
+  if(utm.term)utmCode+='  if(params.get("utm_term"))meta.utm_term=params.get("utm_term");\n';
+  if(utm.content)utmCode+='  if(params.get("utm_content"))meta.utm_content=params.get("utm_content");\n';
+  if(utm.referrer)utmCode+='  meta.referrer=document.referrer||null;\n';
+  if(utm.page)utmCode+='  meta.page_url=window.location.href;\n';
+  
+  var utmCapture=utmCode?'\n  var params=new URLSearchParams(window.location.search);\n'+utmCode:'';
+  var redirect=set.redirect?'\n      window.location.href="'+set.redirect+'";':'';
+  
+  var code='<!-- v4 Forms - '+fo.name+' -->\n';
+  code+='<form id="v4f" onsubmit="return v4send(event)">\n';
+  code+=fieldsHtml;
+  code+='  <button type="submit">'+s.btnLabel+'</button>\n';
+  code+='  <div id="v4msg"></div>\n';
+  code+='</form>\n\n';
+  code+='<script>\n';
+  code+='async function v4send(e){\n';
+  code+='  e.preventDefault();\n';
+  code+='  var btn=e.target.querySelector("button"),msg=document.getElementById("v4msg");\n';
+  code+='  btn.disabled=true;btn.textContent="Enviando...";\n';
+  code+='  var fd=new FormData(e.target),data={};\n';
+  code+='  fd.forEach(function(v,k){data[k]=v});\n';
+  code+='  var meta={};'+utmCapture+'\n';
+  code+='  try{\n';
+  code+='    var r=await fetch("'+url+'",{\n';
+  code+='      method:"POST",\n';
+  code+='      headers:{"Content-Type":"application/json"},\n';
+  code+='      body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:data,meta:meta})\n';
+  code+='    });\n';
+  code+='    if(r.ok){\n';
+  code+='      msg.className="v4msg ok";msg.textContent="'+set.successMsg+'";e.target.reset();'+redirect+'\n';
+  code+='    }else throw 0;\n';
+  code+='  }catch(x){msg.className="v4msg err";msg.textContent="'+set.errorMsg+'";}\n';
+  code+='  btn.disabled=false;btn.textContent="'+s.btnLabel+'";return false;\n';
+  code+='}\n';
+  code+='<\/script>\n\n';
+  code+='<style>\n';
+  code+='#v4f{max-width:500px;font-family:'+s.font+',sans-serif;background:'+s.bg+';padding:24px;border-radius:'+s.radius+'px}\n';
+  code+='#v4f .v4fg{margin-bottom:16px}\n';
+  code+='#v4f label{display:block;margin-bottom:6px;font-weight:500;color:'+s.text+';font-size:'+s.size+'px}\n';
+  code+='#v4f input,#v4f select,#v4f textarea{width:100%;padding:12px;border:1px solid '+s.border+';border-radius:'+s.radius+'px;font-size:'+s.size+'px;color:'+s.text+'}\n';
+  code+='#v4f input:focus,#v4f select:focus,#v4f textarea:focus{outline:none;border-color:'+s.btn+'}\n';
+  code+='#v4f textarea{min-height:100px}\n';
+  code+='#v4f .v4cb{display:flex;align-items:center;gap:8px;font-weight:normal}\n';
+  code+='#v4f .v4ro{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-weight:normal}\n';
+  code+='#v4f .v4rg{margin-top:8px}\n';
+  code+='#v4f button{width:100%;padding:14px;background:'+s.btn+';color:'+s.btnText+';border:none;border-radius:'+s.radius+'px;font-size:'+s.size+'px;font-weight:600;cursor:pointer}\n';
+  code+='#v4f button:hover{opacity:0.9}\n';
+  code+='#v4f button:disabled{opacity:0.6}\n';
+  code+='.v4msg{margin-top:16px;padding:12px;border-radius:'+s.radius+'px;text-align:center}\n';
+  code+='.v4msg.ok{background:#dcfce7;color:#166534}\n';
+  code+='.v4msg.err{background:#fee2e2;color:#991b1b}\n';
+  code+='</style>';
+  
+  document.getElementById('code-out').textContent=code;
+  openM('code');
+}
+
+function copyCode(){
+  var code=document.getElementById('code-out').textContent;
+  navigator.clipboard.writeText(code).then(function(){toast('Código copiado!');});
+}
+
+function saveHook(){
+  var u=document.getElementById('hook-url').value.trim();
+  if(!u){toast('Digite URL','e');return;}
+  f('POST','/webhooks',{url:u,isGlobal:true}).then(function(){
+    toast('Webhook salvo!');load();document.getElementById('hook-url').value='';
+  });
+}
+
+function delHook(id){
+  f('DELETE','/webhooks/'+id).then(function(){toast('Removido');load();});
+}
+
+function csvExport(){window.open(API+'/leads/export/csv','_blank');}
+
+function fdt(s){
+  if(!s)return'-';
+  var d=new Date(s);
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+
+function toast(m,t){
+  var el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML=(t==='e'?'⚠️':'✓')+' '+m;
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},3000);
+}
+
+function esc(s){
+  if(s==null)return'';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function slugify(s){
+  return s.toLowerCase()
+    .replace(/[áàãâä]/g,'a')
+    .replace(/[éèêë]/g,'e')
+    .replace(/[íìîï]/g,'i')
+    .replace(/[óòõôö]/g,'o')
+    .replace(/[úùûü]/g,'u')
+    .replace(/ç/g,'c')
+    .replace(/\s+/g,'_')
+    .replace(/[^a-z0-9_]/g,'');
+}
+
 init();
 </script>
 </body>
