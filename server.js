@@ -196,9 +196,9 @@ app.get('/api/leads/export/csv', requireAuth, (req, res) => {
     q += ' ORDER BY created_at DESC';
     const leads = db.prepare(q).all(...p);
     const h = ['ID', 'Empresa', 'Formulário', 'Nome', 'Email', 'Telefone', 'UTM Source', 'UTM Medium', 'UTM Campaign', 'IP', 'Device', 'Browser', 'OS', 'Data'];
-    let csv = h.join(',') + '\n';
-    leads.forEach(l => { let d = {}; try { d = JSON.parse(l.data); } catch (e) {} csv += [l.id, l.company_id || '', l.form_name || '', d.nome || d.name || '', d.email || '', d.telefone || d.phone || '', l.utm_source || '', l.utm_medium || '', l.utm_campaign || '', l.ip_address || '', l.device_type || '', l.browser || '', l.os || '', l.created_at].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n'; });
-    res.setHeader('Content-Type', 'text/csv'); res.setHeader('Content-Disposition', 'attachment; filename=leads.csv'); res.send(csv);
+    let csv = '\uFEFF' + h.join(';') + '\n';
+    leads.forEach(l => { let d = {}; try { d = JSON.parse(l.data); } catch (e) {} csv += [l.id, l.company_id || '', l.form_name || '', d.nome || d.name || '', d.email || '', d.telefone || d.phone || '', l.utm_source || '', l.utm_medium || '', l.utm_campaign || '', l.ip_address || '', l.device_type || '', l.browser || '', l.os || '', l.created_at].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';') + '\n'; });
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8'); res.setHeader('Content-Disposition', 'attachment; filename=leads.csv'); res.send(csv);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
