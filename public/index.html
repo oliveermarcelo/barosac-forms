@@ -40,7 +40,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .nav-item.logout{color:var(--accent);margin-top:auto}
 .company-selector{margin-bottom:16px;padding:12px;background:var(--card);border-radius:8px}
 .company-selector select{width:100%;padding:8px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px}
-.company-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
 .main{flex:1;padding:24px;overflow-y:auto;min-width:0}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .title{font-size:22px;font-weight:700}
@@ -58,7 +57,6 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg2)}
 .badge{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600}
 .badge-ok{background:rgba(34,197,94,.15);color:var(--success)}
-.badge-wait{background:rgba(245,158,11,.15);color:var(--warning)}
 .badge-info{background:rgba(59,130,246,.15);color:#3b82f6}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;visibility:hidden;padding:20px;transition:all .2s}
 .modal.active{opacity:1;visibility:visible}
@@ -121,7 +119,7 @@ tr:hover td{background:var(--bg2)}
 .width-opt:hover{border-color:var(--text2)}
 .width-opt.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .form-type-selector{display:flex;gap:12px;margin-bottom:20px}
-.form-type-opt{flex:1;padding:20px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;cursor:pointer;text-align:center;transition:all .2s}
+.form-type-opt{flex:1;padding:20px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;cursor:pointer;text-align:center}
 .form-type-opt:hover{border-color:var(--text2)}
 .form-type-opt.active{border-color:var(--accent);background:rgba(239,68,68,.1)}
 .form-type-opt h4{margin-bottom:4px;font-size:14px}
@@ -139,7 +137,7 @@ tr:hover td{background:var(--bg2)}
 <body>
 <div class="login" id="login">
 <div class="login-box">
-<div class="login-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 521"><g fill="currentColor"><path d="M114.63 0Q115.01.18 115.5.18 384.19.12 435.08.14q17.7 0 24.74 1.56 12.78 2.82 22.94 9.83 23.2 15.98 28.78 42.47 1.7 8.08 1.52 28.12-.13 14.63-.04 212.33a.37.37 0 01-.37.37l-72.15.01a.43.42 0 01-.43-.43q.03-209.58-.02-227.09c-.01-5.35-4.35-10.39-8.94-12.4q-2.65-1.16-10.4-1.15-46.43.09-58.53 0c-4.22-.03-8.77 1.09-11.43 3.75Q230.84 176.96 115.3 291.94c-2.48 2.47-4.95 5.48-4.95 8.63q-.05 50.73 0 69.12a3.85 3.55-54 00 .1.86q1.27 5.23 5.61 7.96 2.39 1.5 10.14 1.35 3.13-.06 216.59-.03a2.69 2.39-34.4 01 .64.08q9.05 2.32 9.34 11.6 0 .05.01 57.49 0 4.2 3.24 6.95c2.6 2.22 5.34 2.11 9.26 2.11q62.34-.01 70.07 0a.6.59 90 00 .59-.6l-.01-75.22a.4.4 0 01 .4-.4l76.27.01a.42.42 0 01 .42.42q-.13 48.27.02 57.89.29 18.07-1.53 26.61-6.27 29.39-32.05 44.96-13.84 8.36-31.88 9.28H66.01q-31.58-1.72-51.13-26.09-11.27-14.04-13.77-31.92-.48-3.5-1.11-6.95V65.13c1.19-8.24 1.99-15.14 5.56-23.6C14.96 19.22 34.66 4.76 58.56.71A.47.47 0 0159.11 1.17q-.02 21.77 0 227.51 0 3.49 2.11 5.59 12.92 12.81 37.21 37.01a.66.66 0 00 .94 0L320.67 50.89a.32.32 0 00-.22-.55q-36.28.11-47.7-.03-13.38-.16-18.95 1.46-9.2 2.67-16.78 10.24Q202.28 96.69 114.48 184.08a.28.28 0 01-.47-.2L114.02 0h.61z"/><path d="M355.85 291.42H232.16a.32.32 0 01-.22-.55L355.63 169.16a.32.32 0 01 .54.22v121.72a.32.32 0 01-.32.32z"/></g></svg></div>
+<div class="login-logo"><svg viewBox="0 0 513 521" fill="currentColor"><path d="M114.63 0Q115.01.18 115.5.18 384.19.12 435.08.14q17.7 0 24.74 1.56 12.78 2.82 22.94 9.83 23.2 15.98 28.78 42.47 1.7 8.08 1.52 28.12-.13 14.63-.04 212.33a.37.37 0 01-.37.37l-72.15.01a.43.42 0 01-.43-.43q.03-209.58-.02-227.09c-.01-5.35-4.35-10.39-8.94-12.4q-2.65-1.16-10.4-1.15-46.43.09-58.53 0c-4.22-.03-8.77 1.09-11.43 3.75Q230.84 176.96 115.3 291.94c-2.48 2.47-4.95 5.48-4.95 8.63q-.05 50.73 0 69.12 1.27 5.23 5.61 7.96 2.39 1.5 10.14 1.35 3.13-.06 216.59-.03 9.05 2.32 9.34 11.6 0 .05.01 57.49 0 4.2 3.24 6.95c2.6 2.22 5.34 2.11 9.26 2.11q62.34-.01 70.07 0a.6.59 90 00.59-.6l-.01-75.22a.4.4 0 01.4-.4l76.27.01a.42.42 0 01.42.42q-.13 48.27.02 57.89.29 18.07-1.53 26.61-6.27 29.39-32.05 44.96-13.84 8.36-31.88 9.28H66.01q-31.58-1.72-51.13-26.09-11.27-14.04-13.77-31.92-.48-3.5-1.11-6.95V65.13c1.19-8.24 1.99-15.14 5.56-23.6C14.96 19.22 34.66 4.76 58.56.71q-.02 21.77 0 227.51 0 3.49 2.11 5.59 12.92 12.81 37.21 37.01a.66.66 0 00.94 0L320.67 50.89a.32.32 0 00-.22-.55q-36.28.11-47.7-.03-13.38-.16-18.95 1.46-9.2 2.67-16.78 10.24Q202.28 96.69 114.48 184.08a.28.28 0 01-.47-.2L114.02 0h.61z"/><path d="M355.85 291.42H232.16a.32.32 0 01-.22-.55L355.63 169.16a.32.32 0 01.54.22v121.72a.32.32 0 01-.32.32z"/></svg></div>
 <p>Sistema de Captura de Leads</p>
 <div class="error" id="err">Usuário ou senha inválidos</div>
 <form id="login-form">
@@ -152,7 +150,7 @@ tr:hover td{background:var(--bg2)}
 
 <div class="app" id="app">
 <aside class="sidebar">
-<div class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 521"><g fill="currentColor"><path d="M114.63 0Q115.01.18 115.5.18 384.19.12 435.08.14q17.7 0 24.74 1.56 12.78 2.82 22.94 9.83 23.2 15.98 28.78 42.47 1.7 8.08 1.52 28.12-.13 14.63-.04 212.33a.37.37 0 01-.37.37l-72.15.01a.43.42 0 01-.43-.43q.03-209.58-.02-227.09c-.01-5.35-4.35-10.39-8.94-12.4q-2.65-1.16-10.4-1.15-46.43.09-58.53 0c-4.22-.03-8.77 1.09-11.43 3.75Q230.84 176.96 115.3 291.94c-2.48 2.47-4.95 5.48-4.95 8.63q-.05 50.73 0 69.12a3.85 3.55-54 00 .1.86q1.27 5.23 5.61 7.96 2.39 1.5 10.14 1.35 3.13-.06 216.59-.03a2.69 2.39-34.4 01 .64.08q9.05 2.32 9.34 11.6 0 .05.01 57.49 0 4.2 3.24 6.95c2.6 2.22 5.34 2.11 9.26 2.11q62.34-.01 70.07 0a.6.59 90 00 .59-.6l-.01-75.22a.4.4 0 01 .4-.4l76.27.01a.42.42 0 01 .42.42q-.13 48.27.02 57.89.29 18.07-1.53 26.61-6.27 29.39-32.05 44.96-13.84 8.36-31.88 9.28H66.01q-31.58-1.72-51.13-26.09-11.27-14.04-13.77-31.92-.48-3.5-1.11-6.95V65.13c1.19-8.24 1.99-15.14 5.56-23.6C14.96 19.22 34.66 4.76 58.56.71A.47.47 0 0159.11 1.17q-.02 21.77 0 227.51 0 3.49 2.11 5.59 12.92 12.81 37.21 37.01a.66.66 0 00 .94 0L320.67 50.89a.32.32 0 00-.22-.55q-36.28.11-47.7-.03-13.38-.16-18.95 1.46-9.2 2.67-16.78 10.24Q202.28 96.69 114.48 184.08a.28.28 0 01-.47-.2L114.02 0h.61z"/><path d="M355.85 291.42H232.16a.32.32 0 01-.22-.55L355.63 169.16a.32.32 0 01 .54.22v121.72a.32.32 0 01-.32.32z"/></g></svg></div>
+<div class="logo"><svg viewBox="0 0 513 521" fill="currentColor"><path d="M114.63 0Q115.01.18 115.5.18 384.19.12 435.08.14q17.7 0 24.74 1.56 12.78 2.82 22.94 9.83 23.2 15.98 28.78 42.47 1.7 8.08 1.52 28.12-.13 14.63-.04 212.33a.37.37 0 01-.37.37l-72.15.01a.43.42 0 01-.43-.43q.03-209.58-.02-227.09c-.01-5.35-4.35-10.39-8.94-12.4q-2.65-1.16-10.4-1.15-46.43.09-58.53 0c-4.22-.03-8.77 1.09-11.43 3.75Q230.84 176.96 115.3 291.94c-2.48 2.47-4.95 5.48-4.95 8.63q-.05 50.73 0 69.12 1.27 5.23 5.61 7.96 2.39 1.5 10.14 1.35 3.13-.06 216.59-.03 9.05 2.32 9.34 11.6 0 .05.01 57.49 0 4.2 3.24 6.95c2.6 2.22 5.34 2.11 9.26 2.11q62.34-.01 70.07 0a.6.59 90 00.59-.6l-.01-75.22a.4.4 0 01.4-.4l76.27.01a.42.42 0 01.42.42q-.13 48.27.02 57.89.29 18.07-1.53 26.61-6.27 29.39-32.05 44.96-13.84 8.36-31.88 9.28H66.01q-31.58-1.72-51.13-26.09-11.27-14.04-13.77-31.92-.48-3.5-1.11-6.95V65.13c1.19-8.24 1.99-15.14 5.56-23.6C14.96 19.22 34.66 4.76 58.56.71q-.02 21.77 0 227.51 0 3.49 2.11 5.59 12.92 12.81 37.21 37.01a.66.66 0 00.94 0L320.67 50.89a.32.32 0 00-.22-.55q-36.28.11-47.7-.03-13.38-.16-18.95 1.46-9.2 2.67-16.78 10.24Q202.28 96.69 114.48 184.08a.28.28 0 01-.47-.2L114.02 0h.61z"/><path d="M355.85 291.42H232.16a.32.32 0 01-.22-.55L355.63 169.16a.32.32 0 01.54.22v121.72a.32.32 0 01-.32.32z"/></svg></div>
 <div class="company-selector"><select id="company-select" onchange="changeCompany()"><option value="">Todas Empresas</option></select></div>
 <nav>
 <div class="nav-item active" data-v="dash">📊 Dashboard</div>
@@ -168,15 +166,15 @@ tr:hover td{background:var(--bg2)}
 <section id="v-dash" class="view active">
 <div class="header"><h1 class="title">Dashboard</h1><button class="btn btn-primary" onclick="openFormBuilder()">+ Novo Formulário</button></div>
 <div class="stats"><div class="stat"><div class="stat-label">Total Leads</div><div class="stat-value" id="st-leads">0</div></div><div class="stat"><div class="stat-label">Formulários</div><div class="stat-value" id="st-forms">0</div></div><div class="stat"><div class="stat-label">Empresas</div><div class="stat-value" id="st-companies">0</div></div><div class="stat"><div class="stat-label">Webhooks Enviados</div><div class="stat-value" id="st-sent">0</div></div></div>
-<div class="card"><div class="card-header">Últimos Leads</div><table><thead><tr><th>Nome</th><th>Email</th><th>Empresa</th><th>Formulário</th><th>Origem</th><th>Data</th><th></th></tr></thead><tbody id="tbl-recent"></tbody></table></div>
+<div class="card"><div class="card-header">Últimos Leads</div><table><thead><tr><th>Nome</th><th>Email</th><th>Formulário</th><th>Origem</th><th>Data</th><th></th></tr></thead><tbody id="tbl-recent"></tbody></table></div>
 </section>
 <section id="v-forms" class="view">
 <div class="header"><h1 class="title">Formulários</h1><div class="actions"><button class="btn btn-blue" onclick="openHtmlImport()">📄 Importar HTML</button><button class="btn btn-primary" onclick="openFormBuilder()">+ Novo</button></div></div>
-<div class="card"><table><thead><tr><th>Nome</th><th>Empresa</th><th>Tipo</th><th>Campos</th><th>Leads</th><th>Criado</th><th>Ações</th></tr></thead><tbody id="tbl-forms"></tbody></table></div>
+<div class="card"><table><thead><tr><th>Nome</th><th>Empresa</th><th>Tipo</th><th>Campos</th><th>Leads</th><th>Ações</th></tr></thead><tbody id="tbl-forms"></tbody></table></div>
 </section>
 <section id="v-leads" class="view">
 <div class="header"><h1 class="title">Leads</h1><button class="btn btn-secondary" onclick="csvExport()">📥 Exportar CSV</button></div>
-<div class="filters"><input type="text" id="fl-search" placeholder="Buscar..." onkeyup="filterLeads()"><select id="fl-form" onchange="filterLeads()"><option value="">Todos formulários</option></select><select id="fl-source" onchange="filterLeads()"><option value="">Todas origens</option></select></div>
+<div class="filters"><input type="text" id="fl-search" placeholder="Buscar..." onkeyup="filterLeads()"><select id="fl-form" onchange="filterLeads()"><option value="">Todos</option></select><select id="fl-source" onchange="filterLeads()"><option value="">Todas origens</option></select></div>
 <div class="card"><table><thead><tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Formulário</th><th>Origem</th><th>Data</th><th></th></tr></thead><tbody id="tbl-leads"></tbody></table></div>
 </section>
 <section id="v-companies" class="view">
@@ -185,125 +183,113 @@ tr:hover td{background:var(--bg2)}
 </section>
 <section id="v-hooks" class="view">
 <div class="header"><h1 class="title">Webhooks Globais</h1></div>
-<div class="card"><div class="card-body"><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Webhooks globais recebem TODOS os leads de todas empresas.</p><div class="fg"><label>URL do Webhook</label><input type="url" id="hook-url" placeholder="https://hook.make.com/..."></div><button class="btn btn-primary" onclick="saveHook()">Salvar</button><div id="hook-list" style="margin-top:20px"></div></div></div>
+<div class="card"><div class="card-body"><p style="color:var(--text2);margin-bottom:16px;font-size:13px">Webhooks globais recebem TODOS os leads.</p><div class="fg"><label>URL do Webhook</label><input type="url" id="hook-url" placeholder="https://hook.make.com/..."></div><button class="btn btn-primary" onclick="saveHook()">Salvar</button><div id="hook-list" style="margin-top:20px"></div></div></div>
 </section>
 </main>
 </div>
 
 <!-- Modal Builder -->
-<div class="modal" id="m-builder"><div class="modal-box lg"><div class="modal-header"><h3>✨ Criar Formulário</h3><button class="modal-close" onclick="closeM('builder')">×</button></div>
+<div class="modal" id="m-builder"><div class="modal-box lg"><div class="modal-header"><h3>Criar Formulário</h3><button class="modal-close" onclick="closeM('builder')">&times;</button></div>
 <div class="modal-body">
-<div class="fg"><label>Empresa</label><select id="f-company"><option value="">Sem empresa (Global)</option></select></div>
+<div class="fg"><label>Empresa</label><select id="f-company"><option value="">Sem empresa</option></select></div>
 <div class="form-type-selector">
-<div class="form-type-opt active" onclick="setFormType('builder',this)"><h4>🎨 Form Builder</h4><p>Crie visualmente com preview</p></div>
-<div class="form-type-opt" onclick="setFormType('html',this)"><h4>📄 HTML Customizado</h4><p>Cole seu próprio código HTML</p></div>
+<div class="form-type-opt active" onclick="setFormType('builder',this)"><h4>🎨 Form Builder</h4><p>Crie visualmente</p></div>
+<div class="form-type-opt" onclick="setFormType('html',this)"><h4>📄 HTML Custom</h4><p>Cole seu código</p></div>
 </div>
 <div id="builder-content">
 <div class="builder-layout">
 <div class="builder-left">
 <div class="tabs">
-<div class="tab active" onclick="switchTab(this,'fields')">📝 Campos</div>
-<div class="tab" onclick="switchTab(this,'style')">🎨 Estilo</div>
-<div class="tab" onclick="switchTab(this,'utm')">📊 UTMs</div>
-<div class="tab" onclick="switchTab(this,'config')">⚙️ Config</div>
+<div class="tab active" onclick="switchTab(this,'fields')">Campos</div>
+<div class="tab" onclick="switchTab(this,'style')">Estilo</div>
+<div class="tab" onclick="switchTab(this,'config')">Config</div>
 </div>
 <div id="tab-fields" class="tab-content active">
-<div class="fg"><label>Nome do Formulário</label><input type="text" id="f-name" placeholder="Ex: Formulário de Contato"></div>
+<div class="fg"><label>Nome do Formulário</label><input type="text" id="f-name" placeholder="Ex: Contato"></div>
 <div class="fg"><label>Campos</label><div class="fields-list" id="f-fields"></div><button class="btn btn-secondary btn-full" onclick="openFieldModal()" style="margin-top:8px">+ Adicionar Campo</button></div>
 </div>
 <div id="tab-style" class="tab-content">
 <div class="section-title">Cores</div>
 <div class="fg-row"><div class="fg"><label>Fundo</label><div class="color-picker"><input type="color" id="s-formBg" value="#ffffff" onchange="updatePreview()"><input type="text" id="s-formBg-t" value="#ffffff" onchange="syncC('formBg')"></div></div><div class="fg"><label>Botão</label><div class="color-picker"><input type="color" id="s-btnBg" value="#ef4444" onchange="updatePreview()"><input type="text" id="s-btnBg-t" value="#ef4444" onchange="syncC('btnBg')"></div></div></div>
-<div class="fg-row"><div class="fg"><label>Texto</label><div class="color-picker"><input type="color" id="s-textColor" value="#1f2937" onchange="updatePreview()"><input type="text" id="s-textColor-t" value="#1f2937" onchange="syncC('textColor')"></div></div><div class="fg"><label>Borda</label><div class="color-picker"><input type="color" id="s-inputBorder" value="#d1d5db" onchange="updatePreview()"><input type="text" id="s-inputBorder-t" value="#d1d5db" onchange="syncC('inputBorder')"></div></div></div>
-<div class="section-title">Layout</div>
-<div class="fg-row"><div class="fg"><label>Arredondamento</label><select id="s-formRadius" onchange="updatePreview()"><option value="0">Nenhum</option><option value="8" selected>Pequeno</option><option value="12">Médio</option><option value="16">Grande</option></select></div><div class="fg"><label>Sombra</label><select id="s-formShadow" onchange="updatePreview()"><option value="none">Nenhuma</option><option value="sm">Leve</option><option value="md" selected>Média</option><option value="lg">Forte</option></select></div></div>
 <div class="fg"><label>Texto do Botão</label><input type="text" id="s-btnText" value="Enviar" onchange="updatePreview()"></div>
 </div>
-<div id="tab-utm" class="tab-content">
-<div class="section-title">Parâmetros UTM</div>
-<div class="checkbox-group">
-<label class="checkbox-item"><input type="checkbox" id="utm-source" checked> utm_source</label>
-<label class="checkbox-item"><input type="checkbox" id="utm-medium" checked> utm_medium</label>
-<label class="checkbox-item"><input type="checkbox" id="utm-campaign" checked> utm_campaign</label>
-<label class="checkbox-item"><input type="checkbox" id="utm-term" checked> utm_term</label>
-<label class="checkbox-item"><input type="checkbox" id="utm-content" checked> utm_content</label>
-</div>
-<div class="section-title">Dados Adicionais</div>
-<div class="checkbox-group">
-<label class="checkbox-item"><input type="checkbox" id="utm-referrer" checked> Página de origem</label>
-<label class="checkbox-item"><input type="checkbox" id="utm-page" checked> URL atual</label>
-</div>
-</div>
 <div id="tab-config" class="tab-content">
-<div class="section-title">Webhook</div>
-<div class="fg"><label>URL do Webhook</label><input type="url" id="cfg-webhook" placeholder="https://hook.make.com/..."><small>Receba leads deste formulário</small></div>
-<div class="section-title">Mensagens</div>
-<div class="fg"><label>Sucesso</label><input type="text" id="cfg-successMsg" value="Enviado com sucesso!"></div>
-<div class="fg"><label>Erro</label><input type="text" id="cfg-errorMsg" value="Erro ao enviar."></div>
+<div class="fg"><label>Webhook</label><input type="url" id="cfg-webhook" placeholder="https://hook.make.com/..."></div>
+<div class="fg"><label>Mensagem de Sucesso</label><input type="text" id="cfg-successMsg" value="Enviado com sucesso!"></div>
 <div class="fg"><label>Redirecionar para</label><input type="url" id="cfg-redirect" placeholder="https://seusite.com/obrigado"></div>
 </div>
 </div>
-<div class="builder-right"><div class="preview-label">👁️ Preview</div><div class="preview-frame" id="preview"></div></div>
+<div class="builder-right"><div class="preview-label">Preview</div><div class="preview-frame" id="preview"></div></div>
 </div>
 </div>
 <div id="html-content" style="display:none">
-<div class="fg"><label>Nome do Formulário</label><input type="text" id="f-name-html" placeholder="Ex: Formulário Landing Page"></div>
-<div class="fg"><label>Cole seu código HTML/CSS/JS aqui</label><textarea id="f-custom-html" rows="15" placeholder="<form>...</form>&#10;&#10;<style>...</style>&#10;&#10;<script>...</script>"></textarea><small>O sistema irá adicionar automaticamente o script de captura. Use o atributo name nos inputs para capturar os dados.</small></div>
-<div class="fg"><label>Webhook (opcional)</label><input type="url" id="f-html-webhook" placeholder="https://hook.make.com/..."></div>
+<div class="fg"><label>Nome do Formulário</label><input type="text" id="f-name-html" placeholder="Ex: Landing Page"></div>
+<div class="fg"><label>Cole seu HTML aqui</label><textarea id="f-custom-html" rows="12" placeholder="Cole aqui o HTML do seu formulário..."></textarea></div>
+<div class="fg"><label>Webhook</label><input type="url" id="f-html-webhook" placeholder="https://hook.make.com/..."></div>
 </div>
 </div>
-<div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">✨ Criar Formulário</button></div>
+<div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('builder')">Cancelar</button><button class="btn btn-primary" onclick="saveForm()">Criar</button></div>
 </div></div>
 
 <!-- Modal Campo -->
-<div class="modal" id="m-field"><div class="modal-box sm"><div class="modal-header"><h3 id="field-modal-title">Adicionar Campo</h3><button class="modal-close" onclick="closeM('field')">×</button></div><div class="modal-body">
+<div class="modal" id="m-field"><div class="modal-box sm"><div class="modal-header"><h3 id="field-modal-title">Adicionar Campo</h3><button class="modal-close" onclick="closeM('field')">&times;</button></div><div class="modal-body">
 <div class="fg"><label>Nome</label><input type="text" id="fd-name" placeholder="Ex: Nome Completo"></div>
-<div class="fg"><label>Tipo</label><select id="fd-type" onchange="toggleFieldOpts()"><optgroup label="Texto"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="textarea">Texto Longo</option></optgroup><optgroup label="Documentos BR"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option><option value="cep">CEP</option></optgroup><optgroup label="Data"><option value="date">Data</option></optgroup><optgroup label="Escolhas"><option value="select">Seleção</option><option value="radio">Múltipla Escolha</option><option value="checkbox">Checkbox</option></optgroup><optgroup label="Outros"><option value="hidden">Oculto</option></optgroup></select></div>
-<div class="fg" id="fg-opts" style="display:none"><label>Opções (uma por linha)</label><textarea id="fd-opts" rows="4"></textarea></div>
+<div class="fg"><label>Tipo</label><select id="fd-type" onchange="toggleFieldOpts()"><option value="text">Texto</option><option value="email">Email</option><option value="tel">Telefone</option><option value="textarea">Texto Longo</option><option value="select">Seleção</option><option value="checkbox">Checkbox</option></select></div>
+<div class="fg" id="fg-opts" style="display:none"><label>Opções (uma por linha)</label><textarea id="fd-opts" rows="3"></textarea></div>
 <div class="fg"><label>Placeholder</label><input type="text" id="fd-ph"></div>
-<div class="fg" id="fg-val" style="display:none"><label>Valor Padrão</label><input type="text" id="fd-val"></div>
-<div class="fg"><label>Largura</label><div class="width-selector" id="fd-width"><div class="width-opt" data-w="25%">1/4</div><div class="width-opt" data-w="33.33%">1/3</div><div class="width-opt" data-w="50%">1/2</div><div class="width-opt" data-w="66.66%">2/3</div><div class="width-opt" data-w="75%">3/4</div><div class="width-opt active" data-w="100%">Full</div></div></div>
+<div class="fg"><label>Largura</label><div class="width-selector" id="fd-width"><div class="width-opt" data-w="50%">1/2</div><div class="width-opt active" data-w="100%">Full</div></div></div>
 <div class="fg"><label><input type="checkbox" id="fd-req" checked> Obrigatório</label></div>
-</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('field')">Cancelar</button><button class="btn btn-primary" id="field-modal-btn" onclick="addField()">Adicionar</button></div></div></div>
+</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('field')">Cancelar</button><button class="btn btn-primary" onclick="addField()">Adicionar</button></div></div></div>
 
 <!-- Modal Empresa -->
-<div class="modal" id="m-company"><div class="modal-box sm"><div class="modal-header"><h3 id="company-modal-title">Nova Empresa</h3><button class="modal-close" onclick="closeM('company')">×</button></div><div class="modal-body">
-<div class="fg"><label>Nome da Empresa</label><input type="text" id="co-name" placeholder="Ex: Empresa ABC"></div>
-<div class="fg"><label>Cor</label><div class="color-picker"><input type="color" id="co-color" value="#ef4444"><input type="text" id="co-color-t" value="#ef4444" onchange="document.getElementById('co-color').value=this.value"></div></div>
-<div class="fg"><label>Webhook Global da Empresa</label><input type="url" id="co-webhook" placeholder="https://hook.make.com/..."><small>Todos os leads desta empresa serão enviados para este webhook</small></div>
-</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('company')">Cancelar</button><button class="btn btn-primary" id="company-modal-btn" onclick="saveCompany()">Criar</button></div></div></div>
+<div class="modal" id="m-company"><div class="modal-box sm"><div class="modal-header"><h3 id="company-modal-title">Nova Empresa</h3><button class="modal-close" onclick="closeM('company')">&times;</button></div><div class="modal-body">
+<div class="fg"><label>Nome</label><input type="text" id="co-name" placeholder="Ex: Empresa ABC"></div>
+<div class="fg"><label>Cor</label><div class="color-picker"><input type="color" id="co-color" value="#ef4444"><input type="text" id="co-color-t" value="#ef4444"></div></div>
+<div class="fg"><label>Webhook da Empresa</label><input type="url" id="co-webhook" placeholder="https://hook.make.com/..."></div>
+</div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('company')">Cancelar</button><button class="btn btn-primary" onclick="saveCompany()">Salvar</button></div></div></div>
 
 <!-- Modal Código -->
-<div class="modal" id="m-code"><div class="modal-box"><div class="modal-header"><h3>📋 Código</h3><button class="modal-close" onclick="closeM('code')">×</button></div><div class="modal-body"><p style="color:var(--text2);margin-bottom:12px;font-size:13px">Cole na sua landing page:</p><div class="code-box"><div class="code-header"><span>HTML + CSS + JS</span><button class="btn btn-secondary btn-sm" onclick="copyCode()">📋 Copiar</button></div><pre class="code-content" id="code-out"></pre></div></div></div></div>
+<div class="modal" id="m-code"><div class="modal-box"><div class="modal-header"><h3>Código do Formulário</h3><button class="modal-close" onclick="closeM('code')">&times;</button></div><div class="modal-body"><div class="code-box"><div class="code-header"><span>HTML</span><button class="btn btn-secondary btn-sm" onclick="copyCode()">Copiar</button></div><pre class="code-content" id="code-out"></pre></div></div></div></div>
 
 <!-- Modal Lead -->
-<div class="modal" id="m-lead"><div class="modal-box"><div class="modal-header"><h3>📋 Lead</h3><button class="modal-close" onclick="closeM('lead')">×</button></div><div class="modal-body" id="lead-detail"></div></div></div>
+<div class="modal" id="m-lead"><div class="modal-box"><div class="modal-header"><h3>Detalhes do Lead</h3><button class="modal-close" onclick="closeM('lead')">&times;</button></div><div class="modal-body" id="lead-detail"></div></div></div>
 
-<!-- Modal Import HTML -->
-<div class="modal" id="m-import"><div class="modal-box"><div class="modal-header"><h3>📄 Importar HTML Customizado</h3><button class="modal-close" onclick="closeM('import')">×</button></div><div class="modal-body">
-<div class="fg"><label>Nome do Formulário</label><input type="text" id="imp-name" placeholder="Ex: Landing Page Produto X"></div>
-<div class="fg"><label>Empresa</label><select id="imp-company"><option value="">Sem empresa (Global)</option></select></div>
-<div class="fg"><label>Cole seu código HTML aqui</label><textarea id="imp-html" rows="12" placeholder="Cole aqui o código HTML do seu formulário..."></textarea><small>Use atributo <code>name</code> nos inputs. Adicione <code>id="v4form"</code> no seu form.</small></div>
-<div class="fg"><label>Webhook</label><input type="url" id="imp-webhook" placeholder="https://hook.make.com/..."></div>
+<!-- Modal Import -->
+<div class="modal" id="m-import"><div class="modal-box"><div class="modal-header"><h3>Importar HTML</h3><button class="modal-close" onclick="closeM('import')">&times;</button></div><div class="modal-body">
+<div class="fg"><label>Nome</label><input type="text" id="imp-name" placeholder="Ex: Landing Page"></div>
+<div class="fg"><label>Empresa</label><select id="imp-company"><option value="">Sem empresa</option></select></div>
+<div class="fg"><label>Cole seu HTML</label><textarea id="imp-html" rows="10" placeholder="Cole aqui..."></textarea></div>
+<div class="fg"><label>Webhook</label><input type="url" id="imp-webhook" placeholder="https://..."></div>
 </div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeM('import')">Cancelar</button><button class="btn btn-primary" onclick="importHtmlForm()">Importar</button></div></div></div>
-hooks:[],companies:[]},TF=[],editingFieldIndex=-1,currentCompany='',editingCompanyId=null,formType='builder';
+
+<script>
+var API='/api',tk=localStorage.getItem('tk'),D={forms:[],leads:[],stats:{},hooks:[],companies:[]},TF=[],editingFieldIndex=-1,currentCompany='',editingCompanyId=null,formType='builder';
+var TYPES={text:'Texto',email:'Email',tel:'Telefone',textarea:'Texto Longo',select:'Seleção',checkbox:'Checkbox'};
 
 function init(){if(!tk){showLogin();return;}f('GET','/session').then(function(r){if(r&&r.authenticated){showApp();load();}else doLogout();}).catch(function(){showLogin();});}
 function showLogin(){document.getElementById('login').style.display='flex';document.getElementById('app').classList.remove('active');}
 function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').classList.add('active');}
 function doLogout(){tk=null;localStorage.removeItem('tk');showLogin();}
-document.getElementById('login-form').onsubmit=function(e){e.preventDefault();var u=document.getElementById('user').value,p=document.getElementById('pass').value,b=document.getElementById('btn-login'),er=document.getElementById('err');b.disabled=true;b.textContent='...';er.classList.remove('show');fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})}).then(function(r){return r.json()}).then(function(d){if(d.success){tk=d.token;localStorage.setItem('tk',tk);showApp();load();}else er.classList.add('show');}).catch(function(){er.textContent='Erro';er.classList.add('show');}).finally(function(){b.disabled=false;b.textContent='Entrar';});};
+
+document.getElementById('login-form').onsubmit=function(e){
+  e.preventDefault();
+  var u=document.getElementById('user').value,p=document.getElementById('pass').value;
+  var b=document.getElementById('btn-login'),er=document.getElementById('err');
+  b.disabled=true;b.textContent='...';er.classList.remove('show');
+  fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})})
+  .then(function(r){return r.json()})
+  .then(function(d){if(d.success){tk=d.token;localStorage.setItem('tk',tk);showApp();load();}else{er.classList.add('show');}})
+  .catch(function(){er.textContent='Erro de conexão';er.classList.add('show');})
+  .finally(function(){b.disabled=false;b.textContent='Entrar';});
+};
+
 function logout(){f('POST','/logout').then(function(){doLogout();});}
 function f(m,url,body){var o={method:m,headers:{Authorization:'Bearer '+tk}};if(body){o.headers['Content-Type']='application/json';o.body=JSON.stringify(body);}return fetch(API+url,o).then(function(r){if(r.status===401){doLogout();return null;}return r.json();});}
 
 function load(){
-  var companyParam=currentCompany?'?company_id='+currentCompany:'';
-  Promise.all([f('GET','/stats'+companyParam),f('GET','/forms'+companyParam),f('GET','/leads'+companyParam+'&limit=100'),f('GET','/webhooks'),f('GET','/companies')])
-  .then(function(res){
-    if(!res[0])return;
-    D.stats=res[0].stats||{};D.forms=res[1].forms||[];D.leads=res[2].leads||[];D.hooks=res[3].webhooks||[];D.companies=res[4].companies||[];
-    render();renderCompanies();
-  });
+  var cp=currentCompany?'?company_id='+currentCompany:'';
+  Promise.all([f('GET','/stats'+cp),f('GET','/forms'+cp),f('GET','/leads'+cp),f('GET','/webhooks'),f('GET','/companies')])
+  .then(function(res){if(!res[0])return;D.stats=res[0].stats||{};D.forms=res[1].forms||[];D.leads=res[2].leads||[];D.hooks=res[3].webhooks||[];D.companies=res[4].companies||[];render();});
 }
 
 function changeCompany(){currentCompany=document.getElementById('company-select').value;load();}
@@ -314,166 +300,103 @@ function render(){
   document.getElementById('st-companies').textContent=D.stats.totalCompanies||0;
   document.getElementById('st-sent').textContent=D.stats.webhooksSent||0;
   
-  // Company selectors
-  var companyOpts='<option value="">Todas Empresas</option>';
-  D.companies.forEach(function(c){companyOpts+='<option value="'+c.id+'"'+(currentCompany===c.id?' selected':'')+'>'+esc(c.name)+'</option>';});
-  document.getElementById('company-select').innerHTML=companyOpts;
+  var opts='<option value="">Todas Empresas</option>';
+  D.companies.forEach(function(c){opts+='<option value="'+c.id+'"'+(currentCompany===c.id?' selected':'')+'>'+esc(c.name)+'</option>';});
+  document.getElementById('company-select').innerHTML=opts;
   document.getElementById('f-company').innerHTML='<option value="">Sem empresa</option>'+D.companies.map(function(c){return'<option value="'+c.id+'">'+esc(c.name)+'</option>';}).join('');
   document.getElementById('imp-company').innerHTML='<option value="">Sem empresa</option>'+D.companies.map(function(c){return'<option value="'+c.id+'">'+esc(c.name)+'</option>';}).join('');
   
-  // Forms
   var html='';
-  D.forms.forEach(function(x){
-    var company=D.companies.find(function(c){return c.id===x.company_id;});
-    html+='<tr><td><b>'+esc(x.name)+'</b></td><td>'+(company?'<span class="badge" style="background:'+company.color+'22;color:'+company.color+'">'+esc(company.name)+'</span>':'-')+'</td><td><span class="badge badge-info">'+(x.form_type==='html'?'HTML':'Builder')+'</span></td><td>'+x.fields.length+'</td><td>'+x.leads_count+'</td><td>'+fdt(x.created_at)+'</td><td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="showCode(\''+x.id+'\')">📋</button><button class="btn btn-secondary btn-sm" onclick="delForm(\''+x.id+'\')" style="color:var(--accent)">🗑️</button></div></td></tr>';
-  });
-  document.getElementById('tbl-forms').innerHTML=html||'<tr><td colspan="7" class="empty">Nenhum formulário</td></tr>';
+  D.forms.forEach(function(x){var co=D.companies.find(function(c){return c.id===x.company_id;});html+='<tr><td><b>'+esc(x.name)+'</b></td><td>'+(co?esc(co.name):'-')+'</td><td>'+(x.form_type==='html'?'HTML':'Builder')+'</td><td>'+x.fields.length+'</td><td>'+x.leads_count+'</td><td><div class="actions"><button class="btn btn-secondary btn-sm" onclick="showCode(\''+x.id+'\')">Código</button><button class="btn btn-secondary btn-sm" onclick="delForm(\''+x.id+'\')" style="color:var(--accent)">Excluir</button></div></td></tr>';});
+  document.getElementById('tbl-forms').innerHTML=html||'<tr><td colspan="6" class="empty">Nenhum formulário</td></tr>';
   
-  // Leads
   html='';
-  D.leads.forEach(function(x){
-    var company=D.companies.find(function(c){return c.id===x.company_id;});
-    html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||x.data.phone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';
-  });
+  D.leads.forEach(function(x){html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||x.data.phone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td>'+esc(x.utm_source||'direto')+'</td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">Ver</button></td></tr>';});
   document.getElementById('tbl-leads').innerHTML=html||'<tr><td colspan="7" class="empty">Nenhum lead</td></tr>';
   
-  // Recent
-  html='';
-  D.leads.slice(0,5).forEach(function(x){
-    var company=D.companies.find(function(c){return c.id===x.company_id;});
-    html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+(company?esc(company.name):'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';
-  });
-  document.getElementById('tbl-recent').innerHTML=html||'<tr><td colspan="7" class="empty">Nenhum lead</td></tr>';
+  html='';D.leads.slice(0,5).forEach(function(x){html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td>'+esc(x.utm_source||'direto')+'</td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">Ver</button></td></tr>';});
+  document.getElementById('tbl-recent').innerHTML=html||'<tr><td colspan="6" class="empty">Nenhum lead</td></tr>';
   
-  // Filters
-  var opts='<option value="">Todos</option>';D.forms.forEach(function(x){opts+='<option value="'+x.id+'">'+esc(x.name)+'</option>';});document.getElementById('fl-form').innerHTML=opts;
-  var sources={};D.leads.forEach(function(x){if(x.utm_source)sources[x.utm_source]=1;});opts='<option value="">Todas</option>';for(var s in sources){opts+='<option>'+esc(s)+'</option>';}document.getElementById('fl-source').innerHTML=opts;
+  opts='<option value="">Todos</option>';D.forms.forEach(function(x){opts+='<option value="'+x.id+'">'+esc(x.name)+'</option>';});document.getElementById('fl-form').innerHTML=opts;
   
-  // Webhooks
-  html='';D.hooks.filter(function(h){return h.is_global;}).forEach(function(h){html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><code style="font-size:11px;word-break:break-all;flex:1">'+esc(h.url)+'</code><button class="btn btn-secondary btn-sm" onclick="delHook('+h.id+')" style="color:var(--accent);margin-left:12px">🗑️</button></div>';});
+  html='';D.companies.forEach(function(c){html+='<div class="company-card"><div class="company-color" style="background:'+c.color+'"></div><div class="info"><div class="name">'+esc(c.name)+'</div><div class="meta">'+c.forms_count+' forms - '+c.leads_count+' leads</div></div><div class="actions"><button class="btn btn-secondary btn-sm" onclick="editCompany(\''+c.id+'\')">Editar</button><button class="btn btn-secondary btn-sm" onclick="delCompany(\''+c.id+'\')" style="color:var(--accent)">Excluir</button></div></div>';});
+  document.getElementById('companies-list').innerHTML=html||'<div class="empty">Nenhuma empresa</div>';
+  
+  html='';D.hooks.filter(function(h){return h.is_global;}).forEach(function(h){html+='<div style="display:flex;gap:8px;padding:12px;background:var(--bg2);border-radius:8px;margin-top:8px"><code style="flex:1;font-size:11px;word-break:break-all">'+esc(h.url)+'</code><button class="btn btn-secondary btn-sm" onclick="delHook('+h.id+')" style="color:var(--accent)">X</button></div>';});
   document.getElementById('hook-list').innerHTML=html;
 }
 
-function renderCompanies(){
-  var html='';
-  D.companies.forEach(function(c){
-    html+='<div class="company-card"><div class="company-color" style="background:'+c.color+'"></div><div class="info"><div class="name">'+esc(c.name)+'</div><div class="meta">'+c.forms_count+' formulários · '+c.leads_count+' leads</div></div><div class="actions"><button class="btn btn-secondary btn-sm" onclick="editCompany(\''+c.id+'\')">✏️</button><button class="btn btn-secondary btn-sm" onclick="delCompany(\''+c.id+'\')" style="color:var(--accent)">🗑️</button></div></div>';
-  });
-  document.getElementById('companies-list').innerHTML=html||'<div class="empty">Nenhuma empresa cadastrada</div>';
-}
+function filterLeads(){var s=document.getElementById('fl-search').value.toLowerCase(),fid=document.getElementById('fl-form').value;var fil=D.leads.filter(function(x){if(fid&&x.form_id!==fid)return false;if(s&&JSON.stringify(x.data).toLowerCase().indexOf(s)===-1)return false;return true;});var html='';fil.forEach(function(x){html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td>'+esc(x.utm_source||'direto')+'</td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">Ver</button></td></tr>';});document.getElementById('tbl-leads').innerHTML=html||'<tr><td colspan="7" class="empty">Nenhum</td></tr>';}
 
-function filterLeads(){var search=document.getElementById('fl-search').value.toLowerCase(),formId=document.getElementById('fl-form').value,source=document.getElementById('fl-source').value;var filtered=D.leads.filter(function(x){if(formId&&x.form_id!==formId)return false;if(source&&x.utm_source!==source)return false;if(search&&JSON.stringify(x.data).toLowerCase().indexOf(search)===-1)return false;return true;});var html='';filtered.forEach(function(x){html+='<tr><td>'+esc(x.data.nome||x.data.name||'-')+'</td><td>'+esc(x.data.email||'-')+'</td><td>'+esc(x.data.telefone||x.data.phone||'-')+'</td><td>'+esc(x.form_name||'-')+'</td><td><span class="badge badge-info">'+esc(x.utm_source||'direto')+'</span></td><td>'+fdt(x.created_at)+'</td><td><button class="btn btn-secondary btn-sm" onclick="showLead('+x.id+')">👁️</button></td></tr>';});document.getElementById('tbl-leads').innerHTML=html||'<tr><td colspan="7" class="empty">Nenhum resultado</td></tr>';}
+function showLead(id){var l=D.leads.find(function(x){return x.id===id;});if(!l)return;var html='<div class="lead-detail"><div class="lead-section"><h4>Dados</h4>';for(var k in l.data){html+='<div class="lead-row"><span class="label">'+esc(k)+'</span><span class="value">'+esc(l.data[k])+'</span></div>';}html+='</div><div class="lead-section"><h4>Info</h4><div class="lead-row"><span class="label">IP</span><span class="value">'+esc(l.ip_address||'-')+'</span></div><div class="lead-row"><span class="label">Device</span><span class="value">'+esc(l.device_type||'-')+'</span></div><div class="lead-row"><span class="label">Source</span><span class="value">'+esc(l.utm_source||'-')+'</span></div></div></div>';document.getElementById('lead-detail').innerHTML=html;openM('lead');}
 
-function showLead(id){var lead=D.leads.find(function(x){return x.id===id;});if(!lead)return;var company=D.companies.find(function(c){return c.id===lead.company_id;});var html='<div class="lead-detail"><div class="lead-section"><h4>📝 Dados</h4>';for(var k in lead.data){html+='<div class="lead-row"><span class="label">'+esc(k)+'</span><span class="value">'+esc(lead.data[k])+'</span></div>';}html+='</div>';if(company){html+='<div class="lead-section"><h4>🏢 Empresa</h4><div class="lead-row"><span class="label">Nome</span><span class="value">'+esc(company.name)+'</span></div></div>';}html+='<div class="lead-section"><h4>📊 UTMs</h4><div class="lead-row"><span class="label">Source</span><span class="value">'+esc(lead.utm_source||'-')+'</span></div><div class="lead-row"><span class="label">Medium</span><span class="value">'+esc(lead.utm_medium||'-')+'</span></div><div class="lead-row"><span class="label">Campaign</span><span class="value">'+esc(lead.utm_campaign||'-')+'</span></div></div><div class="lead-section"><h4>💻 Info</h4><div class="lead-row"><span class="label">IP</span><span class="value">'+esc(lead.ip_address||'-')+'</span></div><div class="lead-row"><span class="label">Device</span><span class="value">'+esc(lead.device_type||'-')+'</span></div><div class="lead-row"><span class="label">Data</span><span class="value">'+fdt(lead.created_at)+'</span></div></div></div>';document.getElementById('lead-detail').innerHTML=html;openM('lead');}
-
-var navItems=document.querySelectorAll('.nav-item[data-v]');for(var i=0;i<navItems.length;i++){navItems[i].onclick=function(){for(var j=0;j<navItems.length;j++){navItems[j].classList.remove('active');}this.classList.add('active');var views=document.querySelectorAll('.view');for(var j=0;j<views.length;j++){views[j].classList.remove('active');}document.getElementById('v-'+this.getAttribute('data-v')).classList.add('active');};}
+var navItems=document.querySelectorAll('.nav-item[data-v]');navItems.forEach(function(el){el.onclick=function(){navItems.forEach(function(n){n.classList.remove('active');});this.classList.add('active');document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});document.getElementById('v-'+this.getAttribute('data-v')).classList.add('active');};});
 
 function openM(n){document.getElementById('m-'+n).classList.add('active');}
 function closeM(n){document.getElementById('m-'+n).classList.remove('active');}
-function switchTab(el,t){var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++){tabs[i].classList.remove('active');}el.classList.add('active');var contents=document.querySelectorAll('.tab-content');for(var i=0;i<contents.length;i++){contents[i].classList.remove('active');}document.getElementById('tab-'+t).classList.add('active');}
+function switchTab(el,t){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});el.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active');});document.getElementById('tab-'+t).classList.add('active');}
 function syncC(n){document.getElementById('s-'+n).value=document.getElementById('s-'+n+'-t').value;updatePreview();}
-function setFormType(t,el){formType=t;var opts=document.querySelectorAll('.form-type-opt');for(var i=0;i<opts.length;i++){opts[i].classList.remove('active');}el.classList.add('active');document.getElementById('builder-content').style.display=t==='builder'?'block':'none';document.getElementById('html-content').style.display=t==='html'?'block':'none';}
+function setFormType(t,el){formType=t;document.querySelectorAll('.form-type-opt').forEach(function(x){x.classList.remove('active');});el.classList.add('active');document.getElementById('builder-content').style.display=t==='builder'?'block':'none';document.getElementById('html-content').style.display=t==='html'?'block':'none';}
 
-// Companies
-function openCompanyModal(){editingCompanyId=null;document.getElementById('co-name').value='';document.getElementById('co-color').value='#ef4444';document.getElementById('co-color-t').value='#ef4444';document.getElementById('co-webhook').value='';document.getElementById('company-modal-title').textContent='Nova Empresa';document.getElementById('company-modal-btn').textContent='Criar';openM('company');}
-function editCompany(id){var c=D.companies.find(function(x){return x.id===id;});if(!c)return;editingCompanyId=id;document.getElementById('co-name').value=c.name;document.getElementById('co-color').value=c.color||'#ef4444';document.getElementById('co-color-t').value=c.color||'#ef4444';document.getElementById('co-webhook').value=c.webhook_url||'';document.getElementById('company-modal-title').textContent='Editar Empresa';document.getElementById('company-modal-btn').textContent='Salvar';openM('company');}
-function saveCompany(){var name=document.getElementById('co-name').value.trim(),color=document.getElementById('co-color').value,webhook=document.getElementById('co-webhook').value.trim();if(!name){toast('Digite o nome','e');return;}var data={name:name,color:color,webhook_url:webhook||null};if(editingCompanyId){f('PUT','/companies/'+editingCompanyId,data).then(function(r){if(r&&r.success){closeM('company');toast('Empresa atualizada!');load();}});}else{f('POST','/companies',data).then(function(r){if(r&&r.success){closeM('company');toast('Empresa criada!');load();}});}}
-function delCompany(id){if(confirm('Excluir empresa? Os formulários e leads serão mantidos.')){f('DELETE','/companies/'+id).then(function(){toast('Empresa excluída');load();});}}
+function openCompanyModal(){editingCompanyId=null;document.getElementById('co-name').value='';document.getElementById('co-color').value='#ef4444';document.getElementById('co-webhook').value='';document.getElementById('company-modal-title').textContent='Nova Empresa';openM('company');}
+function editCompany(id){var c=D.companies.find(function(x){return x.id===id;});if(!c)return;editingCompanyId=id;document.getElementById('co-name').value=c.name;document.getElementById('co-color').value=c.color||'#ef4444';document.getElementById('co-webhook').value=c.webhook_url||'';document.getElementById('company-modal-title').textContent='Editar Empresa';openM('company');}
+function saveCompany(){var n=document.getElementById('co-name').value.trim(),c=document.getElementById('co-color').value,w=document.getElementById('co-webhook').value.trim();if(!n){toast('Digite o nome','e');return;}var d={name:n,color:c,webhook_url:w||null};if(editingCompanyId){f('PUT','/companies/'+editingCompanyId,d).then(function(r){if(r&&r.success){closeM('company');toast('Salvo!');load();}});}else{f('POST','/companies',d).then(function(r){if(r&&r.success){closeM('company');toast('Criado!');load();}});}}
+function delCompany(id){if(confirm('Excluir?')){f('DELETE','/companies/'+id).then(function(){toast('Excluído');load();});}}
 
-// Forms
-function openFormBuilder(){formType='builder';document.getElementById('builder-content').style.display='block';document.getElementById('html-content').style.display='none';var opts=document.querySelectorAll('.form-type-opt');opts[0].classList.add('active');opts[1].classList.remove('active');TF=[{name:'Nome',type:'text',placeholder:'Seu nome',required:true,width:'100%'},{name:'Email',type:'email',placeholder:'seu@email.com',required:true,width:'100%'},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true,width:'100%'}];document.getElementById('f-name').value='';document.getElementById('f-company').value=currentCompany;renderFields();updatePreview();openM('builder');}
+function openFormBuilder(){formType='builder';document.getElementById('builder-content').style.display='block';document.getElementById('html-content').style.display='none';document.querySelectorAll('.form-type-opt')[0].classList.add('active');document.querySelectorAll('.form-type-opt')[1].classList.remove('active');TF=[{name:'Nome',type:'text',placeholder:'Seu nome',required:true,width:'100%'},{name:'Email',type:'email',placeholder:'seu@email.com',required:true,width:'100%'},{name:'Telefone',type:'tel',placeholder:'(00) 00000-0000',required:true,width:'100%'}];document.getElementById('f-name').value='';document.getElementById('f-company').value=currentCompany;renderFields();updatePreview();openM('builder');}
 function openHtmlImport(){document.getElementById('imp-name').value='';document.getElementById('imp-html').value='';document.getElementById('imp-webhook').value='';document.getElementById('imp-company').value=currentCompany;openM('import');}
-function importHtmlForm(){var name=document.getElementById('imp-name').value.trim(),html=document.getElementById('imp-html').value,webhook=document.getElementById('imp-webhook').value.trim(),company=document.getElementById('imp-company').value;if(!name){toast('Digite o nome','e');return;}if(!html){toast('Cole o código HTML','e');return;}f('POST','/forms',{name:name,fields:[],styles:{},settings:{},webhookUrl:webhook||null,company_id:company||null,form_type:'html',custom_html:html}).then(function(r){if(r&&r.success){closeM('import');toast('Formulário importado!');load();}else toast('Erro','e');});}
+function importHtmlForm(){var n=document.getElementById('imp-name').value.trim(),h=document.getElementById('imp-html').value,w=document.getElementById('imp-webhook').value.trim(),c=document.getElementById('imp-company').value;if(!n){toast('Digite o nome','e');return;}if(!h){toast('Cole o HTML','e');return;}f('POST','/forms',{name:n,fields:[],styles:{},settings:{},webhookUrl:w||null,company_id:c||null,form_type:'html',custom_html:h}).then(function(r){if(r&&r.success){closeM('import');toast('Importado!');load();}});}
 
-function renderFields(){var html='';if(TF.length){TF.forEach(function(x,i){html+='<div class="field-item"><div class="info"><div class="name">'+esc(x.name)+(x.required?' *':'')+'</div><div class="meta">'+(TYPES[x.type]||x.type)+' · '+x.width+'</div></div><div class="field-actions"><button class="field-btn" onclick="moveField('+i+',-1)"'+(i===0?' disabled':'')+'>↑</button><button class="field-btn" onclick="moveField('+i+',1)"'+(i===TF.length-1?' disabled':'')+'>↓</button><button class="field-btn" onclick="editField('+i+')">✏️</button><button class="field-btn" onclick="rmField('+i+')">🗑️</button></div></div>';});}else{html='<div class="empty" style="padding:20px">Adicione campos</div>';}document.getElementById('f-fields').innerHTML=html;}
+function renderFields(){var html='';TF.forEach(function(x,i){html+='<div class="field-item"><div class="info"><div class="name">'+esc(x.name)+(x.required?' *':'')+'</div><div class="meta">'+(TYPES[x.type]||x.type)+'</div></div><div class="field-actions"><button class="field-btn" onclick="moveField('+i+',-1)"'+(i===0?' disabled':'')+'>↑</button><button class="field-btn" onclick="moveField('+i+',1)"'+(i===TF.length-1?' disabled':'')+'>↓</button><button class="field-btn" onclick="editField('+i+')">✏</button><button class="field-btn" onclick="rmField('+i+')">X</button></div></div>';});document.getElementById('f-fields').innerHTML=html||'<div class="empty">Adicione campos</div>';}
 
-function openFieldModal(){editingFieldIndex=-1;document.getElementById('fd-name').value='';document.getElementById('fd-type').value='text';document.getElementById('fd-ph').value='';document.getElementById('fd-opts').value='';document.getElementById('fd-val').value='';document.getElementById('fd-req').checked=true;setFieldWidth('100%');toggleFieldOpts();document.getElementById('field-modal-title').textContent='Adicionar Campo';document.getElementById('field-modal-btn').textContent='Adicionar';openM('field');}
-function editField(i){editingFieldIndex=i;var f=TF[i];document.getElementById('fd-name').value=f.name;document.getElementById('fd-type').value=f.type;document.getElementById('fd-ph').value=f.placeholder||'';document.getElementById('fd-opts').value=f.options?f.options.join('\n'):'';document.getElementById('fd-val').value=f.value||'';document.getElementById('fd-req').checked=f.required;setFieldWidth(f.width||'100%');toggleFieldOpts();document.getElementById('field-modal-title').textContent='Editar Campo';document.getElementById('field-modal-btn').textContent='Salvar';openM('field');}
-function setFieldWidth(w){var opts=document.querySelectorAll('#fd-width .width-opt');for(var i=0;i<opts.length;i++){opts[i].classList.toggle('active',opts[i].getAttribute('data-w')===w);}}
+function openFieldModal(){editingFieldIndex=-1;document.getElementById('fd-name').value='';document.getElementById('fd-type').value='text';document.getElementById('fd-ph').value='';document.getElementById('fd-opts').value='';document.getElementById('fd-req').checked=true;setFieldWidth('100%');toggleFieldOpts();document.getElementById('field-modal-title').textContent='Adicionar Campo';openM('field');}
+function editField(i){editingFieldIndex=i;var x=TF[i];document.getElementById('fd-name').value=x.name;document.getElementById('fd-type').value=x.type;document.getElementById('fd-ph').value=x.placeholder||'';document.getElementById('fd-opts').value=x.options?x.options.join('\n'):'';document.getElementById('fd-req').checked=x.required;setFieldWidth(x.width||'100%');toggleFieldOpts();document.getElementById('field-modal-title').textContent='Editar Campo';openM('field');}
+function setFieldWidth(w){document.querySelectorAll('#fd-width .width-opt').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-w')===w);});}
 function getFieldWidth(){var a=document.querySelector('#fd-width .width-opt.active');return a?a.getAttribute('data-w'):'100%';}
 document.querySelectorAll('#fd-width .width-opt').forEach(function(el){el.onclick=function(){setFieldWidth(this.getAttribute('data-w'));};});
-function toggleFieldOpts(){var t=document.getElementById('fd-type').value;document.getElementById('fg-opts').style.display=(t==='select'||t==='radio')?'block':'none';document.getElementById('fg-val').style.display=(t==='hidden')?'block':'none';}
-function addField(){var n=document.getElementById('fd-name').value.trim(),t=document.getElementById('fd-type').value,p=document.getElementById('fd-ph').value,r=document.getElementById('fd-req').checked,opts=document.getElementById('fd-opts').value.trim(),val=document.getElementById('fd-val').value.trim(),w=getFieldWidth();if(!n){toast('Digite o nome','e');return;}if((t==='select'||t==='radio')&&!opts){toast('Digite opções','e');return;}var fld={name:n,type:t,placeholder:p,required:r,width:w};if(opts){fld.options=opts.split('\n').filter(function(x){return x.trim();});}if(val)fld.value=val;if(editingFieldIndex>=0){TF[editingFieldIndex]=fld;}else{TF.push(fld);}editingFieldIndex=-1;renderFields();updatePreview();closeM('field');toast(editingFieldIndex>=0?'Atualizado!':'Adicionado!');}
+function toggleFieldOpts(){document.getElementById('fg-opts').style.display=document.getElementById('fd-type').value==='select'?'block':'none';}
+function addField(){var n=document.getElementById('fd-name').value.trim(),t=document.getElementById('fd-type').value,p=document.getElementById('fd-ph').value,r=document.getElementById('fd-req').checked,o=document.getElementById('fd-opts').value.trim(),w=getFieldWidth();if(!n){toast('Digite o nome','e');return;}var fld={name:n,type:t,placeholder:p,required:r,width:w};if(o)fld.options=o.split('\n').filter(function(x){return x.trim();});if(editingFieldIndex>=0)TF[editingFieldIndex]=fld;else TF.push(fld);editingFieldIndex=-1;renderFields();updatePreview();closeM('field');toast('OK!');}
 function rmField(i){TF.splice(i,1);renderFields();updatePreview();}
-function moveField(i,dir){var ni=i+dir;if(ni<0||ni>=TF.length)return;var t=TF[i];TF[i]=TF[ni];TF[ni]=t;renderFields();updatePreview();}
+function moveField(i,d){var n=i+d;if(n<0||n>=TF.length)return;var t=TF[i];TF[i]=TF[n];TF[n]=t;renderFields();updatePreview();}
 
-function getS(){return{formBg:document.getElementById('s-formBg').value,textColor:document.getElementById('s-textColor').value,inputBorder:document.getElementById('s-inputBorder').value,formRadius:document.getElementById('s-formRadius').value,formShadow:document.getElementById('s-formShadow').value,btnBg:document.getElementById('s-btnBg').value,btnText:document.getElementById('s-btnText').value||'Enviar'};}
-function getUtm(){return{source:document.getElementById('utm-source').checked,medium:document.getElementById('utm-medium').checked,campaign:document.getElementById('utm-campaign').checked,term:document.getElementById('utm-term').checked,content:document.getElementById('utm-content').checked,referrer:document.getElementById('utm-referrer').checked,page:document.getElementById('utm-page').checked};}
-function getCfg(){return{webhook:document.getElementById('cfg-webhook').value,successMsg:document.getElementById('cfg-successMsg').value||'Enviado!',errorMsg:document.getElementById('cfg-errorMsg').value||'Erro.',redirect:document.getElementById('cfg-redirect').value};}
+function updatePreview(){var bg=document.getElementById('s-formBg').value,btn=document.getElementById('s-btnBg').value,txt=document.getElementById('s-btnText').value||'Enviar';var html='<div style="font-family:system-ui;background:'+bg+';padding:24px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.1)">';TF.forEach(function(x){if(x.type==='checkbox'){html+='<label style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><input type="checkbox"> '+esc(x.name)+'</label>';}else{html+='<div style="margin-bottom:16px"><label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500">'+esc(x.name)+(x.required?' *':'')+'</label>';if(x.type==='select'&&x.options){html+='<select style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option>Selecione...</option>';x.options.forEach(function(o){html+='<option>'+esc(o)+'</option>';});html+='</select>';}else if(x.type==='textarea'){html+='<textarea style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;min-height:80px" placeholder="'+esc(x.placeholder||'')+'"></textarea>';}else{html+='<input style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px" placeholder="'+esc(x.placeholder||'')+'">';}html+='</div>';}});html+='<button style="width:100%;padding:14px;background:'+btn+';color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer">'+esc(txt)+'</button></div>';document.getElementById('preview').innerHTML=html;}
 
-function updatePreview(){var s=getS(),shadow=SHADOWS[s.formShadow]||'none';var html='<div style="font-family:system-ui;font-size:14px;background:'+s.formBg+';color:'+s.textColor+';padding:24px;border-radius:'+s.formRadius+'px;box-shadow:'+shadow+'">';html+='<div style="display:flex;flex-wrap:wrap;gap:16px">';TF.forEach(function(f){if(f.type==='hidden')return;var w=f.width||'100%';html+='<div style="flex:0 0 '+(w==='100%'?'100%':'calc('+w+' - 16px)')+'">';if(f.type!=='checkbox')html+='<label style="display:block;margin-bottom:6px;font-size:13px;font-weight:500">'+esc(f.name)+(f.required?' *':'')+'</label>';if(f.type==='checkbox'){html+='<label style="display:flex;align-items:center;gap:8px"><input type="checkbox"> '+esc(f.name)+'</label>';}else if(f.type==='select'&&f.options){html+='<select style="width:100%;padding:10px;border:1px solid '+s.inputBorder+';border-radius:8px"><option>Selecione...</option>';f.options.forEach(function(o){html+='<option>'+esc(o)+'</option>';});html+='</select>';}else if(f.type==='textarea'){html+='<textarea style="width:100%;padding:10px;border:1px solid '+s.inputBorder+';border-radius:8px;min-height:80px" placeholder="'+esc(f.placeholder||'')+'"></textarea>';}else{html+='<input style="width:100%;padding:10px;border:1px solid '+s.inputBorder+';border-radius:8px" placeholder="'+esc(f.placeholder||'')+'">';}html+='</div>';});html+='</div><button style="width:100%;margin-top:16px;padding:14px;background:'+s.btnBg+';color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer">'+esc(s.btnText)+'</button></div>';document.getElementById('preview').innerHTML=html;}
-
-function saveForm(){
-  if(formType==='html'){
-    var name=document.getElementById('f-name-html').value.trim(),html=document.getElementById('f-custom-html').value,webhook=document.getElementById('f-html-webhook').value.trim(),company=document.getElementById('f-company').value;
-    if(!name){toast('Digite o nome','e');return;}if(!html){toast('Cole o código HTML','e');return;}
-    f('POST','/forms',{name:name,fields:[],styles:{},settings:{},webhookUrl:webhook||null,company_id:company||null,form_type:'html',custom_html:html}).then(function(r){if(r&&r.success){closeM('builder');toast('Formulário criado!');load();}else toast('Erro','e');});
-  }else{
-    var name=document.getElementById('f-name').value.trim();if(!name){toast('Digite o nome','e');return;}if(!TF.length){toast('Adicione campos','e');return;}
-    var styles=getS(),cfg=getCfg();cfg.utm=getUtm();var company=document.getElementById('f-company').value;
-    f('POST','/forms',{name:name,fields:TF,styles:styles,settings:cfg,webhookUrl:cfg.webhook||null,company_id:company||null,form_type:'builder'}).then(function(r){if(r&&r.success){closeM('builder');toast('Formulário criado!');load();}else toast('Erro','e');});
-  }
-}
+function saveForm(){if(formType==='html'){var n=document.getElementById('f-name-html').value.trim(),h=document.getElementById('f-custom-html').value,w=document.getElementById('f-html-webhook').value.trim(),c=document.getElementById('f-company').value;if(!n){toast('Digite o nome','e');return;}if(!h){toast('Cole o HTML','e');return;}f('POST','/forms',{name:n,fields:[],styles:{},settings:{},webhookUrl:w||null,company_id:c||null,form_type:'html',custom_html:h}).then(function(r){if(r&&r.success){closeM('builder');toast('Criado!');load();}});}else{var n=document.getElementById('f-name').value.trim();if(!n){toast('Digite o nome','e');return;}if(!TF.length){toast('Adicione campos','e');return;}var s={formBg:document.getElementById('s-formBg').value,btnBg:document.getElementById('s-btnBg').value,btnText:document.getElementById('s-btnText').value||'Enviar'};var cfg={webhook:document.getElementById('cfg-webhook').value,successMsg:document.getElementById('cfg-successMsg').value||'Enviado!',redirect:document.getElementById('cfg-redirect').value};var c=document.getElementById('f-company').value;f('POST','/forms',{name:n,fields:TF,styles:s,settings:cfg,webhookUrl:cfg.webhook||null,company_id:c||null,form_type:'builder'}).then(function(r){if(r&&r.success){closeM('builder');toast('Criado!');load();}});}}
 function delForm(id){if(confirm('Excluir?')){f('DELETE','/forms/'+id).then(function(){toast('Excluído');load();});}}
 
 function showCode(id){
   var fo=D.forms.find(function(x){return x.id===id;});if(!fo)return;
   var url=location.origin+'/api/leads';
+  var code='';
   
   if(fo.form_type==='html'&&fo.custom_html){
-    // HTML customizado - adicionar script de captura
-    var code=fo.custom_html+'\n\n<!-- v4 Forms - Script de Captura -->\n<scr'+'ipt>\n';
-    code+='(function(){\n';
-    code+='  var form=document.querySelector("form")||document.getElementById("v4form");\n';
-    code+='  if(!form)return console.error("v4 Forms: form não encontrado");\n';
-    code+='  form.onsubmit=async function(e){\n';
-    code+='    e.preventDefault();\n';
-    code+='    var fd=new FormData(this),d={};\n';
-    code+='    fd.forEach(function(v,k){d[k]=v});\n';
-    code+='    var m={},p=new URLSearchParams(location.search);\n';
-    code+='    ["utm_source","utm_medium","utm_campaign","utm_term","utm_content"].forEach(function(u){if(p.get(u))m[u]=p.get(u);});\n';
-    code+='    m.referrer=document.referrer;m.page_url=location.href;\n';
-    code+='    try{\n';
-    code+='      var r=await fetch("'+url+'",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:d,meta:m})});\n';
-    code+='      if(r.ok){alert("Enviado com sucesso!");this.reset();}\n';
-    code+='      else alert("Erro ao enviar");\n';
-    code+='    }catch(x){alert("Erro ao enviar");}\n';
-    code+='  };\n';
-    code+='})();\n';
-    code+='<\/scr'+'ipt>';
-    document.getElementById('code-out').textContent=code;
-    openM('code');
-    return;
+    code=fo.custom_html+'\n\n<!-'+'- v4 Forms Capture -'+'->\n<scr'+'ipt>\n(function(){\n  var form=document.querySelector("form");\n  if(!form)return;\n  form.onsubmit=async function(e){\n    e.preventDefault();\n    var fd=new FormData(this),d={};\n    fd.forEach(function(v,k){d[k]=v});\n    var m={},p=new URLSearchParams(location.search);\n    ["utm_source","utm_medium","utm_campaign"].forEach(function(u){if(p.get(u))m[u]=p.get(u);});\n    m.referrer=document.referrer;m.page_url=location.href;\n    try{\n      var r=await fetch("'+url+'",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:d,meta:m})});\n      if(r.ok){alert("Enviado!");this.reset();}\n    }catch(x){alert("Erro");}\n  };\n})();\n</'+'scr'+'ipt>';
+  }else{
+    var s=fo.styles||{};var cfg=fo.settings||{};
+    s.formBg=s.formBg||'#ffffff';s.btnBg=s.btnBg||'#ef4444';s.btnText=s.btnText||'Enviar';
+    cfg.successMsg=cfg.successMsg||'Enviado!';
+    var fHtml='';
+    fo.fields.forEach(function(x){var k=slugify(x.name);var rq=x.required?'required':'';
+      if(x.type==='checkbox'){fHtml+='  <label style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><input type="checkbox" name="'+k+'"> '+x.name+'</label>\n';}
+      else if(x.type==='select'&&x.options){fHtml+='  <div style="margin-bottom:16px"><label style="display:block;margin-bottom:6px;font-weight:500">'+x.name+(x.required?' *':'')+'</label><select name="'+k+'" '+rq+' style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"><option value="">Selecione...</option>';x.options.forEach(function(o){fHtml+='<option value="'+o+'">'+o+'</option>';});fHtml+='</select></div>\n';}
+      else if(x.type==='textarea'){fHtml+='  <div style="margin-bottom:16px"><label style="display:block;margin-bottom:6px;font-weight:500">'+x.name+(x.required?' *':'')+'</label><textarea name="'+k+'" placeholder="'+(x.placeholder||'')+'" '+rq+' style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;min-height:80px"></textarea></div>\n';}
+      else{fHtml+='  <div style="margin-bottom:16px"><label style="display:block;margin-bottom:6px;font-weight:500">'+x.name+(x.required?' *':'')+'</label><input type="'+(x.type==='email'||x.type==='tel'?x.type:'text')+'" name="'+k+'" placeholder="'+(x.placeholder||'')+'" '+rq+' style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></div>\n';}
+    });
+    var redir=cfg.redirect?'location.href="'+cfg.redirect+'";':'';
+    code='<!-'+'- v4 Forms -'+'->\n<form id="v4form" style="font-family:system-ui;background:'+s.formBg+';padding:24px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:500px">\n'+fHtml+'  <button type="submit" style="width:100%;padding:14px;background:'+s.btnBg+';color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer">'+s.btnText+'</button>\n  <div id="v4msg" style="margin-top:16px;padding:12px;border-radius:8px;text-align:center;display:none"></div>\n</form>\n\n<scr'+'ipt>\ndocument.getElementById("v4form").onsubmit=async function(e){\n  e.preventDefault();\n  var btn=this.querySelector("button"),msg=document.getElementById("v4msg");\n  btn.disabled=true;btn.textContent="Enviando...";\n  var fd=new FormData(this),d={};fd.forEach(function(v,k){d[k]=v});\n  var m={},p=new URLSearchParams(location.search);\n  ["utm_source","utm_medium","utm_campaign"].forEach(function(u){if(p.get(u))m[u]=p.get(u);});\n  m.referrer=document.referrer;m.page_url=location.href;\n  try{\n    var r=await fetch("'+url+'",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:d,meta:m})});\n    if(r.ok){msg.style.display="block";msg.style.background="#dcfce7";msg.style.color="#166534";msg.textContent="'+cfg.successMsg+'";this.reset();'+redir+'}\n    else throw 0;\n  }catch(x){msg.style.display="block";msg.style.background="#fee2e2";msg.style.color="#991b1b";msg.textContent="Erro ao enviar";}\n  btn.disabled=false;btn.textContent="'+s.btnText+'";\n};\n</'+'scr'+'ipt>';
   }
-  
-  // Form builder
-  var s=fo.styles||{};var cfg=fo.settings||{};var utm=cfg.utm||{};
-  s.formBg=s.formBg||'#ffffff';s.textColor=s.textColor||'#1f2937';s.inputBorder=s.inputBorder||'#d1d5db';s.formRadius=s.formRadius||'8';s.formShadow=s.formShadow||'md';s.btnBg=s.btnBg||'#ef4444';s.btnText=s.btnText||'Enviar';
-  cfg.successMsg=cfg.successMsg||'Enviado!';cfg.errorMsg=cfg.errorMsg||'Erro.';
-  var fHtml='';
-  fo.fields.forEach(function(x){var k=slugify(x.name);var rq=x.required?'required':'';var w=x.width||'100%';
-    if(x.type==='hidden'){fHtml+='    <input type="hidden" name="'+k+'" value="'+(x.value||'')+'">\n';}
-    else{fHtml+='    <div class="v4f" style="flex:0 0 calc('+w+' - 16px)">\n';
-      if(x.type==='checkbox'){fHtml+='      <label class="v4cb"><input type="checkbox" name="'+k+'"> '+x.name+'</label>\n';}
-      else if(x.type==='select'&&x.options){fHtml+='      <label>'+x.name+(x.required?' *':'')+'</label>\n      <select name="'+k+'" '+rq+'><option value="">Selecione...</option>\n';x.options.forEach(function(o){fHtml+='        <option value="'+o+'">'+o+'</option>\n';});fHtml+='      </select>\n';}
-      else if(x.type==='textarea'){fHtml+='      <label>'+x.name+(x.required?' *':'')+'</label>\n      <textarea name="'+k+'" placeholder="'+(x.placeholder||'')+'" '+rq+'></textarea>\n';}
-      else{var it=x.type;if(['cpf','cnpj','cep'].indexOf(x.type)>-1)it='text';fHtml+='      <label>'+x.name+(x.required?' *':'')+'</label>\n      <input type="'+it+'" name="'+k+'" placeholder="'+(x.placeholder||'')+'" '+rq+'>\n';}
-      fHtml+='    </div>\n';}
-  });
-  var uCode='';if(utm.source)uCode+='    if(p.get("utm_source"))m.utm_source=p.get("utm_source");\n';if(utm.medium)uCode+='    if(p.get("utm_medium"))m.utm_medium=p.get("utm_medium");\n';if(utm.campaign)uCode+='    if(p.get("utm_campaign"))m.utm_campaign=p.get("utm_campaign");\n';if(utm.term)uCode+='    if(p.get("utm_term"))m.utm_term=p.get("utm_term");\n';if(utm.content)uCode+='    if(p.get("utm_content"))m.utm_content=p.get("utm_content");\n';if(utm.referrer)uCode+='    m.referrer=document.referrer;\n';if(utm.page)uCode+='    m.page_url=location.href;\n';
-  var utmC=uCode?'    var p=new URLSearchParams(location.search);\n'+uCode:'';var redir=cfg.redirect?'location.href="'+cfg.redirect+'";':'';var shadow=SHADOWS[s.formShadow]||'none';
-  var code='<!-- v4 Forms -->\n<form id="v4form" class="v4form">\n  <div class="v4fields">\n'+fHtml+'  </div>\n  <button type="submit">'+s.btnText+'</button>\n  <div id="v4msg" class="v4msg"></div>\n</form>\n\n<scr'+'ipt>\ndocument.getElementById("v4form").onsubmit=async function(e){\n  e.preventDefault();\n  var btn=this.querySelector("button"),msg=document.getElementById("v4msg");\n  btn.disabled=true;btn.textContent="Enviando...";\n  var fd=new FormData(this),d={};fd.forEach(function(v,k){d[k]=v});\n  var m={};\n'+utmC+'  try{\n    var r=await fetch("'+url+'",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({formId:"'+fo.id+'",formName:"'+fo.name+'",data:d,meta:m})});\n    if(r.ok){msg.className="v4msg ok";msg.textContent="'+cfg.successMsg+'";this.reset();'+redir+'}\n    else throw 0;\n  }catch(x){msg.className="v4msg err";msg.textContent="'+cfg.errorMsg+'";}\n  btn.disabled=false;btn.textContent="'+s.btnText+'";\n};\n<\/scr'+'ipt>\n\n<style>\n.v4form{font-family:system-ui;font-size:14px;background:'+s.formBg+';color:'+s.textColor+';padding:24px;border-radius:'+s.formRadius+'px;box-shadow:'+shadow+';max-width:500px}\n.v4fields{display:flex;flex-wrap:wrap;gap:16px}\n.v4f{min-width:0}\n.v4form label{display:block;margin-bottom:6px;font-size:13px;font-weight:500}\n.v4form input,.v4form select,.v4form textarea{width:100%;padding:12px;border:1px solid '+s.inputBorder+';border-radius:8px;font-size:14px}\n.v4form input:focus,.v4form select:focus,.v4form textarea:focus{outline:none;border-color:'+s.btnBg+'}\n.v4form textarea{min-height:80px}\n.v4cb{display:flex;align-items:center;gap:8px;font-weight:normal}\n.v4form button{width:100%;margin-top:16px;padding:14px;background:'+s.btnBg+';color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}\n.v4form button:hover{opacity:.9}\n.v4form button:disabled{opacity:.6}\n.v4msg{margin-top:16px;padding:12px;border-radius:8px;text-align:center;display:none}\n.v4msg.ok{display:block;background:#dcfce7;color:#166534}\n.v4msg.err{display:block;background:#fee2e2;color:#991b1b}\n@media(max-width:600px){.v4f{flex:0 0 100%!important}}\n</style>';
   document.getElementById('code-out').textContent=code;openM('code');
 }
 
 function copyCode(){navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(function(){toast('Copiado!');});}
 function saveHook(){var u=document.getElementById('hook-url').value.trim();if(!u){toast('Digite URL','e');return;}f('POST','/webhooks',{url:u,isGlobal:true}).then(function(){toast('Salvo!');load();document.getElementById('hook-url').value='';});}
 function delHook(id){f('DELETE','/webhooks/'+id).then(function(){toast('Removido');load();});}
-function csvExport(){var url=API+'/leads/export/csv';if(currentCompany)url+='?company_id='+currentCompany;window.open(url,'_blank');}
-function fdt(s){if(!s)return'-';return new Date(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function csvExport(){window.open(API+'/leads/export/csv'+(currentCompany?'?company_id='+currentCompany:''),'_blank');}
+function fdt(s){if(!s)return'-';return new Date(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function toast(m,t){var el=document.createElement('div');el.className='toast';el.innerHTML=(t==='e'?'⚠️ ':'✅ ')+m;document.body.appendChild(el);setTimeout(function(){el.remove();},3000);}
 function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function slugify(s){return s.toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[íìîï]/g,'i').replace(/[óòõôö]/g,'o').replace(/[úùûü]/g,'u').replace(/ç/g,'c').replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');}
+
 init();
 </script>
 </body>
