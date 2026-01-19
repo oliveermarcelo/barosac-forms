@@ -426,7 +426,7 @@ function showCode(id){
 function copyCode(){navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(function(){toast('Copiado!');});}
 function saveHook(){var u=document.getElementById('hook-url').value.trim();if(!u){toast('Digite URL','e');return;}f('POST','/webhooks',{url:u,isGlobal:true}).then(function(){toast('Salvo!');load();document.getElementById('hook-url').value='';});}
 function delHook(id){f('DELETE','/webhooks/'+id).then(function(){toast('Removido');load();});}
-function csvExport(){window.open(API+'/leads/export/csv'+(currentCompany?'?company_id='+currentCompany:''),'_blank');}
+function csvExport(){var params='?token='+tk;if(currentCompany)params+='&company_id='+currentCompany;window.open(API+'/leads/export/csv'+params,'_blank');}
 function fdt(s){if(!s)return'-';return new Date(s).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function toast(m,t){var el=document.createElement('div');el.className='toast';el.innerHTML=(t==='e'?'⚠️ ':'✅ ')+m;document.body.appendChild(el);setTimeout(function(){el.remove();},3000);}
 function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
