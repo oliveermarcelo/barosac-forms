@@ -55,9 +55,13 @@ const genCompanyId = () => 'c_' + crypto.randomBytes(6).toString('hex');
 // Auth
 function requireAuth(req, res, next) {
   const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
-  if (!sessions.has(auth.slice(7))) return res.status(401).json({ error: 'Invalid session' });
-  req.session = sessions.get(auth.slice(7)); next();
+  const tokenFromQuery = req.query.token;
+  let token = null;
+  if (auth && auth.startsWith('Bearer ')) token = auth.slice(7);
+  else if (tokenFromQuery) token = tokenFromQuery;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  if (!sessions.has(token)) return res.status(401).json({ error: 'Invalid session' });
+  req.session = sessions.get(token); next();
 }
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
