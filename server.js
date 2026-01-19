@@ -7,544 +7,240 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DATABASE_PATH || './data/leads.db';
-
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'v4123';
-
 const sessions = new Map();
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use(express.json());
+app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
+app.use(express.json({ limit: '10mb' }));
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 
-// Schema atualizado com mais campos
-// Criar tabelas básicas primeiro
+// Schema
 db.exec(`
-  CREATE TABLE IF NOT EXISTS leads (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    form_id TEXT NOT NULL,
-    form_name TEXT,
-    data TEXT NOT NULL,
-    ip_address TEXT,
-    webhook_sent INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-  CREATE TABLE IF NOT EXISTS forms (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    fields TEXT NOT NULL,
-    webhook_url TEXT,
-    active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-  CREATE TABLE IF NOT EXISTS webhooks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    form_id TEXT,
-    url TEXT NOT NULL,
-    is_global INTEGER DEFAULT 0,
-    active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-  CREATE TABLE IF NOT EXISTS settings (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
-  );
+  CREATE TABLE IF NOT EXISTS companies (id TEXT PRIMARY KEY, name TEXT NOT NULL, logo TEXT, color TEXT DEFAULT '#ef4444', webhook_url TEXT, active INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE IF NOT EXISTS leads (id INTEGER PRIMARY KEY AUTOINCREMENT, company_id TEXT, form_id TEXT NOT NULL, form_name TEXT, data TEXT NOT NULL, ip_address TEXT, webhook_sent INTEGER DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE IF NOT EXISTS forms (id TEXT PRIMARY KEY, company_id TEXT, name TEXT NOT NULL, fields TEXT NOT NULL, webhook_url TEXT, active INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE IF NOT EXISTS webhooks (id INTEGER PRIMARY KEY AUTOINCREMENT, company_id TEXT, form_id TEXT, url TEXT NOT NULL, is_global INTEGER DEFAULT 0, active INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 `);
 
-// Migração: adicionar novas colunas se não existirem
-const leadColumns = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'referrer', 'page_url', 'user_agent', 'device_type', 'browser', 'os', 'country', 'city', 'webhook_response'];
-leadColumns.forEach(col => {
-  try { db.exec(`ALTER TABLE leads ADD COLUMN ${col} TEXT`); } catch (e) {}
-});
+// Migrations
+const addCol = (t, c, type = 'TEXT') => { try { db.exec(`ALTER TABLE ${t} ADD COLUMN ${c} ${type}`); } catch (e) {} };
+['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'referrer', 'page_url', 'user_agent', 'device_type', 'browser', 'os', 'webhook_response', 'company_id'].forEach(c => addCol('leads', c));
+['styles', 'settings', 'updated_at', 'company_id', 'form_type', 'custom_html'].forEach(c => addCol('forms', c));
+addCol('webhooks', 'last_triggered'); addCol('webhooks', 'success_count', 'INTEGER DEFAULT 0'); addCol('webhooks', 'fail_count', 'INTEGER DEFAULT 0'); addCol('webhooks', 'company_id');
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_company ON leads(company_id)`); } catch (e) {}
+try { db.exec(`CREATE INDEX IF NOT EXISTS idx_forms_company ON forms(company_id)`); } catch (e) {}
 
-const formColumns = ['styles', 'settings', 'updated_at'];
-formColumns.forEach(col => {
-  try { db.exec(`ALTER TABLE forms ADD COLUMN ${col} TEXT`); } catch (e) {}
-});
-
-const webhookColumns = ['last_triggered', 'success_count', 'fail_count'];
-webhookColumns.forEach(col => {
-  try { 
-    if (col.includes('count')) {
-      db.exec(`ALTER TABLE webhooks ADD COLUMN ${col} INTEGER DEFAULT 0`);
-    } else {
-      db.exec(`ALTER TABLE webhooks ADD COLUMN ${col} TEXT`);
-    }
-  } catch (e) {}
-});
-
-// Criar índices após colunas existirem
-try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_form_id ON leads(form_id)`); } catch (e) {}
-try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at)`); } catch (e) {}
-try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_utm_source ON leads(utm_source)`); } catch (e) {}
-try { db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_utm_campaign ON leads(utm_campaign)`); } catch (e) {}
-
-// Funções auxiliares
-function generateToken() {
-  return crypto.randomBytes(32).toString('hex');
-}
-
-function parseUserAgent(ua) {
+// Helpers
+function parseUA(ua) {
   if (!ua) return { device: 'unknown', browser: 'unknown', os: 'unknown' };
-  
-  let device = 'desktop';
-  if (/mobile/i.test(ua)) device = 'mobile';
-  else if (/tablet|ipad/i.test(ua)) device = 'tablet';
-  
-  let browser = 'other';
-  if (/chrome/i.test(ua) && !/edge|opr/i.test(ua)) browser = 'Chrome';
-  else if (/firefox/i.test(ua)) browser = 'Firefox';
-  else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = 'Safari';
-  else if (/edge/i.test(ua)) browser = 'Edge';
-  else if (/opr|opera/i.test(ua)) browser = 'Opera';
-  
-  let os = 'other';
-  if (/windows/i.test(ua)) os = 'Windows';
-  else if (/macintosh|mac os/i.test(ua)) os = 'MacOS';
-  else if (/linux/i.test(ua)) os = 'Linux';
-  else if (/android/i.test(ua)) os = 'Android';
-  else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
-  
+  let device = /mobile/i.test(ua) ? 'mobile' : /tablet|ipad/i.test(ua) ? 'tablet' : 'desktop';
+  let browser = /chrome/i.test(ua) && !/edge/i.test(ua) ? 'Chrome' : /firefox/i.test(ua) ? 'Firefox' : /safari/i.test(ua) && !/chrome/i.test(ua) ? 'Safari' : /edge/i.test(ua) ? 'Edge' : 'other';
+  let os = /windows/i.test(ua) ? 'Windows' : /macintosh/i.test(ua) ? 'MacOS' : /linux/i.test(ua) ? 'Linux' : /android/i.test(ua) ? 'Android' : /iphone|ipad/i.test(ua) ? 'iOS' : 'other';
   return { device, browser, os };
 }
-
-function requireAuth(req, res, next) {
-  const token = req.headers['authorization']?.replace('Bearer ', '');
-  if (!token || !sessions.has(token)) {
-    return res.status(401).json({ success: false, error: 'Não autorizado' });
-  }
-  sessions.set(token, Date.now());
-  next();
+async function sendWebhook(url, data) {
+  try {
+    const c = new AbortController(); const t = setTimeout(() => c.abort(), 10000);
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), signal: c.signal });
+    clearTimeout(t); return { success: r.ok, status: r.status };
+  } catch (e) { return { success: false, error: e.message }; }
 }
+const genId = () => 'f_' + crypto.randomBytes(8).toString('hex');
+const genCompanyId = () => 'c_' + crypto.randomBytes(6).toString('hex');
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [token, timestamp] of sessions) {
-    if (now - timestamp > 24 * 60 * 60 * 1000) {
-      sessions.delete(token);
-    }
-  }
-}, 60 * 60 * 1000);
-
-// ==================== ROTAS PÚBLICAS ====================
-
+// Auth
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
+  if (!sessions.has(auth.slice(7))) return res.status(401).json({ error: 'Invalid session' });
+  req.session = sessions.get(auth.slice(7)); next();
+}
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   if (username === ADMIN_USER && password === ADMIN_PASS) {
-    const token = generateToken();
-    sessions.set(token, Date.now());
+    const token = crypto.randomBytes(32).toString('hex');
+    sessions.set(token, { user: username, created: Date.now() });
     res.json({ success: true, token });
-  } else {
-    res.status(401).json({ success: false, error: 'Usuário ou senha inválidos' });
-  }
+  } else res.status(401).json({ success: false });
 });
+app.post('/api/logout', requireAuth, (req, res) => { sessions.delete(req.headers.authorization.slice(7)); res.json({ success: true }); });
+app.get('/api/session', requireAuth, (req, res) => { res.json({ authenticated: true, user: req.session.user }); });
 
-app.post('/api/logout', (req, res) => {
-  const token = req.headers['authorization']?.replace('Bearer ', '');
-  if (token) sessions.delete(token);
-  res.json({ success: true });
-});
-
-app.get('/api/session', (req, res) => {
-  const token = req.headers['authorization']?.replace('Bearer ', '');
-  if (token && sessions.has(token)) {
-    sessions.set(token, Date.now());
-    res.json({ success: true, authenticated: true });
-  } else {
-    res.json({ success: true, authenticated: false });
-  }
-});
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
-});
-
-// Receber lead (público) - ATUALIZADO com mais dados
-app.post('/api/leads', async (req, res) => {
+// Companies
+app.get('/api/companies', requireAuth, (req, res) => {
   try {
-    const { formId, formName, data, meta } = req.body;
-    if (!formId || !data) {
-      return res.status(400).json({ success: false, error: 'formId e data obrigatórios' });
-    }
-
-    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.headers['x-real-ip'] || req.socket.remoteAddress;
-    const ua = req.headers['user-agent'] || '';
-    const { device, browser, os } = parseUserAgent(ua);
-    
-    // Extrair UTMs do meta ou do data
-    const utmSource = meta?.utm_source || data.utm_source || null;
-    const utmMedium = meta?.utm_medium || data.utm_medium || null;
-    const utmCampaign = meta?.utm_campaign || data.utm_campaign || null;
-    const utmTerm = meta?.utm_term || data.utm_term || null;
-    const utmContent = meta?.utm_content || data.utm_content || null;
-    const utmId = meta?.utm_id || data.utm_id || null;
-    const referrer = meta?.referrer || data.referrer || null;
-    const pageUrl = meta?.page_url || data.page_url || null;
-    
-    // Remover UTMs do data para não duplicar
-    const cleanData = { ...data };
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'referrer', 'page_url'].forEach(k => delete cleanData[k]);
-
-    const stmt = db.prepare(`
-      INSERT INTO leads (form_id, form_name, data, utm_source, utm_medium, utm_campaign, utm_term, utm_content, utm_id, referrer, page_url, ip_address, user_agent, device_type, browser, os)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-    const result = stmt.run(
-      formId, formName || '', JSON.stringify(cleanData),
-      utmSource, utmMedium, utmCampaign, utmTerm, utmContent, utmId,
-      referrer, pageUrl, ip, ua, device, browser, os
-    );
-    const leadId = result.lastInsertRowid;
-
-    // Enviar para webhooks
-    const webhooks = db.prepare('SELECT * FROM webhooks WHERE (form_id = ? OR is_global = 1) AND active = 1').all(formId);
-    let webhookSent = false;
-    let webhookResponse = null;
-
-    const webhookPayload = {
-      leadId,
-      formId,
-      formName,
-      data: cleanData,
-      utm: { source: utmSource, medium: utmMedium, campaign: utmCampaign, term: utmTerm, content: utmContent, id: utmId },
-      meta: { ip, referrer, pageUrl, device, browser, os },
-      receivedAt: new Date().toISOString()
-    };
-
-    for (const wh of webhooks) {
-      try {
-        const response = await fetch(wh.url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(webhookPayload)
-        });
-        if (response.ok) {
-          webhookSent = true;
-          webhookResponse = `${wh.url}: OK`;
-          db.prepare('UPDATE webhooks SET last_triggered = CURRENT_TIMESTAMP, success_count = success_count + 1 WHERE id = ?').run(wh.id);
-        } else {
-          db.prepare('UPDATE webhooks SET last_triggered = CURRENT_TIMESTAMP, fail_count = fail_count + 1 WHERE id = ?').run(wh.id);
-        }
-      } catch (e) {
-        console.error('Webhook error:', e.message);
-        db.prepare('UPDATE webhooks SET fail_count = fail_count + 1 WHERE id = ?').run(wh.id);
-      }
-    }
-
-    if (webhookSent) {
-      db.prepare('UPDATE leads SET webhook_sent = 1, webhook_response = ? WHERE id = ?').run(webhookResponse, leadId);
-    }
-
-    res.json({ success: true, leadId, webhookSent });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+    const companies = db.prepare(`SELECT c.*, (SELECT COUNT(*) FROM forms WHERE company_id = c.id AND active=1) as forms_count, (SELECT COUNT(*) FROM leads WHERE company_id = c.id) as leads_count FROM companies c WHERE c.active = 1 ORDER BY c.name`).all();
+    res.json({ companies });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
-
-// ==================== ROTAS PROTEGIDAS ====================
-
-// Listar leads com filtros
-app.get('/api/leads', requireAuth, (req, res) => {
+app.post('/api/companies', requireAuth, (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 50;
-    const offset = (page - 1) * limit;
-    const formId = req.query.form_id;
-    const search = req.query.search;
-    const utmSource = req.query.utm_source;
-    const utmCampaign = req.query.utm_campaign;
-    const dateFrom = req.query.date_from;
-    const dateTo = req.query.date_to;
-
-    let where = '1=1';
-    const params = [];
-
-    if (formId) { where += ' AND form_id = ?'; params.push(formId); }
-    if (utmSource) { where += ' AND utm_source = ?'; params.push(utmSource); }
-    if (utmCampaign) { where += ' AND utm_campaign = ?'; params.push(utmCampaign); }
-    if (dateFrom) { where += ' AND created_at >= ?'; params.push(dateFrom); }
-    if (dateTo) { where += ' AND created_at <= ?'; params.push(dateTo + ' 23:59:59'); }
-    if (search) { where += ' AND (data LIKE ? OR form_name LIKE ?)'; params.push(`%${search}%`, `%${search}%`); }
-
-    const leads = db.prepare(`SELECT * FROM leads WHERE ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`).all(...params, limit, offset);
-    const { total } = db.prepare(`SELECT COUNT(*) as total FROM leads WHERE ${where}`).get(...params);
-
-    res.json({
-      success: true,
-      leads: leads.map(l => ({
-        ...l,
-        data: JSON.parse(l.data || '{}')
-      })),
-      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) }
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+    const { name, logo, color, webhook_url } = req.body;
+    if (!name) return res.status(400).json({ error: 'Name required' });
+    const id = genCompanyId();
+    db.prepare('INSERT INTO companies (id, name, logo, color, webhook_url) VALUES (?, ?, ?, ?, ?)').run(id, name, logo || null, color || '#ef4444', webhook_url || null);
+    res.json({ success: true, id });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
-
-// Detalhes de um lead
-app.get('/api/leads/:id', requireAuth, (req, res) => {
+app.put('/api/companies/:id', requireAuth, (req, res) => {
   try {
-    const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id);
-    if (!lead) return res.status(404).json({ success: false, error: 'Lead não encontrado' });
-    
-    res.json({
-      success: true,
-      lead: { ...lead, data: JSON.parse(lead.data || '{}') }
-    });
-  } catch (e) {
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
-});
-
-// Exportar CSV
-app.get('/api/leads/export/csv', requireAuth, (req, res) => {
-  try {
-    const formId = req.query.form_id;
-    let sql = 'SELECT * FROM leads';
-    if (formId) sql += ' WHERE form_id = ?';
-    sql += ' ORDER BY created_at DESC';
-    
-    const leads = formId ? db.prepare(sql).all(formId) : db.prepare(sql).all();
-    if (!leads.length) return res.status(404).json({ error: 'Nenhum lead' });
-
-    const allKeys = new Set();
-    leads.forEach(l => Object.keys(JSON.parse(l.data || '{}')).forEach(k => allKeys.add(k)));
-
-    const headers = ['id', 'form_name', 'created_at', ...allKeys, 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'referrer', 'page_url', 'ip_address', 'device_type', 'browser', 'os'];
-    let csv = headers.join(',') + '\n';
-    
-    leads.forEach(l => {
-      const d = JSON.parse(l.data || '{}');
-      csv += [
-        l.id,
-        '"' + (l.form_name || '').replace(/"/g, '""') + '"',
-        l.created_at,
-        ...Array.from(allKeys).map(k => '"' + (d[k] || '').toString().replace(/"/g, '""') + '"'),
-        '"' + (l.utm_source || '') + '"',
-        '"' + (l.utm_medium || '') + '"',
-        '"' + (l.utm_campaign || '') + '"',
-        '"' + (l.utm_term || '') + '"',
-        '"' + (l.utm_content || '') + '"',
-        '"' + (l.referrer || '') + '"',
-        '"' + (l.page_url || '') + '"',
-        '"' + (l.ip_address || '') + '"',
-        '"' + (l.device_type || '') + '"',
-        '"' + (l.browser || '') + '"',
-        '"' + (l.os || '') + '"'
-      ].join(',') + '\n';
-    });
-
-    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', 'attachment; filename=leads-' + new Date().toISOString().slice(0,10) + '.csv');
-    res.send('\uFEFF' + csv);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: 'Erro' });
-  }
-});
-
-app.delete('/api/leads/:id', requireAuth, (req, res) => {
-  db.prepare('DELETE FROM leads WHERE id = ?').run(req.params.id);
-  res.json({ success: true });
-});
-
-// Criar formulário com estilos
-app.post('/api/forms', requireAuth, (req, res) => {
-  try {
-    const { name, fields, styles, settings, webhookUrl } = req.body;
-    if (!name || !fields) {
-      return res.status(400).json({ success: false, error: 'Nome e campos obrigatórios' });
-    }
-
-    const id = 'form_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    db.prepare('INSERT INTO forms (id, name, fields, styles, settings, webhook_url) VALUES (?, ?, ?, ?, ?, ?)').run(
-      id, name, JSON.stringify(fields), JSON.stringify(styles || {}), JSON.stringify(settings || {}), webhookUrl || null
-    );
-
-    res.json({ success: true, formId: id });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
-});
-
-// Atualizar formulário
-app.put('/api/forms/:id', requireAuth, (req, res) => {
-  try {
-    const { name, fields, styles, settings, webhookUrl } = req.body;
-    db.prepare('UPDATE forms SET name = ?, fields = ?, styles = ?, settings = ?, webhook_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(
-      name, JSON.stringify(fields), JSON.stringify(styles || {}), JSON.stringify(settings || {}), webhookUrl || null, req.params.id
-    );
+    const { name, logo, color, webhook_url } = req.body;
+    db.prepare('UPDATE companies SET name = ?, logo = ?, color = ?, webhook_url = ? WHERE id = ?').run(name, logo, color, webhook_url, req.params.id);
     res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.delete('/api/companies/:id', requireAuth, (req, res) => {
+  try { db.prepare('UPDATE companies SET active = 0 WHERE id = ?').run(req.params.id); res.json({ success: true }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.get('/api/companies/:id/stats', requireAuth, (req, res) => {
+  try {
+    const cid = req.params.id;
+    const stats = {
+      totalLeads: db.prepare('SELECT COUNT(*) as c FROM leads WHERE company_id = ?').get(cid)?.c || 0,
+      totalForms: db.prepare('SELECT COUNT(*) as c FROM forms WHERE company_id = ? AND active = 1').get(cid)?.c || 0,
+      leadsToday: db.prepare("SELECT COUNT(*) as c FROM leads WHERE company_id = ? AND date(created_at) = date('now')").get(cid)?.c || 0,
+      leadsWeek: db.prepare("SELECT COUNT(*) as c FROM leads WHERE company_id = ? AND created_at >= date('now', '-7 days')").get(cid)?.c || 0,
+      leadsPerDay: db.prepare(`SELECT date(created_at) as date, COUNT(*) as count FROM leads WHERE company_id = ? AND created_at >= date('now', '-7 days') GROUP BY date(created_at) ORDER BY date`).all(cid),
+      topSources: db.prepare(`SELECT utm_source as source, COUNT(*) as count FROM leads WHERE company_id = ? AND utm_source IS NOT NULL GROUP BY utm_source ORDER BY count DESC LIMIT 5`).all(cid),
+    };
+    res.json({ stats });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// Forms
 app.get('/api/forms', requireAuth, (req, res) => {
   try {
-    const forms = db.prepare(`
-      SELECT f.*, (SELECT COUNT(*) FROM leads WHERE form_id = f.id) as leads_count 
-      FROM forms f WHERE f.active = 1 ORDER BY f.created_at DESC
-    `).all();
-
-    res.json({
-      success: true,
-      forms: forms.map(f => ({
-        ...f,
-        fields: JSON.parse(f.fields || '[]'),
-        styles: JSON.parse(f.styles || '{}'),
-        settings: JSON.parse(f.settings || '{}')
-      }))
+    const { company_id } = req.query;
+    let q = `SELECT f.*, (SELECT COUNT(*) FROM leads WHERE form_id = f.id) as leads_count FROM forms f WHERE f.active = 1`;
+    const p = [];
+    if (company_id) { q += ' AND f.company_id = ?'; p.push(company_id); }
+    q += ' ORDER BY f.created_at DESC';
+    const forms = db.prepare(q).all(...p);
+    forms.forEach(f => {
+      try { f.fields = JSON.parse(f.fields); } catch (e) { f.fields = []; }
+      try { f.styles = JSON.parse(f.styles); } catch (e) { f.styles = {}; }
+      try { f.settings = JSON.parse(f.settings); } catch (e) { f.settings = {}; }
     });
-  } catch (e) {
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+    res.json({ forms });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
-
-app.get('/api/forms/:id', requireAuth, (req, res) => {
+app.post('/api/forms', requireAuth, (req, res) => {
   try {
-    const form = db.prepare('SELECT * FROM forms WHERE id = ? AND active = 1').get(req.params.id);
-    if (!form) return res.status(404).json({ success: false, error: 'Formulário não encontrado' });
-    
-    res.json({
-      success: true,
-      form: {
-        ...form,
-        fields: JSON.parse(form.fields || '[]'),
-        styles: JSON.parse(form.styles || '{}'),
-        settings: JSON.parse(form.settings || '{}')
-      }
-    });
-  } catch (e) {
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+    const { name, fields, styles, settings, webhookUrl, company_id, form_type, custom_html } = req.body;
+    if (!name) return res.status(400).json({ error: 'Name required' });
+    const id = genId();
+    db.prepare(`INSERT INTO forms (id, company_id, name, fields, styles, settings, webhook_url, form_type, custom_html) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(id, company_id || null, name, JSON.stringify(fields || []), JSON.stringify(styles || {}), JSON.stringify(settings || {}), webhookUrl || null, form_type || 'builder', custom_html || null);
+    res.json({ success: true, id });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.put('/api/forms/:id', requireAuth, (req, res) => {
+  try {
+    const { name, fields, styles, settings, webhookUrl, company_id, custom_html } = req.body;
+    db.prepare(`UPDATE forms SET name = ?, fields = ?, styles = ?, settings = ?, webhook_url = ?, company_id = ?, custom_html = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(name, JSON.stringify(fields || []), JSON.stringify(styles || {}), JSON.stringify(settings || {}), webhookUrl || null, company_id || null, custom_html || null, req.params.id);
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.delete('/api/forms/:id', requireAuth, (req, res) => {
+  try { db.prepare('UPDATE forms SET active = 0 WHERE id = ?').run(req.params.id); res.json({ success: true }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/api/forms/:id', requireAuth, (req, res) => {
-  db.prepare('UPDATE forms SET active = 0 WHERE id = ?').run(req.params.id);
-  res.json({ success: true });
+// Leads
+app.get('/api/leads', requireAuth, (req, res) => {
+  try {
+    const { company_id, form_id, utm_source, limit = 100, offset = 0 } = req.query;
+    let q = 'SELECT * FROM leads WHERE 1=1'; const p = [];
+    if (company_id) { q += ' AND company_id = ?'; p.push(company_id); }
+    if (form_id) { q += ' AND form_id = ?'; p.push(form_id); }
+    if (utm_source) { q += ' AND utm_source = ?'; p.push(utm_source); }
+    q += ' ORDER BY created_at DESC LIMIT ? OFFSET ?'; p.push(parseInt(limit), parseInt(offset));
+    const leads = db.prepare(q).all(...p);
+    leads.forEach(l => { try { l.data = JSON.parse(l.data); } catch (e) { l.data = {}; } });
+    res.json({ leads });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/leads', (req, res) => {
+  try {
+    const { formId, formName, data, meta = {} } = req.body;
+    if (!formId || !data) return res.status(400).json({ error: 'formId and data required' });
+    const form = db.prepare('SELECT * FROM forms WHERE id = ?').get(formId);
+    const ua = parseUA(req.headers['user-agent']);
+    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || null;
+    const result = db.prepare(`INSERT INTO leads (company_id, form_id, form_name, data, utm_source, utm_medium, utm_campaign, utm_term, utm_content, utm_id, referrer, page_url, ip_address, user_agent, device_type, browser, os) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(form?.company_id || null, formId, formName || form?.name || 'Form', JSON.stringify(data), meta.utm_source || null, meta.utm_medium || null, meta.utm_campaign || null, meta.utm_term || null, meta.utm_content || null, meta.utm_id || null, meta.referrer || null, meta.page_url || null, ip, req.headers['user-agent'] || null, ua.device, ua.browser, ua.os);
+    const leadId = result.lastInsertRowid;
+    const whData = { event: 'new_lead', lead_id: leadId, form_id: formId, form_name: formName || form?.name, company_id: form?.company_id, data, meta: { ...meta, ip, ...ua }, timestamp: new Date().toISOString() };
+    if (form?.webhook_url) sendWebhook(form.webhook_url, whData).then(r => db.prepare('UPDATE leads SET webhook_sent = ?, webhook_response = ? WHERE id = ?').run(r.success ? 1 : 0, JSON.stringify(r), leadId));
+    if (form?.company_id) { const co = db.prepare('SELECT webhook_url FROM companies WHERE id = ?').get(form.company_id); if (co?.webhook_url) sendWebhook(co.webhook_url, whData); }
+    db.prepare('SELECT * FROM webhooks WHERE is_global = 1 AND active = 1').all().forEach(h => sendWebhook(h.url, whData).then(r => db.prepare(r.success ? 'UPDATE webhooks SET success_count = success_count + 1, last_triggered = CURRENT_TIMESTAMP WHERE id = ?' : 'UPDATE webhooks SET fail_count = fail_count + 1 WHERE id = ?').run(h.id)));
+    res.json({ success: true, id: leadId });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.delete('/api/leads/:id', requireAuth, (req, res) => {
+  try { db.prepare('DELETE FROM leads WHERE id = ?').run(req.params.id); res.json({ success: true }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.get('/api/leads/export/csv', requireAuth, (req, res) => {
+  try {
+    const { company_id } = req.query;
+    let q = 'SELECT * FROM leads'; const p = [];
+    if (company_id) { q += ' WHERE company_id = ?'; p.push(company_id); }
+    q += ' ORDER BY created_at DESC';
+    const leads = db.prepare(q).all(...p);
+    const h = ['ID', 'Empresa', 'Formulário', 'Nome', 'Email', 'Telefone', 'UTM Source', 'UTM Medium', 'UTM Campaign', 'IP', 'Device', 'Browser', 'OS', 'Data'];
+    let csv = h.join(',') + '\n';
+    leads.forEach(l => { let d = {}; try { d = JSON.parse(l.data); } catch (e) {} csv += [l.id, l.company_id || '', l.form_name || '', d.nome || d.name || '', d.email || '', d.telefone || d.phone || '', l.utm_source || '', l.utm_medium || '', l.utm_campaign || '', l.ip_address || '', l.device_type || '', l.browser || '', l.os || '', l.created_at].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n'; });
+    res.setHeader('Content-Type', 'text/csv'); res.setHeader('Content-Disposition', 'attachment; filename=leads.csv'); res.send(csv);
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // Webhooks
+app.get('/api/webhooks', requireAuth, (req, res) => {
+  try {
+    const { company_id } = req.query;
+    let q = 'SELECT * FROM webhooks WHERE active = 1'; const p = [];
+    if (company_id) { q += ' AND (company_id = ? OR is_global = 1)'; p.push(company_id); }
+    res.json({ webhooks: db.prepare(q).all(...p) });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
 app.post('/api/webhooks', requireAuth, (req, res) => {
   try {
-    const { formId, url, isGlobal } = req.body;
-    if (!url) return res.status(400).json({ success: false, error: 'URL obrigatória' });
-
-    const result = db.prepare('INSERT INTO webhooks (form_id, url, is_global) VALUES (?, ?, ?)').run(formId || null, url, isGlobal ? 1 : 0);
-    res.json({ success: true, webhookId: result.lastInsertRowid });
-  } catch (e) {
-    res.status(500).json({ success: false, error: 'Erro interno' });
-  }
+    const { url, formId, isGlobal, company_id } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL required' });
+    db.prepare('INSERT INTO webhooks (url, form_id, is_global, company_id) VALUES (?, ?, ?, ?)').run(url, formId || null, isGlobal ? 1 : 0, company_id || null);
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
-
-app.get('/api/webhooks', requireAuth, (req, res) => {
-  res.json({ success: true, webhooks: db.prepare('SELECT * FROM webhooks WHERE active = 1').all() });
-});
-
 app.delete('/api/webhooks/:id', requireAuth, (req, res) => {
-  db.prepare('UPDATE webhooks SET active = 0 WHERE id = ?').run(req.params.id);
-  res.json({ success: true });
+  try { db.prepare('UPDATE webhooks SET active = 0 WHERE id = ?').run(req.params.id); res.json({ success: true }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Settings
-app.get('/api/settings', requireAuth, (req, res) => {
-  const settings = {};
-  db.prepare('SELECT * FROM settings').all().forEach(s => settings[s.key] = s.value);
-  res.json({ success: true, settings });
-});
-
-app.put('/api/settings', requireAuth, (req, res) => {
-  const stmt = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value');
-  Object.entries(req.body).forEach(([k, v]) => stmt.run(k, v));
-  res.json({ success: true });
-});
-
-// Stats avançados
+// Stats
 app.get('/api/stats', requireAuth, (req, res) => {
   try {
-    const totalLeads = db.prepare('SELECT COUNT(*) as c FROM leads').get().c;
-    const totalForms = db.prepare('SELECT COUNT(*) as c FROM forms WHERE active = 1').get().c;
-    const totalWebhooks = db.prepare('SELECT COUNT(*) as c FROM webhooks WHERE active = 1').get().c;
-    const webhooksSent = db.prepare('SELECT COUNT(*) as c FROM leads WHERE webhook_sent = 1').get().c;
-    
-    // Leads por dia (últimos 7 dias)
-    const leadsPerDay = db.prepare(`
-      SELECT DATE(created_at) as date, COUNT(*) as count 
-      FROM leads 
-      WHERE created_at >= DATE('now', '-7 days')
-      GROUP BY DATE(created_at)
-      ORDER BY date
-    `).all();
-    
-    // Top UTM sources
-    const topSources = db.prepare(`
-      SELECT utm_source, COUNT(*) as count 
-      FROM leads 
-      WHERE utm_source IS NOT NULL AND utm_source != ''
-      GROUP BY utm_source 
-      ORDER BY count DESC 
-      LIMIT 5
-    `).all();
-    
-    // Top campanhas
-    const topCampaigns = db.prepare(`
-      SELECT utm_campaign, COUNT(*) as count 
-      FROM leads 
-      WHERE utm_campaign IS NOT NULL AND utm_campaign != ''
-      GROUP BY utm_campaign 
-      ORDER BY count DESC 
-      LIMIT 5
-    `).all();
-    
-    // Dispositivos
-    const devices = db.prepare(`
-      SELECT device_type, COUNT(*) as count 
-      FROM leads 
-      WHERE device_type IS NOT NULL
-      GROUP BY device_type
-    `).all();
-
-    res.json({
-      success: true,
-      stats: {
-        totalLeads,
-        totalForms,
-        totalWebhooks,
-        webhooksSent,
-        leadsPerDay,
-        topSources,
-        topCampaigns,
-        devices
-      }
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false });
-  }
+    const { company_id } = req.query;
+    let lq = 'SELECT COUNT(*) as c FROM leads', fq = 'SELECT COUNT(*) as c FROM forms WHERE active = 1';
+    if (company_id) { lq += ' WHERE company_id = ?'; fq += ' AND company_id = ?'; }
+    const stats = {
+      totalLeads: db.prepare(lq).get(...(company_id ? [company_id] : []))?.c || 0,
+      totalForms: db.prepare(fq).get(...(company_id ? [company_id] : []))?.c || 0,
+      totalWebhooks: db.prepare('SELECT COUNT(*) as c FROM webhooks WHERE active = 1').get()?.c || 0,
+      totalCompanies: db.prepare('SELECT COUNT(*) as c FROM companies WHERE active = 1').get()?.c || 0,
+      webhooksSent: db.prepare('SELECT COUNT(*) as c FROM leads WHERE webhook_sent = 1').get()?.c || 0,
+    };
+    res.json({ stats });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// Static
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+app.get('*', (req, res) => { if (!req.path.startsWith('/api')) res.sendFile(path.join(__dirname, 'public', 'index.html')); });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('========================================');
-  console.log('  v4 Forms rodando na porta ' + PORT);
-  console.log('========================================');
-  console.log('  Usuario: ' + ADMIN_USER);
-  console.log('  Senha: ' + ADMIN_PASS);
-  console.log('========================================');
+  console.log(`\n========================================\n  v4 Forms rodando na porta ${PORT}\n  Usuario: ${ADMIN_USER}\n  Senha: ${ADMIN_PASS}\n========================================\n`);
 });
