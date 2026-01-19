@@ -13,6 +13,7 @@ const sessions = new Map();
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization'] }));
 app.use(express.json({ limit: '10mb' }));
+app.use((req, res, next) => { res.setHeader('Content-Type', 'application/json; charset=utf-8'); next(); });
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
@@ -242,7 +243,7 @@ app.get('/api/stats', requireAuth, (req, res) => {
 });
 
 // Static
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { setHeaders: (res, filePath) => { if (filePath.endsWith('.html')) res.setHeader('Content-Type', 'text/html; charset=utf-8'); } }));
 app.get('*', (req, res) => { if (!req.path.startsWith('/api')) res.sendFile(path.join(__dirname, 'public', 'index.html')); });
 
 app.listen(PORT, '0.0.0.0', () => {
