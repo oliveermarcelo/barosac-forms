@@ -185,6 +185,18 @@ app.post('/api/leads', (req, res) => {
     res.json({ success: true, id: leadId });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
+app.delete('/api/leads/all', requireAuth, (req, res) => {
+  try {
+    const { company_id } = req.query;
+    let result;
+    if (company_id) {
+      result = db.prepare('DELETE FROM leads WHERE company_id = ?').run(company_id);
+    } else {
+      result = db.prepare('DELETE FROM leads').run();
+    }
+    res.json({ success: true, deleted: result.changes });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
 app.delete('/api/leads/:id', requireAuth, (req, res) => {
   try { db.prepare('DELETE FROM leads WHERE id = ?').run(req.params.id); res.json({ success: true }); }
   catch (e) { res.status(500).json({ error: e.message }); }
