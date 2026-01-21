@@ -197,6 +197,15 @@ app.delete('/api/leads/all', requireAuth, (req, res) => {
     res.json({ success: true, deleted: result.changes });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
+app.post('/api/leads/delete-batch', requireAuth, (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !ids.length) return res.status(400).json({ error: 'No IDs provided' });
+    const placeholders = ids.map(() => '?').join(',');
+    const result = db.prepare(`DELETE FROM leads WHERE id IN (${placeholders})`).run(...ids);
+    res.json({ success: true, deleted: result.changes });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
 app.delete('/api/leads/:id', requireAuth, (req, res) => {
   try { db.prepare('DELETE FROM leads WHERE id = ?').run(req.params.id); res.json({ success: true }); }
   catch (e) { res.status(500).json({ error: e.message }); }
